@@ -1,84 +1,66 @@
-# Especificação — Parte 1: Proposta Técnica
+# Specification
 
-## Objetivo
+## Goal
 
-Definir uma proposta técnica completa para a próxima geração do Portal Pessoas, capaz de sustentar mais de 10 squads, experiências web e mobile, integração incremental com o legado e evolução independente por domínio.
+Conduzir a modernização do Portal Pessoas em incrementos demonstráveis: preservar a proposta técnica aprovada e implementar uma aplicação pequena que prove composição independente, reuso, evolução por squads e convivência controlada com o legado.
 
-A entrega desta etapa é documental e deve responder integralmente aos seis tópicos da Parte 1 do case, apresentar os respectivos trade-offs e incluir os diagramas necessários. A aplicação prática pertence a uma etapa posterior.
+## Functional Requirements
 
-## Requisitos Funcionais
+- **FR-1:** A Parte 1 deve permanecer rastreável como a proposta técnica aprovada do case.
+- **FR-2:** A Parte 2 deve possuir uma fundação executável com shell, contratos de plataforma, carregamento federado em runtime e builds independentes.
+- **FR-3:** A aplicação concluída deve possuir ao menos duas jornadas modernas mantidas como domínios independentes.
+- **FR-4:** Uma nova jornada deve poder ser descoberta por manifesto sem import de sua implementação pelo shell.
+- **FR-5:** Shell e jornadas devem reutilizar tokens e componentes públicos de um Design System demonstrativo.
+- **FR-6:** A aplicação concluída deve demonstrar home, catálogo, busca, notificações e uma jornada externa simulada.
+- **FR-7:** Falhas de manifesto ou carregamento de uma jornada não devem inutilizar o shell.
+- **FR-8:** A experiência deve ser responsiva e compatível com uma bridge móvel simulada, sem exigir aplicativos nativos no case.
+- **FR-9:** Logs, erros, métricas de experiência e analytics devem possuir contexto mínimo de domínio, versão, rota, plataforma e correlação.
+- **FR-10:** Instalação, execução, testes e builds devem ser reproduzíveis localmente.
 
-- **FR-1:** A proposta deve apresentar um diagrama de alto nível contendo shell, microfrontends ou alternativa escolhida, aplicativo mobile, BFF, APIs, Design System, observabilidade e integração com jornadas legadas.
-- **FR-5:** A proposta deve definir um contrato de integração que permita adicionar novos domínios ou jornadas sem transferir responsabilidades de negócio para o shell.
-- **FR-6:** A proposta deve definir como jornadas modernas e legadas convivem e como o usuário é direcionado com segurança para experiências ainda não modernizadas.
-- **FR-8:** A proposta deve definir publicação, deploy independente quando aplicável, versionamento, governança, padrões mínimos de qualidade e observabilidade.
-- **FR-9:** A arquitetura deve sustentar mais de 10 squads trabalhando simultaneamente por domínio ou jornada, com baixa dependência entre equipes e sem transformar o shell ou a squad de plataforma em gargalo.
-- **FR-10:** A estratégia web/mobile deve definir responsabilidades da camada nativa, elementos compartilháveis, redução de duplicação, consistência visual e funcional, tecnologia adotada e trade-offs.
-- **FR-11:** A estratégia organizacional deve explicar trabalho paralelo, publicação, prevenção de conflitos, versionamento, governança, qualidade e evolução sem dependência recorrente do shell.
-- **FR-12:** A proposta deve declarar se utilizará microfrontends ou alternativa e justificar o mecanismo escolhido. Module Federation, Web Components, Single-SPA, pacotes versionados, monorepo, polyrepo e modelos híbridos devem ser avaliados quando aplicáveis.
-- **FR-13:** O Design System deve ser estruturado em tokens, componentes base, componentes compostos e componentes específicos de negócio, com ownership, versionamento, governança, adoção e compatibilidade entre web e mobile.
-- **FR-14:** A estratégia de migração deve explicar convivência com o legado, evolução sem big bang, redirecionamento, rollout, medição do avanço e proteção da experiência do colaborador.
-- **FR-15:** A estratégia de observabilidade deve contemplar logs, métricas, monitoramento de erros, analytics de navegação e correlação suficiente para identificar domínio, versão e etapa da jornada afetada.
+## Acceptance Criteria
 
-## Critérios de Aceitação
+- **AC-1 [FR-1]:** A spec da Parte 1 preserva conteúdo e identificadores e permanece ligada neste catálogo.
+- **AC-2 [FR-2, FR-4]:** Um host carrega um remote neutro em runtime por contrato validado, e ambos produzem builds separados.
+- **AC-3 [FR-3]:** Benefícios e Férias são entregues como remotes sem imports entre si.
+- **AC-4 [FR-5]:** Tokens e componentes são consumidos somente pela API pública do Design System e documentados em Storybook independente.
+- **AC-5 [FR-6]:** As experiências transversais e o destino externo são navegáveis com dados simulados.
+- **AC-6 [FR-7]:** Manifesto inválido, versão incompatível e indisponibilidade exibem fallback controlado.
+- **AC-7 [FR-8]:** Fluxos críticos funcionam em desktop e viewport mobile e exercitam o adapter web da bridge.
+- **AC-8 [FR-9]:** Eventos demonstrativos propagam contexto e não registram tokens ou dados pessoais.
+- **AC-9 [FR-10]:** Os comandos documentados de lint, tipos, testes, builds e Storybook executam sem erro.
 
-- **AC-1 [FR-1]:** O diagrama identifica todos os elementos obrigatórios e explicita suas relações e principais fluxos.
-- **AC-6 [FR-5]:** O contrato de extensão define o que um domínio fornece ao portal e o que não pode exigir do shell.
-- **AC-7 [FR-6]:** A integração com o legado define entrada, retorno, falha controlada e continuidade de contexto.
-- **AC-9 [FR-8]:** Publicação, versionamento, governança, gates de qualidade e responsabilidade operacional estão documentados.
-- **AC-10 [FR-9]:** A proposta demonstra como squads mantêm ownership e cadência independentes sem dependências transversais excessivas.
-- **AC-11 [FR-10]:** Responsabilidades nativas e web, compartilhamento, consistência, comunicação entre camadas e alternativas rejeitadas estão documentados com trade-offs.
-- **AC-12 [FR-11]:** O fluxo operacional cobre desenvolvimento, integração, publicação, rollback, compatibilidade de versões, mudanças transversais e prevenção de conflitos.
-- **AC-13 [FR-12]:** A composição escolhida é comparada com alternativas em autonomia, complexidade operacional, performance, governança, reuso e evolução futura.
-- **AC-14 [FR-13]:** Camadas, ownership, contribuição, distribuição, versionamento e compatibilidade multiplataforma do Design System estão definidos.
-- **AC-15 [FR-14]:** A migração possui fases, direcionamento, rollout, rollback, indicadores de progresso e guardrails de experiência.
-- **AC-16 [FR-15]:** A proposta define sinais, contexto de correlação, ownership de alertas e isolamento de falhas por domínio.
-- **AC-17 [FR-1, FR-10–FR-15]:** Todas as perguntas obrigatórias da Parte 1 estão respondidas no documento de arquitetura; nenhuma permanece como decisão adiada.
+## Constraints
 
-## Restrições
+- A baseline e as fronteiras de `docs/ARCHITECTURE.md` são obrigatórias.
+- O desenvolvimento é incremental; somente specs aprovadas e ligadas abaixo constituem escopo ativo.
+- APIs, BFFs, registry remoto, mobile nativo, infraestrutura e fornecedores externos são simulados.
+- A referência pública do Itaú orienta a linguagem visual, mas não fornece código ou ativos ao projeto.
 
-- React e TypeScript são a base das experiências web modernas.
-- Autonomia sustentável para mais de 10 squads é prioridade arquitetural.
-- A proposta deve ser compatível com um core mobile nativo Kotlin/Swift e experiências React integráveis por WebView.
-- A arquitetura deve permitir evolução incremental e convivência temporária com legado.
-- A Parte 1 não inclui código, infraestrutura ou execução de deploy.
-- Arquitetura e diagramas devem ser aprovados antes do planejamento da Parte 2.
+## Assumptions
 
-## Premissas
+- Benefícios e Férias serão as duas jornadas modernas.
+- O primeiro marco implementa apenas fundação e Design System e não conclui a Parte 2.
 
-- O ecossistema mobile existente combina capacidades nativas e experiências web.
-- Consistência entre plataformas significa linguagem visual e comportamento coerentes, não implementações idênticas.
-- Deploy independente é uma capacidade arquitetural a ser analisada, não algo que será executado nesta etapa.
-- Domínio ou jornada representa uma fronteira genérica de produto e ownership; nenhuma jornada funcional específica está selecionada nesta etapa.
+## Edge Cases
 
-## Casos Limítrofes
+- Um remote ausente ou incompatível preserva navegação e conteúdo do host.
+- Um consumidor não pode acessar internals de plataforma, Design System ou outro domínio.
 
-- A indisponibilidade de um domínio não deve inutilizar o shell ou outros domínios.
-- Incompatibilidade de contrato ou versão deve produzir fallback controlado.
-- Uma jornada legada indisponível deve preservar retorno seguro ao portal.
-- Mudanças transversais devem possuir estratégia de compatibilidade que evite migração simultânea de todas as squads.
+## Out of Scope
 
-## Fora de Escopo
+- Publicação em produção, backend real e aplicativos Kotlin ou Swift.
+- Implementação antecipada das specs futuras registradas somente no roadmap.
 
-- Escolher ou implementar jornadas funcionais específicas.
-- Desenvolver shell, microfrontends, aplicativo mobile ou BFF.
-- Criar mocks, testes de aplicação, pipeline ou infraestrutura.
-- Executar deploy ou migração real.
-- Planejar a Parte 2 antes da aprovação da arquitetura.
+## Open Questions
 
-## Questões a Resolver na Arquitetura
+Nenhuma para o primeiro marco.
 
-Todas as questões abaixo são obrigatórias e não poderão permanecer abertas na entrega final:
+## Feature Specifications
 
-- Limites e responsabilidades do shell.
-- Monorepo, polyrepo ou modelo híbrido.
-- Microfrontends ou alternativa e mecanismo de composição.
-- Granularidade, descoberta e carregamento dos domínios.
-- Responsabilidades do core nativo, WebView e bridge.
-- Compartilhamento e versionamento do Design System.
-- Topologia de BFFs, APIs e contratos.
-- Estado e comunicação entre shell e domínios.
-- Observabilidade e isolamento de falhas.
-- Publicação, versionamento, rollout e rollback.
-- Governança para mais de 10 squads.
-- Fases e indicadores da migração do legado.
+- [Parte 1 — Proposta Técnica](specs/parte-1-proposta-tecnica.md)
+- [Parte 2 — Fundação da Plataforma](specs/parte-2-fundacao-plataforma.md)
+- [Parte 2 — Design System](specs/parte-2-design-system.md)
+
+## Delivery Roadmap
+
+O sequenciamento completo e as specs futuras ainda não aprovadas estão em [PARTE-2-ROADMAP.md](PARTE-2-ROADMAP.md).
