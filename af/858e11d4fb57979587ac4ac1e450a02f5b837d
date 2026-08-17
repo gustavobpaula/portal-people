@@ -1,0 +1,14 @@
+.vscode/settings.json
+  h_4c750985969531 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "af858e11d4fb57979587ac4ac1e450a02f5b837d",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
