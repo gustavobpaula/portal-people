@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { benefitFixtures, benefitSummaries } from "../benefits-fixtures";
+import { benefitFixtures, benefitSummaries } from "../services/api/benefits-fixtures";
 
 const API_BASE_URL = "http://localhost/api/benefits";
 

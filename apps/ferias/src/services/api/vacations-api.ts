@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   availableVacationEligibility,
   VACATION_PROTOCOL,
-} from "../domain/vacation-fixtures";
+} from "./vacation-fixtures";
 import {
   calculateEndDate,
   createVacationRequestSchema,
@@ -10,7 +10,7 @@ import {
   vacationRequestSchema,
   type VacationEligibility,
   type VacationRequestInput,
-} from "../domain/vacation-rules";
+} from "../../domain/vacation-rules";
 
 const vacationSubmissionSchema = vacationRequestSchema.extend({
   endDate: z.string(),

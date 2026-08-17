@@ -21,7 +21,7 @@ import {
   BenefitsApiError,
   type BenefitDetail,
   type BenefitsApiClient,
-} from "./benefits-api";
+} from "../services/api/benefits-api";
 import styles from "./styles.module.scss";
 
 const DOMAIN = "beneficios";

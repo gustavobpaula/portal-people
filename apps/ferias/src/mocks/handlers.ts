@@ -2,7 +2,7 @@ import { http, HttpResponse } from "msw";
 import {
   availableVacationEligibility,
   VACATION_PROTOCOL,
-} from "../domain/vacation-fixtures";
+} from "../services/api/vacation-fixtures";
 import {
   calculateEndDate,
   createVacationRequestSchema,

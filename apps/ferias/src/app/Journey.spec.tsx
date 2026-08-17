@@ -4,11 +4,11 @@ import { delay, http, HttpResponse } from "msw";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PlatformCapabilities } from "@portal/platform-contracts";
 import { VacationsApp } from "./Journey";
-import { createVacationsApiClient } from "../services/vacations-api";
+import { createVacationsApiClient } from "../services/api/vacations-api";
 import {
   balanceUnavailableEligibility,
   noEligibleDaysEligibility,
-} from "../domain/vacation-fixtures";
+} from "../services/api/vacation-fixtures";
 import { server } from "../mocks/server";
 
 const track = vi.fn();

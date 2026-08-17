@@ -1,4 +1,4 @@
-import type { AvailableVacationEligibility } from "./vacation-rules";
+import type { AvailableVacationEligibility } from "../../domain/vacation-rules";
 
 export const availableVacationEligibility: AvailableVacationEligibility = {
   status: "available",

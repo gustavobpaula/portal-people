@@ -23,7 +23,7 @@ import {
   vacationsApiClient,
   type VacationSubmission,
   type VacationsApiClient,
-} from "../services/vacations-api";
+} from "../services/api/vacations-api";
 import {
   calculateEndDate,
   createVacationRequestSchema,

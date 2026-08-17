@@ -5,7 +5,7 @@ import {
   createBenefitsApiClient,
   localBenefitsFetch,
 } from "./benefits-api";
-import { server } from "./mocks/server";
+import { server } from "../../mocks/server";
 
 const httpFetch = (input: RequestInfo | URL, init?: RequestInit) =>
   fetch(new URL(input.toString(), "http://localhost").toString(), init);

@@ -13,9 +13,9 @@ import type { PlatformCapabilities } from "@portal/platform-contracts";
 import {
   createBenefitsApiClient,
   type BenefitsApiClient,
-} from "./benefits-api";
+} from "../services/api/benefits-api";
 import { BenefitsApp } from "./Journey";
-import { server } from "./mocks/server";
+import { server } from "../mocks/server";
 
 const track = vi.fn();
 const API_BASE_URL = "http://localhost/api/benefits";

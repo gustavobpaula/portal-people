@@ -3,7 +3,7 @@ export default createModuleFederationConfig({
   name: "__DOMAIN_NAME__",
   manifest: true,
   dts: false,
-  exposes: { "./Journey": "./src/Journey.tsx" },
+  exposes: { "./Journey": "./src/app/Journey.tsx" },
   shared: {
     react: { singleton: true },
     "react-dom": { singleton: true },

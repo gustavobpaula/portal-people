@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { VacationsApiError, createVacationsApiClient } from "./vacations-api";
-import { server } from "../mocks/server";
+import { server } from "../../mocks/server";
 
 const API_BASE_URL = "http://localhost/api/vacations";
 const httpFetch = (input: RequestInfo | URL, init?: RequestInit) =>

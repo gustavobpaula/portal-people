@@ -69,10 +69,12 @@ No marco atual, novas jornadas entram pelo golden path. Ele valida o nome em `ke
    apps/beneficios/
    ├── project.json
    └── src/
-       └── Journey.tsx
+       ├── app/
+       │   └── Journey.tsx
+       └── main.tsx
    ```
 
-4. Implemente a UI somente dentro do domínio e use a API pública de `@portal/platform-contracts`. A jornada recebe `PlatformCapabilities`; ela não deve importar internals do host, outro domínio, tokens de sessão ou estado de negócio global.
+4. Implemente a UI em `src/app/` e use a API pública de `@portal/platform-contracts`. Materialize `domain/`, `services/`, `mocks/` e `test/` somente quando a responsabilidade existir. A jornada recebe `PlatformCapabilities`; ela não deve importar internals do host, outro domínio, tokens de sessão ou estado de negócio global.
 
 5. Valide o projeto e o workspace:
 

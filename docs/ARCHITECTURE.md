@@ -73,6 +73,10 @@ O shell possui bootstrap, navegação, contexto de plataforma, descoberta, compo
 |---|---|---|---|
 | `apps/<shell>/` | Composição e experiências transversais | Plataforma e DS web | Internals de domínio |
 | `apps/<domain>/` | Entrada independente do remote | Libraries do próprio domínio, plataforma e DS | Outros domínios ou shell |
+| `apps/<domain>/src/app/` | Componentes, telas, estilos e estado estritamente visual do remote | Domínio, serviços, plataforma e DS | Contratos HTTP externos ou regras de negócio duplicadas |
+| `apps/<domain>/src/domain/` | Modelos internos, schemas, invariantes e regras puras | Somente outros módulos do próprio domínio sem I/O | React, HTTP, MSW ou APIs da plataforma |
+| `apps/<domain>/src/services/<integration>/` | Cliente, contratos HTTP externos e tradução na fronteira de uma integração | `domain/`, `fetch` e contratos externos | Componentes React, estado visual ou regras duplicadas |
+| `apps/<domain>/src/mocks/` e `src/test/` | Handlers, fixtures e setup de testes exclusivos do domínio | Domínio e serviços do próprio domínio | Contratos públicos de produção |
 | `apps/design-system-docs/` | Storybook do DS web no case | Tokens e DS web | Shell, plataforma e domínios |
 | `libs/<domain>/<capability>/` | Funcionalidades verticalmente coesas | Mesmo domínio e contratos externos | Outros domínios |
 | `libs/platform/<capability>/` | Contratos e adaptadores transversais | Infraestrutura aprovada | Regras de negócio |
@@ -92,6 +96,7 @@ Na arquitetura corporativa, o Storybook será mantido junto ao Design System ext
 - Dependências transversais exigem ownership da Plataforma Frontend.
 - Regras Nx e ESLint verificam as fronteiras.
 - Mudanças excepcionais exigem ADR com owner e condição de revisão.
+- Um contrato de backend não atravessa a fronteira de `services/`: payloads externos ficam em `api-contracts` (ou `dto`) e a tradução fica coesa com a integração. Modelos internos ficam em `domain/`; modelos exclusivamente de apresentação ficam em `app/`.
 
 ## State and Data Ownership
 
@@ -141,6 +146,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - declarar integração, telemetria e estratégia de erro;
 - respeitar DS, acessibilidade e fronteiras Nx;
 - possuir testes proporcionais ao risco.
+- iniciar pelo golden path com `src/app/` e materializar outras pastas somente quando sua responsabilidade existir.
 
 **A feature may:**
 
@@ -148,6 +154,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - possuir BFF próprio quando houver justificativa;
 - manter stories dos seus componentes de negócio dentro do domínio;
 - divergir do golden path por ADR aprovado.
+- criar `hooks/` quando um hook encapsular uma capacidade reutilizada ou integração relevante; tipos, mappers e transforms devem permanecer junto da responsabilidade que os possui.
 
 **A feature must not:**
 
@@ -157,6 +164,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - criar estado ou eventos globais;
 - expor tokens;
 - adicionar dependência runtime compartilhada unilateralmente.
+- criar diretórios vazios, `utils/`, `entities/`, `models/` ou `mappers/` genéricos. `entities` não é o nome padrão para payload HTTP; a exceção requer uma distinção concreta que `api-contracts`, `domain` ou `app` não expressem.
 
 ## Testing Strategy
 
@@ -211,6 +219,7 @@ O Storybook é gerado como artefato estático independente. Sua publicação oco
 | AD-29 | CSS Modules, SCSS e tokens; Tailwind e styled-components exigem exceção. |
 | AD-30 | Testes orientados a risco e contratos, sem meta de cobertura isolada. |
 | AD-31 | Storybook documenta e valida o DS web em aplicação independente do shell. |
+| AD-32 | Remotes organizam código por responsabilidade, começando em `app/`; domínio e integrações surgem sob demanda. Contratos externos são traduzidos na borda de serviços, evitando o vazamento de payloads de backend e árvores de diretórios vazias. |
 
 ## Deferred Decisions
 
