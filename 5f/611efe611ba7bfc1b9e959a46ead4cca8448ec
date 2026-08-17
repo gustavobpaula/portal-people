@@ -1,0 +1,103 @@
+apps/ferias/src/mocks/server.ts
+  s_8c2c289b07c305::t_70cdd3d6453d7c 1-4
+apps/beneficios/src/Journey.spec.tsx
+  s_8c2c289b07c305::t_4d59ebcfb1928b 21
+tools/domain-governance.json
+  s_8c2c289b07c305::t_010b8acc2db843 4
+apps/ferias/vitest.config.ts
+  s_8c2c289b07c305::t_70cdd3d6453d7c 23-24
+  s_8c2c289b07c305::t_010b8acc2db843 1-22,25-26
+apps/ferias/src/services/vacations-api.spec.ts
+  s_8c2c289b07c305::t_d829b98cef9188 1-60
+apps/ferias/index.html
+  s_8c2c289b07c305::t_010b8acc2db843 1-7
+apps/ferias/vite.config.ts
+  s_8c2c289b07c305::t_010b8acc2db843 1-47
+apps/ferias/src/mocks/handlers.ts
+  s_8c2c289b07c305::t_f2d50965429516 5,9
+  h_4c750985969531 8,20
+  s_8c2c289b07c305::t_70cdd3d6453d7c 1-4,6-7,10-19,21-31
+package.json
+  s_8c2c289b07c305::t_97a5d6ba5c5edd 21,28,62-64
+apps/portal-host/src/portal-experiences.spec.tsx
+  h_4c750985969531 1-8,14-16,21,26,28,31,37,41,44,47,50,52-54,56,58,60-62,64-66,70,73-74,76-79,82-84,87-88,90,94,97-98,100-103,106-107,109,113,115,117-119,121-122,124,128,131-133,135-136,138,140,142,145,147,151-152,155,158-160,165-167,170,172,176,178,182-184,188,191,194,196,200,203-205,208,210-212,215,217-219,223,226-227,229-232,234-236,239-240,243,245-249,253,255-259,263-265
+  s_8c2c289b07c305::t_4d59ebcfb1928b 55,63,67,80,104,134,161,206,237,250,260,266
+  h_4c750985969531 13,17,27,33-36,38,46,48-49,51,57,59,75,81,85,89,91,99,105,108,110,116,120,123,125,137,141,143,146,148,156-157,164,168,171,173,187,189-190,192,195,197,201-202,209,213,216,220,228,233,241-242,244,251-252,254,261-262
+scripts/verify-federation.mjs
+  s_8c2c289b07c305::t_4d59ebcfb1928b 12,14,16-19,21-22,24,26
+  h_4c750985969531 1,4-7,11,13,15,20,25
+  h_4c750985969531 10
+scripts/verify-shell.mjs
+  s_8c2c289b07c305::t_c57a51b73506d8 102,104-105,107
+  h_4c750985969531 1-2,11,14,16-17,24,26,28,32,34-39,41-43,45,47-50,52,54,56-60,62-72,75,77-81,83,85-86,88-93,96-101,103,106,108,110,114,116,119
+  s_8c2c289b07c305::t_d15e7c5cd658dc 6,20,109,111-112,124
+  h_4c750985969531 10,12-13,15,23,25,27,29,31,33,40,44,46,53,55,74,76,82,84,87,94,113,115,118,120
+apps/portal-host/src/mocks/fixtures.ts
+  s_8c2c289b07c305::t_4d59ebcfb1928b 18-24
+apps/portal-host/src/assets/journey-registry.json
+  s_8c2c289b07c305::t_4d59ebcfb1928b 25-36
+apps/ferias/src/app/Journey.spec.tsx
+  s_8c2c289b07c305::t_d829b98cef9188 12
+  s_8c2c289b07c305::t_f2d50965429516 1-11,13-214
+apps/ferias/src/services/vacations-api.ts
+  s_8c2c289b07c305::t_f2d50965429516 1-125
+docs/specs/parte-2-ferias.md
+  s_8c2c289b07c305::t_580a2a291b8761 1-58
+apps/ferias/journey-manifest.json
+  s_8c2c289b07c305::t_70cdd3d6453d7c 1-16
+apps/ferias/src/test/setup.ts
+  s_8c2c289b07c305::t_70cdd3d6453d7c 1-7
+apps/ferias/module-federation.config.ts
+  s_8c2c289b07c305::t_9fc1567f1748f1 6
+  s_8c2c289b07c305::t_010b8acc2db843 1-5,7-12
+docs/SPEC.md
+  s_8c2c289b07c305::t_580a2a291b8761 66
+apps/ferias/project.json
+  s_8c2c289b07c305::t_010b8acc2db843 1-21
+README.md
+  s_8c2c289b07c305::t_d15e7c5cd658dc 20-22,80-81
+apps/ferias/src/app/Journey.tsx
+  s_8c2c289b07c305::t_f2d50965429516 1-449
+apps/ferias/src/main.tsx
+  s_8c2c289b07c305::t_010b8acc2db843 1-3,5,7-15
+  s_8c2c289b07c305::t_f2d50965429516 4,6
+apps/beneficios/src/benefits-api.spec.tsx
+  s_8c2c289b07c305::t_c57a51b73506d8 3-7,62-69
+  s_8c2c289b07c305::t_4d59ebcfb1928b 13
+  s_8c2c289b07c305::t_5aca50e13f9cf5 70
+apps/beneficios/src/mocks/handlers.ts
+  s_8c2c289b07c305::t_4d59ebcfb1928b 4
+apps/beneficios/src/benefits-api.ts
+  s_8c2c289b07c305::t_4d59ebcfb1928b 66,69,91,94
+apps/ferias/src/app/global.scss
+  s_8c2c289b07c305::t_b84a9bc41627da 1-12
+apps/ferias/src/app/styles.module.scss
+  s_8c2c289b07c305::t_8cb1b6383f48f6 1-51
+apps/ferias/src/domain/vacation-fixtures.ts
+  s_8c2c289b07c305::t_99fde4bd42c53a 1-18
+apps/ferias/src/domain/vacation-rules.ts
+  s_8c2c289b07c305::t_69a93c005b5854 1-92
+pnpm-lock.yaml
+  s_8c2c289b07c305::t_de858a59a7e569 11-13,32-34,953-1030,1726-1728,3250-3255,4782-4790,5387-5388,7136-7139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5f611efe611ba7bfc1b9e959a46ead4cca8448ec",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_8c2c289b07c305": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0102b-2933-7df1-90b9-3992c62ed5ce",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
