@@ -1,0 +1,41 @@
+apps/portal-host/vitest.config.ts
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 5-8,10
+apps/design-system-docs/project.json
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 11
+vitest.storybook.config.ts
+  s_314b8de2cafc7f::t_a563dac92fca7a 15,18-21,29,37-38
+  s_314b8de2cafc7f::t_baf01357783732 27
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 1-2,6,8-9,43-48,58-63
+  s_314b8de2cafc7f::t_b4aa0dce5b0cce 3-4,7,14,42,49,64
+  s_314b8de2cafc7f::t_4c0a539dfd7ef7 12-13,16,52
+  s_314b8de2cafc7f::t_6fa84d457029df 5,10-11,17,22-24,26,30-36,39-41
+  s_314b8de2cafc7f::t_7ca4bbcb0b41ff 28
+  s_314b8de2cafc7f::t_42895aae640720 50-51,53-57
+  s_314b8de2cafc7f::t_b6a98bfb9b9108 25
+apps/portal-host/project.json
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 10
+apps/portal-host/src/App.tsx
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 10
+README.md
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 29
+apps/design-system-docs/.storybook/main.ts
+  s_314b8de2cafc7f::t_8eb39864942ab0 4-5,12
+apps/portal-host/src/App.spec.tsx
+  s_314b8de2cafc7f::t_c94e1c3c4f3ca9 1-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "08cdd0d0f3689e65edc2fe9f626a1dac8842c96d",
+  "prompts": {},
+  "sessions": {
+    "s_314b8de2cafc7f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00d81-ebac-70d0-b0fe-0284f109dca2",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
