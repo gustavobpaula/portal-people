@@ -20,6 +20,7 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    include: ["apps/__DOMAIN_NAME__/src/**/*.spec.tsx"],
+    include: ["apps/beneficios/src/**/*.spec.tsx"],
+    setupFiles: ["apps/beneficios/src/test/setup.ts"],
   },
 });

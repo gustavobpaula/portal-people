@@ -8,6 +8,13 @@ export const catalogItems: CatalogItem[] = [
     route: "/foundation",
     keywords: ["fundação", "plataforma", "jornada", "contratos"],
   },
+  {
+    id: "beneficios",
+    title: "Benefícios",
+    description: "Consulte seus benefícios e as orientações para utilizá-los.",
+    route: "/beneficios",
+    keywords: ["benefícios", "beneficios", "vale-alimentação", "saúde", "bem-estar"],
+  },
 ];
 
 export const notifications: NotificationItem[] = [

@@ -35,8 +35,9 @@ describe('portal experiences', () => {
     expect(await screen.findByRole('heading', { name: 'Portal Pessoas' })).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'Produtos' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Notificações' })).toHaveAttribute('href', '/notificacoes');
-    await screen.findByText('1 resultado');
+    await screen.findByText('2 resultados');
     expect(screen.getAllByRole('link', { name: /Fundação da plataforma/ })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: /Benefícios/ })).toHaveAttribute('href', '/beneficios');
   });
 
   it('keeps submitted search results on the home route and restores them from q', async () => {
@@ -51,6 +52,17 @@ describe('portal experiences', () => {
     renderHome('/?q=PLATAFORMA');
     expect(await screen.findByDisplayValue('PLATAFORMA')).toBeInTheDocument();
     expect(await screen.findByRole('link', { name: /Fundação da plataforma/ })).toBeInTheDocument();
+  });
+
+  it('finds Benefícios in Produtos and keeps its registered route', async () => {
+    const user = userEvent.setup();
+    renderHome();
+    const input = await screen.findByRole('textbox', { name: 'Buscar no portal' });
+    await user.type(input, 'BENEFICIOS');
+    await user.keyboard('{Enter}');
+    expect(await screen.findByTestId('location')).toHaveTextContent('/?q=BENEFICIOS');
+    expect(await screen.findByRole('link', { name: /Benefícios/ })).toHaveAttribute('href', '/beneficios');
+    expect(screen.queryByRole('link', { name: /Fundação da plataforma/ })).not.toBeInTheDocument();
   });
 
   it('shows a clear action for an empty search and restores the catalog', async () => {

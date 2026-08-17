@@ -1,0 +1,19 @@
+{
+  "id": "beneficios",
+  "displayName": "Benefícios",
+  "route": "/beneficios",
+  "strategy": "federated-module",
+  "version": "1.0.0",
+  "platformCompatibility": "^1.0.0",
+  "owner": {
+    "squad": "Squad Benefícios",
+    "contact": "beneficios@example.test"
+  },
+  "observability": { "domain": "beneficios", "eventNamespace": "beneficios" },
+  "rollout": { "audience": "all", "percentage": 100 },
+  "remote": {
+    "name": "beneficios",
+    "entry": "http://localhost:4300/mf-manifest.json",
+    "exposedModule": "./Journey"
+  }
+}

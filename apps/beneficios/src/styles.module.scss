@@ -1,0 +1,26 @@
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-md);
+}
+
+.detailSurface {
+  display: grid;
+  gap: var(--ds-space-md);
+  max-width: 48rem;
+  margin-top: var(--ds-space-md);
+}
+
+.detailSection {
+  display: grid;
+  gap: var(--ds-space-xs);
+  padding-top: var(--ds-space-md);
+  border-top: 1px solid var(--ds-color-border);
+}
+
+@media (max-width: 40rem) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}

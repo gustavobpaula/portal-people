@@ -14,6 +14,9 @@ corepack pnpm typecheck
 corepack pnpm test
 corepack pnpm nx build portal-host
 corepack pnpm nx build neutral-remote
+corepack pnpm nx lint beneficios
+corepack pnpm nx test beneficios
+corepack pnpm nx build beneficios
 corepack pnpm verify:federation
 corepack pnpm verify:shell
 corepack pnpm golden-path -- --name nova-jornada --dry-run

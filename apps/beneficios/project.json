@@ -1,0 +1,23 @@
+{
+  "name": "beneficios",
+  "sourceRoot": "apps/beneficios/src",
+  "projectType": "application",
+  "tags": ["scope:domain", "domain:beneficios", "type:app"],
+  "implicitDependencies": [
+    "platform-contracts",
+    "platform-runtime",
+    "design-system-web",
+    "design-tokens"
+  ],
+  "targets": {
+    "serve": { "command": "vite --config apps/beneficios/vite.config.ts" },
+    "build": {
+      "command": "vite build --config apps/beneficios/vite.config.ts",
+      "outputs": ["{workspaceRoot}/dist/apps/beneficios"]
+    },
+    "test": {
+      "command": "vitest run --config apps/beneficios/vitest.config.ts"
+    },
+    "lint": { "command": "eslint apps/beneficios --max-warnings=0" }
+  }
+}
