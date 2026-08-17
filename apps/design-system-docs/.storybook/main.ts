@@ -1,12 +1,15 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { fileURLToPath, URL } from 'node:url';
 
+const workspaceRoot = fileURLToPath(new URL('../../../', import.meta.url));
+
 const config: StorybookConfig = {
   stories: ['../../../libs/design-system-web/src/**/*.stories.@(ts|tsx)', '../src/**/*.mdx'],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
   framework: '@storybook/react-vite',
   viteFinal: async (viteConfig) => ({
     ...viteConfig,
+    root: workspaceRoot,
     resolve: {
       ...viteConfig.resolve,
       alias: {

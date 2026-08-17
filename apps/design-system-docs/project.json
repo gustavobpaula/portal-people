@@ -8,7 +8,7 @@
   "targets": {
     "serve": { "command": "storybook dev -p 6006 -c apps/design-system-docs/.storybook" },
     "build": { "command": "storybook build -c apps/design-system-docs/.storybook -o dist/apps/design-system-docs", "outputs": ["{workspaceRoot}/dist/apps/design-system-docs"] },
-    "test": { "command": "vitest run --config vitest.browser.config.ts" },
+    "test": { "command": "vitest run --config vitest.storybook.config.ts --project=storybook" },
     "lint": { "command": "eslint apps/design-system-docs libs/design-system-web --max-warnings=0" }
   }
 }

@@ -26,7 +26,7 @@ corepack pnpm verify:design-system-assets
 
 O Design System demonstrativo está em `libs/design-tokens` e `libs/design-system-web`; consumidores usam somente `@portal/design-tokens` e `@portal/design-system-web`. A documentação executável é servida de forma independente por Storybook.
 
-Os testes de stories usam Chromium via Playwright. Após instalar as dependências, baixe o browser local uma vez (ou defina `PLAYWRIGHT_CHROMIUM_EXECUTABLE` para usar um Chrome corporativo já instalado):
+`test:design-system` executa em Chromium os smoke tests, as `play` functions e as verificações de acessibilidade das stories. Após instalar as dependências, baixe o browser local uma vez (ou defina `PLAYWRIGHT_CHROMIUM_EXECUTABLE` para usar um Chrome corporativo já instalado):
 
 ```sh
 corepack pnpm exec playwright install chromium

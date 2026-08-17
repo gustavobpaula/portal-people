@@ -7,7 +7,7 @@ import { createWebCapabilities, loadFederatedJourney, type JourneyLoadResult } f
  */
 export function App() {
   const [result, setResult] = useState<JourneyLoadResult>();
-  const capabilities = createWebCapabilities();
+  const [capabilities] = useState(createWebCapabilities);
 
   useEffect(() => {
     void loadFederatedJourney(manifest).then(setResult);
