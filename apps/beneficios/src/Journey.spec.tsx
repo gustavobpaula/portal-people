@@ -18,7 +18,7 @@ import { BenefitsApp } from "./Journey";
 import { server } from "./mocks/server";
 
 const track = vi.fn();
-const API_BASE_URL = "http://localhost/api/beneficios";
+const API_BASE_URL = "http://localhost/api/benefits";
 
 function LocationProbe() {
   const location = useLocation();

@@ -17,6 +17,9 @@ corepack pnpm nx build neutral-remote
 corepack pnpm nx lint beneficios
 corepack pnpm nx test beneficios
 corepack pnpm nx build beneficios
+corepack pnpm nx lint ferias
+corepack pnpm nx test ferias
+corepack pnpm nx build ferias
 corepack pnpm verify:federation
 corepack pnpm verify:shell
 corepack pnpm golden-path -- --name nova-jornada --dry-run
@@ -74,8 +77,8 @@ No marco atual, novas jornadas entram pelo golden path. Ele valida o nome em `ke
 5. Valide o projeto e o workspace:
 
    ```sh
-   corepack pnpm nx lint beneficios
-   corepack pnpm typecheck
+corepack pnpm nx lint beneficios
+corepack pnpm typecheck
    ```
 
 > O generator cria um remote Vite com Module Federation, manifesto local e teste smoke. Use `--port` para evitar colisão entre remotes e adicione o conteúdo de `journey-manifest.json` ao registro local do host quando a jornada for aprovada; o generator não altera o shell.

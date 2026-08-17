@@ -1,0 +1,21 @@
+{
+  "name": "ferias",
+  "sourceRoot": "apps/ferias/src",
+  "projectType": "application",
+  "tags": ["scope:domain", "domain:ferias", "type:app"],
+  "implicitDependencies": [
+    "platform-contracts",
+    "platform-runtime",
+    "design-system-web",
+    "design-tokens"
+  ],
+  "targets": {
+    "serve": { "command": "vite --config apps/ferias/vite.config.ts" },
+    "build": {
+      "command": "vite build --config apps/ferias/vite.config.ts",
+      "outputs": ["{workspaceRoot}/dist/apps/ferias"]
+    },
+    "test": { "command": "vitest run --config apps/ferias/vitest.config.ts" },
+    "lint": { "command": "eslint apps/ferias --max-warnings=0" }
+  }
+}

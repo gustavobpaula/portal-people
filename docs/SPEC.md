@@ -63,6 +63,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Shell e Contrato da Plataforma](specs/parte-2-shell-plataforma.md)
 - [Parte 2 — Experiências Transversais](specs/parte-2-experiencias-transversais.md)
 - [Parte 2 — Jornada Benefícios](specs/parte-2-beneficios.md)
+- [Parte 2 — Jornada Férias](specs/parte-2-ferias.md)
 
 ## Delivery Roadmap
 

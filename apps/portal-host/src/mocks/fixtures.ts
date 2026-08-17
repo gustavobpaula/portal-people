@@ -15,6 +15,13 @@ export const catalogItems: CatalogItem[] = [
     route: "/beneficios",
     keywords: ["benefícios", "beneficios", "vale-alimentação", "saúde", "bem-estar"],
   },
+  {
+    id: "ferias",
+    title: "Férias",
+    description: "Planeje e envie uma nova solicitação de férias.",
+    route: "/ferias",
+    keywords: ["férias", "ferias", "solicitação", "descanso"],
+  },
 ];
 
 export const notifications: NotificationItem[] = [

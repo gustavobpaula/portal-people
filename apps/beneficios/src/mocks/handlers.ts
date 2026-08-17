@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { benefitFixtures, benefitSummaries } from "../benefits-fixtures";
 
-const API_BASE_URL = "http://localhost/api/beneficios";
+const API_BASE_URL = "http://localhost/api/benefits";
 
 export const handlers = [
   http.get(API_BASE_URL, () => HttpResponse.json({ items: benefitSummaries })),

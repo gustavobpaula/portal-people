@@ -1,0 +1,51 @@
+.journey,
+.formSurface,
+.reviewSurface,
+.confirmationSurface,
+.actions,
+.summary {
+  display: grid;
+  gap: var(--ds-space-md);
+}
+
+.journey {
+  max-width: 48rem;
+}
+
+.formSurface,
+.reviewSurface,
+.confirmationSurface {
+  margin-top: var(--ds-space-md);
+}
+
+.actions {
+  grid-template-columns: repeat(2, max-content);
+}
+
+.summary {
+  grid-template-columns: max-content 1fr;
+  margin: 0;
+}
+
+.summary dt {
+  font-weight: 600;
+}
+
+.summary dd {
+  margin: 0;
+}
+
+.focusTarget:focus {
+  outline: 3px solid var(--ds-color-focus);
+  outline-offset: 0.25rem;
+}
+
+@media (max-width: 40rem) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}

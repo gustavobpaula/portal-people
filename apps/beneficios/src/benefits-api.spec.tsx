@@ -1,12 +1,16 @@
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
-import { BenefitsApiError, createBenefitsApiClient } from "./benefits-api";
+import {
+  BenefitsApiError,
+  createBenefitsApiClient,
+  localBenefitsFetch,
+} from "./benefits-api";
 import { server } from "./mocks/server";
 
 const httpFetch = (input: RequestInfo | URL, init?: RequestInit) =>
   fetch(new URL(input.toString(), "http://localhost").toString(), init);
 const client = createBenefitsApiClient(httpFetch);
-const API_BASE_URL = "http://localhost/api/beneficios";
+const API_BASE_URL = "http://localhost/api/benefits";
 
 describe("benefitsApiClient", () => {
   it("reads list and detail through the domain HTTP contract", async () => {
@@ -53,6 +57,15 @@ describe("benefitsApiClient", () => {
 
     await expect(client.getBenefit("inexistente")).rejects.toMatchObject({
       kind: "not-found",
+    });
+  });
+
+  it("uses only the English local API URLs", async () => {
+    await expect(localBenefitsFetch("/api/benefits")).resolves.toMatchObject({
+      status: 200,
+    });
+    await expect(localBenefitsFetch("/api/beneficios")).resolves.toMatchObject({
+      status: 404,
     });
   });
 });

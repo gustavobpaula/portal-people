@@ -22,5 +22,17 @@
     "observability": { "domain": "beneficios", "eventNamespace": "beneficios" },
     "rollout": { "audience": "all", "percentage": 100 },
     "remote": { "name": "beneficios", "entry": "http://localhost:4300/mf-manifest.json", "exposedModule": "./Journey" }
+  },
+  {
+    "id": "ferias",
+    "displayName": "Férias",
+    "route": "/ferias",
+    "strategy": "federated-module",
+    "version": "1.0.0",
+    "platformCompatibility": "^1.0.0",
+    "owner": { "squad": "Squad Férias", "contact": "ferias@example.test" },
+    "observability": { "domain": "ferias", "eventNamespace": "ferias" },
+    "rollout": { "audience": "all", "percentage": 100 },
+    "remote": { "name": "ferias", "entry": "http://localhost:4301/mf-manifest.json", "exposedModule": "./Journey" }
   }
 ]

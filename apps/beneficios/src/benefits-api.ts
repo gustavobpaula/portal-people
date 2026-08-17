@@ -63,10 +63,10 @@ export interface BenefitsApiClient {
 export function createBenefitsApiClient(fetcher: Fetcher): BenefitsApiClient {
   return {
     getBenefits: (signal) =>
-      request("/api/beneficios", benefitsResponseSchema, fetcher, signal),
+      request("/api/benefits", benefitsResponseSchema, fetcher, signal),
     getBenefit: (id, signal) =>
       request(
-        `/api/beneficios/${encodeURIComponent(id)}`,
+        `/api/benefits/${encodeURIComponent(id)}`,
         benefitDetailSchema,
         fetcher,
         signal,
@@ -88,10 +88,10 @@ export const localBenefitsFetch: Fetcher = async (input, init) => {
     typeof input === "string" ? input : input.toString(),
     "http://beneficios.local",
   ).pathname;
-  if (path === "/api/beneficios") {
+  if (path === "/api/benefits") {
     return json({ items: benefitSummaries });
   }
-  const id = path.match(/^\/api\/beneficios\/([^/]+)$/)?.[1];
+  const id = path.match(/^\/api\/benefits\/([^/]+)$/)?.[1];
   const benefit = id
     ? benefitFixtures.find((item) => item.id === decodeURIComponent(id))
     : undefined;
