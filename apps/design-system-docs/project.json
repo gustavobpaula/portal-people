@@ -1,0 +1,12 @@
+{
+  "name": "design-system-docs",
+  "sourceRoot": "apps/design-system-docs/src",
+  "projectType": "application",
+  "tags": ["scope:design-system-docs", "type:app"],
+  "implicitDependencies": ["design-system-web", "design-tokens"],
+  "targets": {
+    "serve": { "command": "vite --config apps/design-system-docs/vite.config.ts" },
+    "build": { "command": "vite build --config apps/design-system-docs/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/design-system-docs"] },
+    "lint": { "command": "eslint apps/design-system-docs --max-warnings=0" }
+  }
+}

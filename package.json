@@ -1,0 +1,40 @@
+{
+  "name": "portal-pessoas-itau",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "scripts": {
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "golden-path": "node tools/generators/create-domain.mjs",
+    "verify:federation": "node scripts/verify-federation.mjs"
+  },
+  "dependencies": {
+    "@module-federation/runtime": "2.8.2",
+    "@module-federation/vite": "1.20.7",
+    "@vitejs/plugin-react": "6.0.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-router-dom": "7.13.1",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@nx/eslint": "23.1.1",
+    "@nx/eslint-plugin": "23.1.1",
+    "@nx/js": "23.1.1",
+    "@nx/vite": "23.1.1",
+    "@nx/vitest": "23.1.1",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.8",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.1",
+    "nx": "23.1.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.48.1",
+    "vite": "8.2.1",
+    "vitest": "4.1.10"
+  }
+}

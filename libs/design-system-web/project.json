@@ -1,0 +1,8 @@
+{
+  "name": "design-system-web",
+  "sourceRoot": "libs/design-system-web/src",
+  "projectType": "library",
+  "tags": ["scope:design-system", "type:ui"],
+  "implicitDependencies": ["design-tokens"],
+  "targets": { "lint": { "command": "eslint libs/design-system-web --max-warnings=0" } }
+}

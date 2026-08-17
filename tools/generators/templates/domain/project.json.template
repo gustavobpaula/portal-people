@@ -1,0 +1,7 @@
+{
+  "name": "__DOMAIN_NAME__",
+  "sourceRoot": "apps/__DOMAIN_NAME__/src",
+  "projectType": "application",
+  "tags": ["scope:__DOMAIN_NAME__", "type:app"],
+  "targets": { "lint": { "command": "eslint apps/__DOMAIN_NAME__ --max-warnings=0" } }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "neutral-journey",
+  "route": "/foundation",
+  "strategy": "federated-module",
+  "version": "1.0.0",
+  "platformCompatibility": "^1.0.0",
+  "owner": { "squad": "platform", "contact": "platform@example.test" },
+  "observability": { "domain": "foundation", "eventNamespace": "foundation" },
+  "rollout": { "audience": "all", "percentage": 100 },
+  "remote": { "name": "neutral-remote", "entry": "http://localhost:4201/mf-manifest.json", "exposedModule": "./Journey" }
+}

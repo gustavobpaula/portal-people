@@ -1,0 +1,11 @@
+{
+  "name": "platform-runtime",
+  "sourceRoot": "libs/platform/runtime/src",
+  "projectType": "library",
+  "tags": ["scope:platform", "type:runtime"],
+  "implicitDependencies": ["platform-contracts"],
+  "targets": {
+    "test": { "command": "vitest run libs/platform/runtime" },
+    "lint": { "command": "eslint libs/platform/runtime --max-warnings=0" }
+  }
+}

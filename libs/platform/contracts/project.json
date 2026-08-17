@@ -1,0 +1,10 @@
+{
+  "name": "platform-contracts",
+  "sourceRoot": "libs/platform/contracts/src",
+  "projectType": "library",
+  "tags": ["scope:platform", "type:contract"],
+  "targets": {
+    "test": { "command": "vitest run libs/platform/contracts" },
+    "lint": { "command": "eslint libs/platform/contracts --max-warnings=0" }
+  }
+}

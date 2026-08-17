@@ -1,0 +1,9 @@
+{
+  "name": "golden-path",
+  "sourceRoot": "tools/generators",
+  "projectType": "library",
+  "tags": ["scope:platform", "type:tooling"],
+  "targets": {
+    "test": { "command": "vitest run tools/generators" }
+  }
+}

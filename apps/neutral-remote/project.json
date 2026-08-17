@@ -1,0 +1,12 @@
+{
+  "name": "neutral-remote",
+  "sourceRoot": "apps/neutral-remote/src",
+  "projectType": "application",
+  "tags": ["scope:neutral-domain", "type:app"],
+  "implicitDependencies": ["platform-contracts", "platform-runtime"],
+  "targets": {
+    "serve": { "command": "vite --config apps/neutral-remote/vite.config.ts" },
+    "build": { "command": "vite build --config apps/neutral-remote/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/neutral-remote"] },
+    "lint": { "command": "eslint apps/neutral-remote --max-warnings=0" }
+  }
+}

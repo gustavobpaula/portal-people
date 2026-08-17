@@ -1,0 +1,12 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #161616;
+  background: #f7f7f7;
+}
+main {
+  max-width: 48rem;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 0.5rem;
+}

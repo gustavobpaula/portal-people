@@ -1,0 +1,12 @@
+{
+  "name": "portal-host",
+  "sourceRoot": "apps/portal-host/src",
+  "projectType": "application",
+  "tags": ["scope:shell", "type:app"],
+  "implicitDependencies": ["platform-runtime", "platform-contracts"],
+  "targets": {
+    "serve": { "command": "vite --config apps/portal-host/vite.config.ts" },
+    "build": { "command": "vite build --config apps/portal-host/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/portal-host"] },
+    "lint": { "command": "eslint apps/portal-host --max-warnings=0" }
+  }
+}
