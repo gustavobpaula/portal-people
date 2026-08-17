@@ -10,6 +10,10 @@ const validManifest = {
 
 describe('journeyManifestSchema', () => {
   it('accepts a complete federated journey manifest', () => expect(journeyManifestSchema.parse(validManifest)).toEqual(validManifest));
+  it('accepts the additive display name and remains compatible without it', () => {
+    expect(journeyManifestSchema.parse({ ...validManifest, displayName: 'Fundação' }).displayName).toBe('Fundação');
+    expect(journeyManifestSchema.parse(validManifest).displayName).toBeUndefined();
+  });
   it.each([
     ['strategy', { ...validManifest, strategy: 'iframe' }],
     ['version', { ...validManifest, version: 'one' }],

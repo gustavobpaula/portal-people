@@ -2,6 +2,6 @@
   "name": "__DOMAIN_NAME__",
   "sourceRoot": "apps/__DOMAIN_NAME__/src",
   "projectType": "application",
-  "tags": ["scope:__DOMAIN_NAME__", "type:app"],
-  "targets": { "lint": { "command": "eslint apps/__DOMAIN_NAME__ --max-warnings=0" } }
+  "tags": ["scope:domain", "domain:__DOMAIN_NAME__", "type:app"],
+  "targets": { "serve": { "command": "vite --config apps/__DOMAIN_NAME__/vite.config.ts" }, "build": { "command": "vite build --config apps/__DOMAIN_NAME__/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/__DOMAIN_NAME__"] }, "test": { "command": "vitest run --config apps/__DOMAIN_NAME__/vitest.config.ts" }, "lint": { "command": "eslint apps/__DOMAIN_NAME__ --max-warnings=0" } }
 }

@@ -20,6 +20,7 @@ const route = z
 /** Fields shared by every routing strategy before its destination-specific data is added. */
 const commonJourney = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  displayName: z.string().trim().min(1).optional(),
   route,
   version: semanticVersion,
   platformCompatibility: compatibilityRange,

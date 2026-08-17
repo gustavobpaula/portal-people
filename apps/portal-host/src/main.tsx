@@ -1,8 +1,15 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { App } from './App';
-import './styles.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { App } from "./App";
+import "./global.scss";
 
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error('Root element is required.');
-createRoot(rootElement).render(<StrictMode><App /></StrictMode>);
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Root element is required.");
+createRoot(rootElement).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+);
