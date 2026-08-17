@@ -7,10 +7,12 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
   cacheDir: fileURLToPath(new URL('../../node_modules/.vite/portal-host', import.meta.url)),
-  plugins: [react(), federation(federationConfig)], server: { port: 4200 },
+  plugins: [react(), federation(federationConfig)], server: { port: 4200, strictPort: true },
   build: { target: 'chrome89', outDir: fileURLToPath(new URL('../../dist/apps/portal-host', import.meta.url)), emptyOutDir: true },
   resolve: { alias: {
     '@portal/platform-contracts': fileURLToPath(new URL('../../libs/platform/contracts/src/index.ts', import.meta.url)),
-    '@portal/platform-runtime': fileURLToPath(new URL('../../libs/platform/runtime/src/index.ts', import.meta.url))
+    '@portal/platform-runtime': fileURLToPath(new URL('../../libs/platform/runtime/src/index.ts', import.meta.url)),
+    '@portal/design-system-web': fileURLToPath(new URL('../../libs/design-system-web/src/index.tsx', import.meta.url)),
+    '@portal/design-tokens': fileURLToPath(new URL('../../libs/design-tokens/src/index.ts', import.meta.url))
   } }
 });

@@ -15,6 +15,7 @@ corepack pnpm test
 corepack pnpm nx build portal-host
 corepack pnpm nx build neutral-remote
 corepack pnpm verify:federation
+corepack pnpm verify:shell
 corepack pnpm golden-path -- --name nova-jornada --dry-run
 corepack pnpm storybook
 corepack pnpm storybook:build
@@ -72,7 +73,7 @@ No marco atual, novas jornadas entram pelo golden path. Ele valida o nome em `ke
    corepack pnpm typecheck
    ```
 
-> O generator atual cria somente o esqueleto validado. A configuração de Vite, Module Federation, manifesto, telemetria e testes de integração será incorporada incrementalmente quando as próximas specs de shell e jornadas forem aprovadas. Não adicione essas integrações antecipadamente.
+> O generator cria um remote Vite com Module Federation, manifesto local e teste smoke. Use `--port` para evitar colisão entre remotes e adicione o conteúdo de `journey-manifest.json` ao registro local do host quando a jornada for aprovada; o generator não altera o shell.
 
 ## Criando uma library
 
@@ -89,7 +90,7 @@ Crie uma library apenas quando houver uma responsabilidade reutilizável e um ow
      "name": "beneficios-consulta",
      "sourceRoot": "libs/beneficios/consulta/src",
      "projectType": "library",
-     "tags": ["scope:beneficios", "type:feature"],
+     "tags": ["scope:domain", "domain:beneficios", "type:feature"],
      "targets": {
        "lint": {
          "command": "eslint libs/beneficios/consulta --max-warnings=0"
@@ -98,7 +99,7 @@ Crie uma library apenas quando houver uma responsabilidade reutilizável e um ow
    }
    ```
 
-4. Adicione o alias público no `tsconfig.base.json` e, enquanto o workspace ainda usa aliases explícitos, no `vite.config.ts` de cada consumidor autorizado.
+4. Use as tags `scope:domain`, `domain:<dominio>` e o respectivo `type:*` em cada library da jornada. Ela pode depender do próprio domínio, da plataforma e do Design System, mas não de outro domínio. Em seguida, adicione o alias público no `tsconfig.base.json` e, enquanto o workspace ainda usa aliases explícitos, no `vite.config.ts` de cada consumidor autorizado.
 
 5. Execute:
 

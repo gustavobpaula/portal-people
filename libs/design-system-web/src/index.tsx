@@ -413,6 +413,8 @@ export interface AppHeaderProps extends HTMLAttributes<HTMLElement> {
   brand?: string;
   homeHref?: string;
   navigationItems?: NavigationItem[];
+  onNavigate?: NavigationProps["onNavigate"];
+  onHomeNavigate?: (event: MouseEvent<HTMLAnchorElement>) => void;
   actions?: ReactNode;
   menuLabel?: string;
 }
@@ -420,6 +422,8 @@ export function AppHeader({
   brand = "Portal Pessoas",
   homeHref = "/",
   navigationItems = [],
+  onNavigate,
+  onHomeNavigate,
   actions,
   menuLabel = "Abrir navegação",
   className,
@@ -429,7 +433,7 @@ export function AppHeader({
   return (
     <header {...props} className={cx(styles.header, className)}>
       <div className={styles.headerBar}>
-        <a className={styles.brand} href={homeHref}>
+        <a className={styles.brand} href={homeHref} onClick={onHomeNavigate}>
           {brand}
         </a>
         {navigationItems.length ? (
@@ -449,6 +453,7 @@ export function AppHeader({
         <Navigation
           label="Navegação principal"
           items={navigationItems}
+          onNavigate={onNavigate}
           className={cx(
             styles.headerNavigation,
             open && styles.headerNavigation_open,

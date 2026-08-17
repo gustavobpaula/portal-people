@@ -2,8 +2,8 @@
   "name": "neutral-remote",
   "sourceRoot": "apps/neutral-remote/src",
   "projectType": "application",
-  "tags": ["scope:neutral-domain", "type:app"],
-  "implicitDependencies": ["platform-contracts", "platform-runtime"],
+  "tags": ["scope:domain", "domain:neutral", "type:app"],
+  "implicitDependencies": ["platform-contracts", "platform-runtime", "design-system-web", "design-tokens"],
   "targets": {
     "serve": { "command": "vite --config apps/neutral-remote/vite.config.ts" },
     "build": { "command": "vite build --config apps/neutral-remote/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/neutral-remote"] },

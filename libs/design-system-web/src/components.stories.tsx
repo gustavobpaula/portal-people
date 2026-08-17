@@ -90,6 +90,10 @@ export const NavigationAndHeader: Story = {
   parameters: { viewport: { defaultViewport: "mobile" } },
   render: () => (
     <AppHeader
+      onNavigate={(item, event) => {
+        if (!event.metaKey && !event.ctrlKey && event.button === 0) event.preventDefault();
+        console.info("storybook-navigation", item.href);
+      }}
       navigationItems={[
         { id: "home", label: "Início", href: "/", current: true },
         {

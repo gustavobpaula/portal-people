@@ -60,6 +60,7 @@ Nenhuma para o primeiro marco.
 - [Parte 1 — Proposta Técnica](specs/parte-1-proposta-tecnica.md)
 - [Parte 2 — Fundação da Plataforma](specs/parte-2-fundacao-plataforma.md)
 - [Parte 2 — Design System](specs/parte-2-design-system.md)
+- [Parte 2 — Shell e Contrato da Plataforma](specs/parte-2-shell-plataforma.md)
 
 ## Delivery Roadmap
 

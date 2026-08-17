@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
   "include": ["apps/**/*.ts", "apps/**/*.tsx", "libs/**/*.ts", "libs/**/*.tsx", "tools/**/*.ts", "tools/**/*.tsx"],
-  "exclude": ["apps/**/vite.config.ts", "apps/**/module-federation.config.ts", "**/*.spec.ts"]
+  "exclude": ["apps/**/vite.config.ts", "apps/**/module-federation.config.ts", "tools/generators/templates/**", "**/*.spec.ts"]
 }

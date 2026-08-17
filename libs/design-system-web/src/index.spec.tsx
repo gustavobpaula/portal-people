@@ -82,6 +82,24 @@ describe("design system public components", () => {
       "page",
     );
   });
+  it("forwards navigation callbacks without changing native link behavior", () => {
+    const onNavigate = vi.fn();
+    const onHomeNavigate = vi.fn();
+    render(
+      <AppHeader
+        onNavigate={onNavigate}
+        onHomeNavigate={onHomeNavigate}
+        navigationItems={[{ id: "journey", label: "Jornada", href: "/jornada" }]}
+      />,
+    );
+    fireEvent.click(screen.getByRole("link", { name: "Jornada" }));
+    fireEvent.click(screen.getByRole("link", { name: "Portal Pessoas" }), {
+      metaKey: true,
+    });
+    expect(onNavigate).toHaveBeenCalledOnce();
+    expect(onHomeNavigate).toHaveBeenCalledOnce();
+    expect(onHomeNavigate.mock.calls[0][0].metaKey).toBe(true);
+  });
   it("uses appropriate live regions for feedback and empty states", () => {
     const dismiss = vi.fn();
     render(

@@ -3,7 +3,7 @@
   "sourceRoot": "apps/portal-host/src",
   "projectType": "application",
   "tags": ["scope:shell", "type:app"],
-  "implicitDependencies": ["platform-runtime", "platform-contracts"],
+  "implicitDependencies": ["platform-runtime", "platform-contracts", "design-system-web", "design-tokens"],
   "targets": {
     "serve": { "command": "vite --config apps/portal-host/vite.config.ts" },
     "build": { "command": "vite build --config apps/portal-host/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/portal-host"] },

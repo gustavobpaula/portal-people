@@ -7,10 +7,22 @@ import {
   type PlatformCapabilities
 } from '@portal/platform-contracts';
 
+const defaultRuntime = createInstance({ name: 'portal-host', remotes: [] });
+
 /** Result boundary used by the host to distinguish a loadable journey from a safe fallback state. */
 export type JourneyLoadResult =
   | { status: 'ready'; manifest: Extract<JourneyManifest, { strategy: 'federated-module' }>; module: FederatedJourneyModule }
-  | { status: 'fallback'; reason: 'invalid-manifest' | 'incompatible-contract' | 'remote-unavailable' };
+  | { status: 'fallback'; reason: 'invalid-manifest' | 'incompatible-contract' | 'remote-timeout' | 'remote-unavailable' };
+
+export type JourneyRegistryResolution = Readonly<{
+  journeys: JourneyManifest[];
+  rejected: Array<{ index: number; reason: 'invalid-manifest' | 'invalid-registry' }>;
+}>;
+
+export type WebCapabilityAdapters = Readonly<{
+  navigate?: PlatformCapabilities['navigate'];
+  telemetry?: PlatformCapabilities['telemetry'];
+}>;
 
 /**
  * Checks whether the manifest's platform contract major version is supported.
@@ -30,6 +42,24 @@ export function resolveManifest(value: unknown): JourneyManifest | null {
 }
 
 /**
+ * Resolves each registry entry independently so one malformed journey cannot hide valid ones.
+ */
+export function resolveJourneyRegistry(value: unknown): JourneyRegistryResolution {
+  if (!Array.isArray(value)) {
+    return { journeys: [], rejected: [{ index: -1, reason: 'invalid-registry' }] };
+  }
+
+  const journeys: JourneyManifest[] = [];
+  const rejected: JourneyRegistryResolution['rejected'] = [];
+  value.forEach((entry, index) => {
+    const manifest = resolveManifest(entry);
+    if (manifest) journeys.push(manifest);
+    else rejected.push({ index, reason: 'invalid-manifest' });
+  });
+  return { journeys, rejected };
+}
+
+/**
  * Validates, registers, and loads a federated journey while preserving a safe host fallback.
  *
  * @param value Raw manifest data from the journey registry.
@@ -39,7 +69,7 @@ export function resolveManifest(value: unknown): JourneyManifest | null {
  */
 export async function loadFederatedJourney(
   value: unknown,
-  runtime: Pick<ModuleFederation, 'loadRemote' | 'registerRemotes'> = createInstance({ name: 'portal-host', remotes: [] }),
+  runtime: Pick<ModuleFederation, 'loadRemote' | 'registerRemotes'> = defaultRuntime,
   timeoutMs = 5_000
 ): Promise<JourneyLoadResult> {
   const manifest = resolveManifest(value);
@@ -47,15 +77,21 @@ export async function loadFederatedJourney(
   if (!isCompatible(manifest.platformCompatibility)) return { status: 'fallback', reason: 'incompatible-contract' };
 
   runtime.registerRemotes?.([{ name: manifest.remote.name, entry: manifest.remote.entry }]);
+  const timeoutMarker = Symbol('remote-timeout');
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
     const module = await Promise.race([
       runtime.loadRemote<FederatedJourneyModule>(`${manifest.remote.name}/${manifest.remote.exposedModule.slice(2)}`),
-      new Promise<never>((_resolve, reject) => setTimeout(() => reject(new Error('Remote timed out.')), timeoutMs))
+      new Promise<never>((_resolve, reject) => {
+        timeoutId = setTimeout(() => reject(timeoutMarker), timeoutMs);
+      })
     ]);
     if (!module) return { status: 'fallback', reason: 'remote-unavailable' };
     return { status: 'ready', manifest, module };
-  } catch {
-    return { status: 'fallback', reason: 'remote-unavailable' };
+  } catch (error) {
+    return { status: 'fallback', reason: error === timeoutMarker ? 'remote-timeout' : 'remote-unavailable' };
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
   }
 }
 
@@ -63,11 +99,14 @@ export async function loadFederatedJourney(
  * Creates the browser implementation of the narrow platform contract supplied to remotes.
  * It deliberately exposes device availability rather than browser internals or credentials.
  */
-export function createWebCapabilities(): PlatformCapabilities {
+export function createWebCapabilities(adapters: WebCapabilityAdapters = {}): PlatformCapabilities {
   return {
-    navigate: (path) => window.history.pushState({}, '', path),
+    navigate: adapters.navigate ?? ((path) => {
+      window.history.pushState({}, '', path);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }),
     context: { correlationId: crypto.randomUUID(), locale: navigator.language, platform: 'web' },
-    telemetry: { track: (event) => console.info('portal-event', event.name, event.properties) },
+    telemetry: adapters.telemetry ?? { track: (event) => console.info('portal-event', event.name, event.properties) },
     flags: {},
     notifications: { show: (message) => console.info('portal-notification', message) },
     device: { isAvailable: () => false }

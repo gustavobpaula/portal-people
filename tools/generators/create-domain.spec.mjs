@@ -1,5 +1,16 @@
 import { spawnSync } from 'node:child_process';
+import { access, mkdtemp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { createDomain } from './create-domain.mjs';
+
+async function createWorkspace(domains = []) {
+  const workspaceRoot = await mkdtemp(join(tmpdir(), 'portal-generator-'));
+  await mkdir(join(workspaceRoot, 'tools'), { recursive: true });
+  await writeFile(join(workspaceRoot, 'tools/domain-governance.json'), `${JSON.stringify({ domains }, null, 2)}\n`);
+  return workspaceRoot;
+}
 
 describe('golden path', () => {
   it('validates kebab-case names without changing the workspace in dry-run', () => {
@@ -10,5 +21,28 @@ describe('golden path', () => {
   it('rejects invalid names', () => {
     const output = spawnSync('node', ['tools/generators/create-domain.mjs', '--name', 'Nova Jornada', '--dry-run'], { encoding: 'utf8' });
     expect(output.status).toBe(1);
+  });
+  it('materializes a complete federated remote outside the shell', async () => {
+    const workspaceRoot = await createWorkspace(['legado']);
+    const destination = await createDomain({ name: 'nova-jornada', displayName: 'Nova jornada', port: 4301, workspaceRoot });
+    expect(await readFile(join(destination, 'journey-manifest.json'), 'utf8')).toContain('http://localhost:4301/mf-manifest.json');
+    const viteConfig = await readFile(join(destination, 'vite.config.ts'), 'utf8');
+    expect(viteConfig).toContain('federation(config)');
+    expect(viteConfig).toContain('port: Number("4301")');
+    expect(viteConfig).not.toContain('__PORT__');
+    expect(await readFile(join(destination, 'src/Journey.spec.tsx'), 'utf8')).toContain('Nova jornada');
+    expect(await readFile(join(destination, 'src/Journey.spec.tsx'), 'utf8')).toContain('import { expect, it } from "vitest"');
+    expect(await readFile(join(destination, 'src/Journey.tsx'), 'utf8')).not.toContain('@ts-nocheck');
+    expect(await readFile(join(destination, 'src/main.tsx'), 'utf8')).not.toContain('@ts-nocheck');
+    expect(JSON.parse(await readFile(join(destination, 'project.json'), 'utf8')).tags).toEqual(['scope:domain', 'domain:nova-jornada', 'type:app']);
+    expect(JSON.parse(await readFile(join(workspaceRoot, 'tools/domain-governance.json'), 'utf8')).domains).toEqual(['legado', 'nova-jornada']);
+    await expect(access(join(workspaceRoot, 'apps/portal-host'))).rejects.toMatchObject({ code: 'ENOENT' });
+    await expect(access(join(workspaceRoot, 'apps/portal-host/src/assets/journey-registry.json'))).rejects.toMatchObject({ code: 'ENOENT' });
+  });
+  it('keeps the governance catalog idempotent while preserving existing domains', async () => {
+    const workspaceRoot = await createWorkspace(['legado', 'legado']);
+    await createDomain({ name: 'beneficios', workspaceRoot });
+    await createDomain({ name: 'ferias', workspaceRoot });
+    expect(JSON.parse(await readFile(join(workspaceRoot, 'tools/domain-governance.json'), 'utf8')).domains).toEqual(['beneficios', 'ferias', 'legado']);
   });
 });

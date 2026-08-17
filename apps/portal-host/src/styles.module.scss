@@ -1,0 +1,25 @@
+.shell {
+  min-height: 100vh;
+  font-family: var(--ds-font-family);
+}
+
+.main {
+  display: grid;
+  gap: var(--ds-space-md);
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: var(--ds-space-lg) var(--ds-space-md);
+}
+
+.loading {
+  display: grid;
+  min-height: 16rem;
+  place-items: center;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-sm);
+  margin-top: var(--ds-space-md);
+}
