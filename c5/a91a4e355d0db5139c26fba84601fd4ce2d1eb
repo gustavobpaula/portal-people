@@ -1,0 +1,64 @@
+docs/ARCHITECTURE.md
+  s_8c2c289b07c305::t_5013684c57b6ab 76-79,99,149,157,167,222
+tools/generators/create-domain.spec.mjs
+  s_8c2c289b07c305::t_ba7095016164d0 38,46
+  s_8c2c289b07c305::t_5013684c57b6ab 43-45
+  s_8c2c289b07c305::t_d76029dc683f10 47-48
+README.md
+  s_8c2c289b07c305::t_5013684c57b6ab 72-74,77
+apps/beneficios/src/mocks/handlers.ts
+  s_8c2c289b07c305::t_64e872d1adea76 2
+tools/generators/templates/domain/src/main.tsx
+  s_8c2c289b07c305::t_5013684c57b6ab 5
+apps/ferias/src/services/api/vacations-api.spec.ts
+  s_8c2c289b07c305::t_003c757790e957 1-60
+apps/beneficios/module-federation.config.ts
+  s_8c2c289b07c305::t_9630c126bf27c9 6
+apps/beneficios/src/app/Journey.spec.tsx
+  s_8c2c289b07c305::t_64e872d1adea76 16
+  s_8c2c289b07c305::t_9630c126bf27c9 1-15,17-182
+apps/beneficios/src/app/Journey.tsx
+  s_8c2c289b07c305::t_9630c126bf27c9 1-23,25-307
+  s_8c2c289b07c305::t_64e872d1adea76 24
+apps/ferias/src/services/api/vacations-api.ts
+  s_8c2c289b07c305::t_e9021836f033cd 5,13
+apps/beneficios/src/main.tsx
+  s_8c2c289b07c305::t_9630c126bf27c9 4,6
+apps/ferias/src/mocks/handlers.ts
+  s_8c2c289b07c305::t_64e872d1adea76 5
+tools/generators/templates/domain/module-federation.config.ts
+  s_8c2c289b07c305::t_5013684c57b6ab 6
+apps/neutral-remote/src/main.tsx
+  s_8c2c289b07c305::t_9630c126bf27c9 4
+apps/beneficios/src/services/api/benefits-api.spec.tsx
+  s_8c2c289b07c305::t_e9021836f033cd 1-71
+apps/ferias/src/app/Journey.spec.tsx
+  s_8c2c289b07c305::t_64e872d1adea76 7,11
+apps/ferias/src/services/api/vacation-fixtures.ts
+  s_8c2c289b07c305::t_e9021836f033cd 1-18
+apps/ferias/src/app/Journey.tsx
+  s_8c2c289b07c305::t_64e872d1adea76 26
+apps/neutral-remote/module-federation.config.ts
+  s_8c2c289b07c305::t_9630c126bf27c9 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c5a91a4e355d0db5139c26fba84601fd4ce2d1eb",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_8c2c289b07c305": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0102b-2933-7df1-90b9-3992c62ed5ce",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
