@@ -1,0 +1,151 @@
+apps/neutral-remote/src/Journey.tsx
+  s_360d317acd326c::t_c24a9c72cdd8cf 1-5
+apps/portal-host/module-federation.config.ts
+  s_360d317acd326c::t_01cd55dfaf9158 1-10
+tsconfig.json
+  s_360d317acd326c::t_76da5ad0bd4739 4-5
+  s_360d317acd326c::t_4d6c2b6471c43b 1-2
+  s_360d317acd326c::t_d966e5ef292828 3
+apps/portal-host/src/styles.css
+  h_ab4cd9ae44a449 1-12
+apps/portal-host/src/App.tsx
+  s_360d317acd326c::t_0c6e7e4863b0bb 1,11-21
+  s_360d317acd326c::t_8deb55153984e7 5-7
+  s_360d317acd326c::t_7e9f870470be8a 8-10
+  s_360d317acd326c::t_8b4c2c7b997d94 2-4
+libs/platform/runtime/src/index.spec.ts
+  s_360d317acd326c::t_60637706f21ec1 1-23
+apps/neutral-remote/index.html
+  s_360d317acd326c::t_ae81e2e4a5004e 1
+apps/portal-host/src/main.tsx
+  s_360d317acd326c::t_3da845fe57abd3 1-8
+libs/platform/runtime/src/index.ts
+  s_360d317acd326c::t_6f04d85218a6e8 7-9
+  s_360d317acd326c::t_3a8488cd0c884a 10
+  s_360d317acd326c::t_8deb55153984e7 15-65
+  s_360d317acd326c::t_a46ca42223f4ac 1-6,69-75
+  s_360d317acd326c::t_87a921389d7ee2 11-14
+  s_360d317acd326c::t_d2056eebba39b1 66-68
+eslint.config.mjs
+  s_360d317acd326c::t_159093d279b229 1-25
+apps/portal-host/index.html
+  s_360d317acd326c::t_c66cb2ad4eb31a 1
+pnpm-lock.yaml
+  s_55c1408057eaa5::t_46c279225b64e2 1-5041
+README.md
+  s_360d317acd326c::t_b7851879cb10be 21-23
+  s_360d317acd326c::t_b58f90f19c3523 24-106
+  s_360d317acd326c::t_a66b5d80b5ba3d 1-20
+tools/generators/templates/domain/src/Journey.tsx
+  s_360d317acd326c::t_e5ec05985ee098 1-5
+pnpm-workspace.yaml
+  s_55c1408057eaa5::t_947162a7af6feb 1-5
+apps/neutral-remote/module-federation.config.ts
+  s_360d317acd326c::t_c7bef15a984149 1-6
+libs/design-system-web/project.json
+  s_360d317acd326c::t_6fe5d53b9e79bf 1-8
+apps/design-system-docs/project.json
+  s_360d317acd326c::t_3d822a99e9b9fa 1-12
+libs/platform/contracts/src/index.spec.ts
+  s_360d317acd326c::t_9f0110756fec2f 1-22
+vitest.config.ts
+  s_360d317acd326c::t_c5ad822df56f88 1-7
+tools/generators/create-domain.spec.mjs
+  s_360d317acd326c::t_e89b511f595de3 1-14
+libs/platform/contracts/src/index.ts
+  s_360d317acd326c::t_3a8488cd0c884a 4-107
+  s_360d317acd326c::t_da8d2cb80bb4b3 1-3
+  s_360d317acd326c::t_bf9cd6e19c23f1 108-110
+apps/design-system-docs/index.html
+  s_360d317acd326c::t_804412b0883d02 1
+apps/neutral-remote/vite.config.ts
+  s_360d317acd326c::t_f5a4b287d8dde3 10-12
+  s_360d317acd326c::t_61ba808a3c9321 1-5,13-16
+  s_360d317acd326c::t_5ae2a9f4813ae9 9
+  s_360d317acd326c::t_e5ec5f1de80d45 6-8
+nx.json
+  h_ab4cd9ae44a449 1-42
+apps/neutral-remote/src/main.tsx
+  s_360d317acd326c::t_5e83f84fd6e494 1-8
+libs/platform/contracts/project.json
+  s_360d317acd326c::t_23792176ea9452 1-10
+scripts/verify-federation.mjs
+  s_360d317acd326c::t_792a8771917784 1-5
+apps/portal-host/vite.config.ts
+  s_360d317acd326c::t_0517b445239645 10-12
+  s_360d317acd326c::t_29c47cab3deb37 1-5,13-16
+  s_360d317acd326c::t_4e476036e3bab2 6-8
+  s_360d317acd326c::t_5ae2a9f4813ae9 9
+apps/design-system-docs/vite.config.ts
+  s_360d317acd326c::t_036b65ff2ae9ed 5
+  s_360d317acd326c::t_5ae2a9f4813ae9 4
+  s_360d317acd326c::t_dd3e8e7f5484e6 7
+  s_360d317acd326c::t_675396f7184a23 6
+  s_360d317acd326c::t_9e9ffca42f1b4a 1-3
+package.json
+  s_360d317acd326c::t_7a4110b018646a 1-40
+libs/design-system-web/src/index.tsx
+  s_360d317acd326c::t_675396f7184a23 3-4,6-10,12-13,15
+  h_ab4cd9ae44a449 1-2,5,11,14
+tools/generators/create-domain.mjs
+  s_360d317acd326c::t_78830e7efe5ba3 9-11
+  s_360d317acd326c::t_3a8488cd0c884a 5-8
+  s_360d317acd326c::t_cdc5355a1ffa45 1,12-33
+  s_360d317acd326c::t_f8b9535be02eb9 2-4
+apps/portal-host/project.json
+  s_360d317acd326c::t_0189138cba9d15 1-12
+apps/portal-host/src/assets/journey-manifest.json
+  s_360d317acd326c::t_a117a47fe0c624 1-11
+.npmrc
+  s_360d317acd326c::t_19926cf3d58fe7 1
+tools/generators/templates/domain/project.json.template
+  s_360d317acd326c::t_4f2c2f6a1e9ef7 1-7
+apps/neutral-remote/project.json
+  s_360d317acd326c::t_c387a0fcf384d1 1-12
+apps/design-system-docs/src/main.tsx
+  s_360d317acd326c::t_506185a2716b15 1-6
+tsconfig.base.json
+  s_360d317acd326c::t_00be8476964948 20-22
+  s_360d317acd326c::t_307bb196eb4d4f 1-15
+  s_360d317acd326c::t_38d47ccf77f23c 16-18
+  s_360d317acd326c::t_675396f7184a23 19
+libs/platform/runtime/project.json
+  s_360d317acd326c::t_886c935385bc2b 1-11
+libs/design-tokens/project.json
+  s_360d317acd326c::t_932ae7b54cdacd 1-7
+tools/generators/project.json
+  s_360d317acd326c::t_7a22cf4f607a03 1-9
+libs/design-tokens/src/index.ts
+  h_ab4cd9ae44a449 1-4
+.gitignore
+  s_360d317acd326c::t_c625cb743029d7 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "2faca341d588e508978f4f550aa27916690bf79a",
+  "prompts": {},
+  "humans": {
+    "h_ab4cd9ae44a449": {
+      "author": "Gabriela Bento de Paula <bentogabi@MacBook-Air-de-Gabriela.local>"
+    }
+  },
+  "sessions": {
+    "s_360d317acd326c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a002c9-5cf7-7a60-a229-fa1db8b5161c",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gabriela Bento de Paula <bentogabi@MacBook-Air-de-Gabriela.local>"
+    },
+    "s_55c1408057eaa5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a002cd-3401-76e1-9bd0-a65cbecfdc28",
+        "model": "unknown"
+      },
+      "human_author": "Gabriela Bento de Paula <bentogabi@MacBook-Air-de-Gabriela.local>"
+    }
+  }
+}
