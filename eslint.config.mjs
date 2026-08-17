@@ -22,4 +22,16 @@ export default [
       }]
     }
   }
+  ,
+  {
+    files: ['apps/**/*.{ts,tsx}', 'libs/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [
+          { group: ['@portal/design-system-web/*'], message: 'Use @portal/design-system-web only through its public entry point.' },
+          { group: ['@portal/design-tokens/*'], message: 'Use @portal/design-tokens only through its public entry point.' }
+        ]
+      }]
+    }
+  }
 ];

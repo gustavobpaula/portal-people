@@ -3,5 +3,9 @@
   "sourceRoot": "libs/design-tokens/src",
   "projectType": "library",
   "tags": ["scope:design-system", "type:tokens"],
-  "targets": { "lint": { "command": "eslint libs/design-tokens --max-warnings=0" } }
+  "metadata": { "owner": "Plataforma Frontend" },
+  "targets": {
+    "test": { "command": "vitest run libs/design-tokens" },
+    "lint": { "command": "eslint libs/design-tokens --max-warnings=0" }
+  }
 }

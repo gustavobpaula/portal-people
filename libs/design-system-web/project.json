@@ -3,6 +3,7 @@
   "sourceRoot": "libs/design-system-web/src",
   "projectType": "library",
   "tags": ["scope:design-system", "type:ui"],
+  "metadata": { "owner": "Plataforma Frontend" },
   "implicitDependencies": ["design-tokens"],
-  "targets": { "lint": { "command": "eslint libs/design-system-web --max-warnings=0" } }
+  "targets": { "test": { "command": "vitest run --config libs/design-system-web/vitest.config.ts" }, "lint": { "command": "eslint libs/design-system-web --max-warnings=0" } }
 }

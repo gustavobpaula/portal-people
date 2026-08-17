@@ -3,10 +3,12 @@
   "sourceRoot": "apps/design-system-docs/src",
   "projectType": "application",
   "tags": ["scope:design-system-docs", "type:app"],
+  "metadata": { "owner": "Plataforma Frontend" },
   "implicitDependencies": ["design-system-web", "design-tokens"],
   "targets": {
-    "serve": { "command": "vite --config apps/design-system-docs/vite.config.ts" },
-    "build": { "command": "vite build --config apps/design-system-docs/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/design-system-docs"] },
-    "lint": { "command": "eslint apps/design-system-docs --max-warnings=0" }
+    "serve": { "command": "storybook dev -p 6006 -c apps/design-system-docs/.storybook" },
+    "build": { "command": "storybook build -c apps/design-system-docs/.storybook -o dist/apps/design-system-docs", "outputs": ["{workspaceRoot}/dist/apps/design-system-docs"] },
+    "test": { "command": "vitest run --config vitest.browser.config.ts" },
+    "lint": { "command": "eslint apps/design-system-docs libs/design-system-web --max-warnings=0" }
   }
 }

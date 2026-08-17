@@ -16,7 +16,23 @@ corepack pnpm nx build portal-host
 corepack pnpm nx build neutral-remote
 corepack pnpm verify:federation
 corepack pnpm golden-path -- --name nova-jornada --dry-run
+corepack pnpm storybook
+corepack pnpm storybook:build
+corepack pnpm test:design-system
+corepack pnpm verify:design-system-assets
 ```
+
+## Design System
+
+O Design System demonstrativo está em `libs/design-tokens` e `libs/design-system-web`; consumidores usam somente `@portal/design-tokens` e `@portal/design-system-web`. A documentação executável é servida de forma independente por Storybook.
+
+Os testes de stories usam Chromium via Playwright. Após instalar as dependências, baixe o browser local uma vez (ou defina `PLAYWRIGHT_CHROMIUM_EXECUTABLE` para usar um Chrome corporativo já instalado):
+
+```sh
+corepack pnpm exec playwright install chromium
+```
+
+Os valores visuais são aproximações locais, não oficiais e substituíveis. O verificador de ativos impede referências remotas, fontes e recursos oficiais nos fontes do Design System.
 
 `portal-host` e `neutral-remote` também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. O host usa o manifesto local em `apps/portal-host/src/assets/journey-manifest.json` e carrega o remote em runtime.
 

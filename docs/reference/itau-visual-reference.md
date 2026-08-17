@@ -24,7 +24,7 @@ O projeto não copia componentes, folhas de estilo, fontes, ícones ou outros at
 | Papel semântico | Valor inicial | Evidência/uso pretendido |
 |---|---:|---|
 | Marca primária | `#FF6200` | Cabeçalhos e realces de marca |
-| Ação primária | `#E55800` | Botões e links de maior prioridade |
+| Ação primária | `#C94F00` | Botões e links de maior prioridade; mantém contraste de 4,56:1 com texto branco |
 | Marca secundária | `#000066` | Ações e contraste institucional |
 | Fundo padrão | `#FFFFFF` | Superfícies principais |
 | Fundo sutil | `#F1F2F4` | Agrupamentos e estados neutros |
@@ -32,13 +32,17 @@ O projeto não copia componentes, folhas de estilo, fontes, ícones ou outros at
 | Texto primário | `#000000` | Títulos e conteúdo principal |
 | Texto secundário | `#4C4C4C` | Apoio e metadados |
 
-Espaçamento: `4`, `8`, `12`, `16`, `24`, `32`, `40` e `48px`. Raios: `4`, `8`, `12` e `16px`.
+Espaçamento: `4`, `8`, `12`, `16`, `24`, `32`, `40` e `48px`. Raios: `4`, `8`, `12` e `16px`. O catálogo local também mapeia superfícies, bordas, feedback, tipografia, elevação e movimento para propriedades CSS semânticas.
 
 ## Tipografia e ativos
 
 O site expõe famílias identificadas como “Itau Text” e “Itau Display”. Elas não serão extraídas nem redistribuídas. O case usa `system-ui`, preservando peso, tamanho e altura de linha como mecanismos de hierarquia.
 
 Ícones serão desenhados localmente como SVGs geométricos simples e decorativos, ou acompanhados por nomes acessíveis quando comunicarem uma ação. A marca do produto será apresentada textualmente como “Portal Pessoas”.
+
+## Tema local
+
+O case entrega somente o tema claro. Ele é materializado em `:root` e `[data-theme="light"]`; temas futuros devem remapear os mesmos nomes semânticos, sem alterar a API dos componentes. `prefers-reduced-motion` remove animações não essenciais e `forced-colors` preserva foco e bordas no modo de alto contraste do sistema.
 
 ## Limitações
 

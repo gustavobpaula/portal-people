@@ -2,4 +2,6 @@ packages:
   - apps/*
   - libs/*/*
 allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
   nx: true
