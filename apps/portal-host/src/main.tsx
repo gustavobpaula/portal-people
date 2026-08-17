@@ -4,12 +4,20 @@ import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import "./global.scss";
 
-const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error("Root element is required.");
-createRoot(rootElement).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-);
+async function bootstrap() {
+  if (import.meta.env.DEV) {
+    const { worker } = await import('./mocks/browser');
+    await worker.start({ onUnhandledRequest: 'bypass', serviceWorker: { url: '/mockServiceWorker.js' } });
+  }
+  const rootElement = document.getElementById("root");
+  if (!rootElement) throw new Error("Root element is required.");
+  createRoot(rootElement).render(
+    <StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </StrictMode>,
+  );
+}
+
+void bootstrap();

@@ -20,6 +20,7 @@
   "dependencies": {
     "@module-federation/runtime": "2.8.2",
     "@module-federation/vite": "1.20.7",
+    "@tanstack/react-query": "^5.101.4",
     "@vitejs/plugin-react": "6.0.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -45,6 +46,7 @@
     "@vitest/browser-playwright": "^4.1.10",
     "eslint": "9.39.1",
     "jsdom": "^30.0.1",
+    "msw": "^2.15.0",
     "nx": "23.1.1",
     "playwright": "^1.62.1",
     "sass": "^1.102.0",
@@ -53,5 +55,8 @@
     "typescript-eslint": "8.48.1",
     "vite": "8.2.1",
     "vitest": "4.1.10"
+  },
+  "msw": {
+    "workerDirectory": ["apps/portal-host/public"]
   }
 }

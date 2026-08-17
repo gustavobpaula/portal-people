@@ -10,5 +10,9 @@ export default defineConfig({
       '@portal/design-tokens': fileURLToPath(new URL('../../libs/design-tokens/src/index.ts', import.meta.url))
     }
   },
-  test: { environment: 'jsdom', include: ['apps/portal-host/src/**/*.spec.tsx'] }
+  test: {
+    environment: 'jsdom',
+    include: ['apps/portal-host/src/**/*.spec.ts', 'apps/portal-host/src/**/*.spec.tsx'],
+    setupFiles: ['apps/portal-host/src/test/setup.ts']
+  }
 });

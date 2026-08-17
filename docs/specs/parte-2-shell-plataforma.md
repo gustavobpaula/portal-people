@@ -6,8 +6,8 @@ Evoluir o host demonstrativo para um shell navegável que componha jornadas regi
 
 ## Functional Requirements
 
-- **FR-1:** O shell deve oferecer layout base com cabeçalho, navegação e área principal, reutilizando somente APIs públicas do Design System para elementos compartilhados e sem incorporar regras ou estado de negócio.
-- **FR-2:** O shell deve resolver uma coleção de manifestos e derivar dela as entradas navegáveis e rotas principais, sem importar implementações de domínio nem exigir alteração da configuração interna para cada nova jornada.
+- **FR-1:** O shell deve oferecer layout base com cabeçalho, área principal e ações transversais aprovadas, reutilizando somente APIs públicas do Design System para elementos compartilhados e sem incorporar regras ou estado de negócio.
+- **FR-2:** O shell deve resolver uma coleção de manifestos e derivar dela as rotas principais, sem importar implementações de domínio nem exigir alteração da configuração interna para cada nova jornada. A descoberta listada das jornadas ocorre por Produtos, conforme `docs/specs/parte-2-experiencias-transversais.md`.
 - **FR-3:** Entradas inválidas ou incompatíveis devem ser isoladas, preservando as entradas válidas e a navegação do shell.
 - **FR-4:** O roteamento deve ser hierárquico: o shell controla a rota principal da jornada, enquanto o remote controla suas rotas relativas. Acesso direto ou refresh em uma rota registrada deve restaurar a composição correspondente.
 - **FR-5:** Jornadas `federated-module` devem ser carregadas sob demanda com estado de loading, timeout, fronteira de erro, fallback controlado, retorno seguro e ação manual de nova tentativa, sem repetição automática ilimitada.
@@ -17,8 +17,8 @@ Evoluir o host demonstrativo para um shell navegável que componha jornadas regi
 
 ## Acceptance Criteria
 
-- **AC-1 [FR-1]:** O shell apresenta landmarks de cabeçalho, navegação e conteúdo principal, indica o item atual e permite operar a navegação por teclado.
-- **AC-2 [FR-2]:** Adicionar uma entrada válida ao registro local torna a jornada neutra navegável sem import de sua implementação ou edição de uma tabela interna de rotas do shell.
+- **AC-1 [FR-1]:** O shell apresenta landmarks de cabeçalho e conteúdo principal, oferece ações aprovadas com operação por teclado e não lista jornadas no cabeçalho.
+- **AC-2 [FR-2]:** Adicionar uma entrada válida ao registro local torna a jornada neutra acessível por Produtos e navegável sem import de sua implementação ou edição de uma tabela interna de rotas do shell.
 - **AC-3 [FR-3]:** Uma coleção contendo entradas válidas e inválidas mantém disponíveis as entradas válidas e não desmonta o shell.
 - **AC-4 [FR-4]:** Navegação direta e refresh em uma rota registrada carregam a jornada correta, e uma rota relativa permanece sob controle do remote.
 - **AC-5 [FR-5]:** Loading, incompatibilidade, timeout e erro de renderização apresentam estados observáveis; a ação de tentar novamente repete somente o carregamento selecionado.
@@ -46,7 +46,7 @@ Evoluir o host demonstrativo para um shell navegável que componha jornadas regi
 
 ## Out of Scope
 
-- Home, catálogo completo, busca, notificações e Portal BFF.
+- Implementação de home, Produtos, busca, conteúdo e dados de notificações, definidos em `docs/specs/parte-2-experiencias-transversais.md`.
 - Jornadas Benefícios e Férias.
 - Execução de `external-web` e `native-route`, rollout, rollback, bridge nativa e registry remoto.
 - Fornecedores de observabilidade, deploy e infraestrutura.

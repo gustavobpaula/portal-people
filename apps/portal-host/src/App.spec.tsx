@@ -50,7 +50,7 @@ describe('App', () => {
     vi.mocked(capabilities.navigate).mockReset();
   });
 
-  it('renders accessible shell navigation and keeps capabilities stable', async () => {
+  it('renders the shell header actions without listing journeys and keeps capabilities stable', async () => {
     const received = vi.fn();
     const remote: FederatedJourneyModule = { default: ({ platform }) => { received(platform); return <p>Correlação: {platform.context.correlationId}</p>; } };
     const loader = vi.fn(async (): Promise<JourneyLoadResult> => ({ status: 'ready', manifest, module: remote }));
@@ -58,9 +58,9 @@ describe('App', () => {
 
     await screen.findByText('Correlação: correlation-stable');
     expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Fundação da plataforma' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Notificações' })).toHaveAttribute('href', '/notificacoes');
+    expect(screen.queryByRole('navigation', { name: 'Navegação principal' })).not.toBeInTheDocument();
     expect(view.createCapabilities).toHaveBeenCalledTimes(1);
     expect(received).toHaveBeenLastCalledWith(capabilities);
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: 'portal.journey.load.succeeded' }));
@@ -70,7 +70,7 @@ describe('App', () => {
     renderShell({ registryData: [manifest, {}] });
     await screen.findByText('Jornada carregada');
     expect(screen.getByRole('alert')).toHaveTextContent('Algumas jornadas não puderam ser registradas');
-    expect(screen.getByRole('link', { name: 'Fundação da plataforma' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Fundação da plataforma/ })).not.toBeInTheDocument();
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: 'portal.registry.resolved', properties: expect.objectContaining({ invalidCount: 1 }) }));
   });
 

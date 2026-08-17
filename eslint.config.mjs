@@ -7,12 +7,12 @@ const domainGovernance = JSON.parse(readFileSync(new URL('./tools/domain-governa
 const domainConstraints = createDomainConstraints(domainGovernance.domains);
 
 export default [
-  { ignores: ['tools/generators/templates/**'] },
+  { ignores: ['tools/generators/templates/**', 'apps/**/public/**'] },
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...tseslint.configs.recommended,
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**', 'apps/**/public/**'],
     files: ['**/*.{ts,tsx}'],
     rules: {
       '@nx/enforce-module-boundaries': ['error', {

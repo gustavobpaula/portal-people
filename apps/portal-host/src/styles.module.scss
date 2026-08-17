@@ -23,3 +23,80 @@
   gap: var(--ds-space-sm);
   margin-top: var(--ds-space-md);
 }
+
+.home {
+  display: grid;
+  gap: var(--ds-space-xl);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--ds-space-md);
+  margin-top: var(--ds-space-sm);
+}
+
+.notifications {
+  display: grid;
+  gap: var(--ds-space-sm);
+  padding: 0;
+  margin: var(--ds-space-sm) 0 0;
+  list-style: none;
+}
+
+.notificationItem {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--ds-space-sm);
+  border: 0;
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-md);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  background: var(--ds-color-surface);
+}
+
+.notificationItem:hover {
+  background: color-mix(in srgb, var(--ds-color-surface-subtle) 80%, var(--ds-color-text) 4%);
+}
+
+.notificationItemUnread {
+  background: var(--ds-color-surface-subtle);
+}
+
+.notificationContent {
+  display: grid;
+  gap: var(--ds-space-xs);
+}
+
+.notificationIndicator {
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-top: 0.35rem;
+  border-radius: 999px;
+  background: var(--ds-color-info);
+}
+
+.headerNotification {
+  display: inline-grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 0;
+  border-radius: var(--ds-radius-md);
+  color: inherit;
+  background: transparent;
+}
+
+.headerNotification:hover {
+  background: var(--ds-color-surface-subtle);
+}
+
+.headerNotification:focus-visible,
+.notificationItem:focus-visible {
+  outline: 0.1875rem solid var(--ds-color-action-primary);
+  outline-offset: 0.1875rem;
+}

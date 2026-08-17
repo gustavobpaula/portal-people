@@ -37,6 +37,8 @@ Os valores visuais são aproximações locais, não oficiais e substituíveis. O
 
 `portal-host` e `neutral-remote` também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. O host usa o manifesto local em `apps/portal-host/src/assets/journey-manifest.json` e carrega o remote em runtime.
 
+Durante o desenvolvimento do `portal-host`, o Portal BFF simulado é iniciado automaticamente no navegador. Ele fornece dados sintéticos para Produtos, busca e notificações; nenhum backend externo é necessário.
+
 O golden path cria um domínio a partir de um template versionado, sem editar configurações internas do shell. Para materializá-lo, remova `--dry-run`.
 
 ## Criando uma nova app de domínio

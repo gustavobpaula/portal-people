@@ -3,6 +3,7 @@
   "sourceRoot": "apps/portal-host/src",
   "projectType": "application",
   "tags": ["scope:shell", "type:app"],
+  "metadata": { "owner": "Plataforma Frontend" },
   "implicitDependencies": ["platform-runtime", "platform-contracts", "design-system-web", "design-tokens"],
   "targets": {
     "serve": { "command": "vite --config apps/portal-host/vite.config.ts" },
