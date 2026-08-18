@@ -1,0 +1,64 @@
+apps/portal-host/src/external-availability.ts
+  s_e32de4e9c30a8c::t_abd596598ffcb2 1-23
+package.json
+  s_e32de4e9c30a8c::t_a9d654fac50e0e 15
+  s_e32de4e9c30a8c::t_7f4dad22942ee2 16
+apps/portal-host/src/App.tsx
+  s_e32de4e9c30a8c::t_b4c8dc5dfd2fd2 181-182
+  s_e32de4e9c30a8c::t_88dea56510b793 9,35-38,61,433,516,587,595-636
+  s_e32de4e9c30a8c::t_abd596598ffcb2 34,51,63,278,284,289-290,306-324,337-346,438,553
+  s_e32de4e9c30a8c::t_a8219a4766a9e1 347-349
+  s_e32de4e9c30a8c::t_32e980e865eac5 350
+scripts/demo-legacy.mjs
+  s_e32de4e9c30a8c::t_7f4dad22942ee2 1-14
+apps/portal-host/src/external-availability.spec.ts
+  s_e32de4e9c30a8c::t_abd596598ffcb2 1-28
+README.md
+  s_e32de4e9c30a8c::t_5c77ea8fa1ad0d 78-79
+  s_e32de4e9c30a8c::t_388a00ddefa892 26,47,68-74
+  s_e32de4e9c30a8c::t_a9d654fac50e0e 25,56
+  s_e32de4e9c30a8c::t_bb4bebe715eb9f 75
+apps/portal-host/src/journey-registry.spec.ts
+  s_e32de4e9c30a8c::t_7f4dad22942ee2 1-30
+scripts/verify-external-web.mjs
+  s_e32de4e9c30a8c::t_5c77ea8fa1ad0d 62-73,76-78,82
+tools/external-web-demo/server.mjs
+  s_e32de4e9c30a8c::t_abd596598ffcb2 9,25-32
+apps/portal-host/src/styles.module.scss
+  s_e32de4e9c30a8c::t_388a00ddefa892 103-112
+apps/portal-host/src/App.spec.tsx
+  s_e32de4e9c30a8c::t_dca8407acd2933 191
+  s_e32de4e9c30a8c::t_85994f4b23d0e1 49,72,242-281,285
+  s_e32de4e9c30a8c::t_15dd3deb64ce86 282-284
+  s_e32de4e9c30a8c::t_3a62a5fab40274 286-287
+apps/portal-host/src/journey-registry.ts
+  s_e32de4e9c30a8c::t_7f4dad22942ee2 1-33
+apps/portal-host/src/mocks/handlers.ts
+  s_e32de4e9c30a8c::t_7f4dad22942ee2 2,10
+apps/portal-host/src/portal-experiences.spec.tsx
+  s_e32de4e9c30a8c::t_9897bb0bbb54a8 32,36,55,57-61
+  s_e32de4e9c30a8c::t_850b2ad6672bc7 42-46,56
+  s_e32de4e9c30a8c::t_848f1af808736f 37-41
+  s_e32de4e9c30a8c::t_9c668cbe79b6dc 62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f785f99c78b1d2cc60e49e0082eb68b264ad85c6",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e32de4e9c30a8c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a011d4-9eec-77c2-a8f5-7608ec9a70e8",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
