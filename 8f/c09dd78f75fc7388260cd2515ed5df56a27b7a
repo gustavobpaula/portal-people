@@ -1,0 +1,48 @@
+apps/portal-host/src/main.tsx
+  s_e32de4e9c30a8c::t_7edd744136b193 4-5
+apps/portal-host/src/app/journeys/telemetry.ts
+  s_e32de4e9c30a8c::t_a26b3df9bd4f50 1-37
+apps/portal-host/src/app/portal-experiences.tsx
+  s_e32de4e9c30a8c::t_7edd744136b193 1-337
+apps/portal-host/src/app/types.ts
+  s_e32de4e9c30a8c::t_a26b3df9bd4f50 1-28
+apps/portal-host/src/app/journeys/FederatedJourneySlot.tsx
+  s_e32de4e9c30a8c::t_642cd9f0992684 1-59
+apps/portal-host/src/app/App.tsx
+  s_e32de4e9c30a8c::t_4638c595ec2cfe 1-67
+apps/portal-host/src/app/journeys/ExternalJourneySlot.tsx
+  s_e32de4e9c30a8c::t_642cd9f0992684 1-42
+apps/portal-host/src/app/journeys/RegistryJourneySlots.tsx
+  s_e32de4e9c30a8c::t_7d2194b76bc295 1-25
+apps/portal-host/src/mocks/fixtures.ts
+  s_e32de4e9c30a8c::t_7edd744136b193 1
+apps/portal-host/src/app/journeys/JourneyFallback.tsx
+  s_e32de4e9c30a8c::t_a26b3df9bd4f50 1-43
+apps/portal-host/src/app/App.spec.tsx
+  s_e32de4e9c30a8c::t_7edd744136b193 1-342
+apps/portal-host/src/app/portal-experiences.spec.tsx
+  s_e32de4e9c30a8c::t_7edd744136b193 1-290
+apps/portal-host/src/services/portal-bff/portal-bff.spec.ts
+  s_e32de4e9c30a8c::t_7edd744136b193 1-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "8fc09dd78f75fc7388260cd2515ed5df56a27b7a",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e32de4e9c30a8c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a011d4-9eec-77c2-a8f5-7608ec9a70e8",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
