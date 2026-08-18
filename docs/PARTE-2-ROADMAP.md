@@ -16,7 +16,7 @@ Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas
 | 4 | Experiências transversais | Fase 3 | Home, catálogo, busca e notificações com Portal BFF simulado | Planejada |
 | 5 | Jornada Benefícios | Fases 2–3 | Remote consultivo independente e estados de dados | Planejada |
 | 6 | Jornada Férias | Fases 2–3 | Remote transacional independente, validação e confirmação | Planejada |
-| 7 | Legado, rollout e resiliência | Fases 3–6 | Destino externo, retorno, isolamento, rollout e rollback | Planejada |
+| 7 | Legado, rollout e resiliência | Fases 3–6 | Holerite externo, retorno e isolamento; responsabilidades externas de rollout documentadas | Concluída |
 | 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Planejada |
 | 9 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Planejada |
 | 10 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Planejada |
@@ -43,7 +43,7 @@ Os nomes acima reservam intenção no roadmap, mas os arquivos não serão criad
 | Module Federation, monorepo e governança | `docs/PROPOSTA-TECNICA.md`, seções 3–4; AD-4, AD-12 e AD-15 | 1, 3 e 10 |
 | Design System web/mobile | `docs/PROPOSTA-TECNICA.md`, seção 5; AD-11, AD-29 e AD-31 | 2 e 8 |
 | Home, busca e notificações | `docs/CASE.md`, requisitos funcionais; AD-7 | 4 |
-| Legado e migração incremental | `docs/PROPOSTA-TECNICA.md`, seção 6; AD-19–AD-21 | 7 |
+| Legado e migração incremental | `docs/PROPOSTA-TECNICA.md`, seção 6; AD-19–AD-21; rollout operado externamente por CI/CD e deployment | 7 |
 | Mobile mínimo e bridge | `docs/PROPOSTA-TECNICA.md`, seção 2; AD-9, AD-10 e AD-24 | 8 |
 | Observabilidade e isolamento | `docs/PROPOSTA-TECNICA.md`, Observabilidade; AD-17 e AD-18 | 1, 3, 7 e 9 |
 | Estado, dados e testes | AD-22, AD-27, AD-28 e AD-30 | Todas as fases aplicáveis |

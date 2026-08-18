@@ -13,7 +13,7 @@ Os princípios que orientam a proposta são:
 3. aplicações legadas convivem por integração, sem serem artificialmente movidas para o monorepo;
 4. compartilhamento é seletivo: contratos e linguagem visual são comuns, estado e regras permanecem locais;
 5. governança deve ser automatizada pelo golden path e pelos gates do workspace;
-6. migração e rollout são graduais e reversíveis.
+6. migração é gradual e reversível; rollout e rollback são operados pelo CI/CD e pela plataforma de deployment.
 
 ---
 
@@ -27,7 +27,9 @@ flowchart TB
     WebView <--> Bridge["Bridge de capacidades"]
     Bridge <--> Native
 
-    Registry["Registro dinâmico"] --> Shell
+    Flags["Feature flags e segmentação backend"] --> Registry
+    Registry["Journey Registry: jornadas resolvidas"] --> Shell
+    Delivery["CI/CD e plataforma de deployment"] --> Remotes
     Shell --> Core["Home, catálogo, busca e notificações"]
     Shell --> Remotes["Domínios React federados"]
     Shell --> Legacy["External web legado"]
@@ -56,9 +58,9 @@ flowchart TB
 
 | Elemento | Responsável por | Não responsável por |
 |---|---|---|
-| Shell | bootstrap, navegação, descoberta, composição, contexto, rollout, loading, fallback e telemetria transversal | regras, estado, formulários ou APIs de negócio |
+| Shell | bootstrap, navegação, descoberta, composição, contexto, loading, fallback e telemetria transversal | regras de negócio, audiência, release, percentual, promoção ou rollback |
 | Domínio moderno | rotas internas, UI, estado, regras de apresentação, integrações, testes, release e operação | outros domínios ou internals do shell |
-| Registro | destino, versão, contrato, ownership, observabilidade e rollout | classificação permanente entre moderno e legado |
+| Journey Registry | jornadas autorizadas e destinos já resolvidos, com versão técnica, contrato, ownership e observabilidade | decidir release no frontend ou classificar permanentemente moderno e legado |
 | Portal BFF | home, catálogo, busca e notificações | orquestrar todos os domínios |
 | BFF de domínio | agregação e adaptação justificadas pela experiência | autorização apenas no frontend ou lógica visual |
 | App nativo | sessão, ciclo de vida, deep links, push, permissões, WebView e capacidades do dispositivo | regras das jornadas web |
@@ -72,7 +74,7 @@ Uma nova jornada não exige alteração no código do shell. A squad publica um 
 - `external-web`: experiência incompatível ou ainda não modernizada;
 - `native-route`: funcionalidade pertencente ao aplicativo nativo.
 
-O registro informa, no mínimo, identificador, rota, destino, versão do artefato, faixa compatível do contrato da plataforma, owner e regras de rollout. O shell valida o manifesto e fornece somente o contrato de capacidades aprovado.
+O registro informa, no mínimo, identificador, rota, destino já resolvido, versão técnica do artefato, faixa compatível do contrato da plataforma, owner e observabilidade. O shell valida o manifesto e fornece somente o contrato de capacidades aprovado; ele não interpreta público, percentual ou canal de release.
 
 ### Isolamento de falhas
 
@@ -138,7 +140,7 @@ Ela não substitui BFFs, não executa métodos arbitrários, não transporta obj
 
 ### Monorepo com autonomia operacional
 
-O monorepo contém somente o frontend moderno. Shell, remotes React, contratos da plataforma, Design System web e ferramentas de workspace convivem no mesmo grafo, mas cada domínio continua sendo uma unidade independente de build, publicação, rollout e rollback.
+O monorepo contém somente o frontend moderno. Shell, remotes React, contratos da plataforma, Design System web e ferramentas de workspace convivem no mesmo grafo, mas cada domínio continua sendo uma unidade independente de código e build. Publicação, rollout e rollback são executados externamente pelos pipelines e pela plataforma de deployment.
 
 Aplicações legadas permanecem nos repositórios atuais até serem substituídas. Colocá-las no monorepo sem modernização apenas transferiria dívida e dependências incompatíveis para o novo baseline.
 
@@ -149,15 +151,16 @@ flowchart LR
     Change["Mudança da squad"] --> Affected["Nx identifica afetados"]
     Affected --> Gates["Lint, tipos, testes, contratos e budgets"]
     Gates --> Artifact["Artefato imutável"]
-    Artifact --> Candidate["Versão candidata no registro"]
-    Candidate --> Rollout["Rollout por grupo"]
+    Artifact --> Release["Release imutável"]
+    Release --> Deploy["Plataforma de deployment"]
+    Deploy --> Rollout["Canary ou Blue-Green"]
     Rollout --> Promote["Promoção"]
-    Rollout --> Rollback["Rollback para versão anterior"]
+    Rollout --> Rollback["Rollback operacional"]
 ```
 
 ### Ownership
 
-Cada squad de domínio possui código, manifesto, pipeline, dashboards, alertas, incidentes, release e rollback. A Plataforma Frontend mantém shell, contrato, registro, runtime de composição, generators, configurações-base e regras de fronteira.
+Cada squad de domínio possui código, manifesto, pipeline, dashboards, alertas, incidentes e responsabilidade operacional pela release. A Plataforma Frontend mantém shell, contrato, runtime de composição, generators, configurações-base e regras de fronteira. A plataforma backend mantém o Journey Registry; CI/CD e deployment executam publicação, promoção e rollback.
 
 O Chapter Frontend governa mudanças transversais; ele não aprova manualmente cada release de domínio.
 
@@ -176,7 +179,7 @@ Nx e ESLint impedem imports entre domínios, imports de internals do shell e dep
 | Elemento | Estratégia |
 |---|---|
 | Remote | artefato imutável com versão ou build identificável |
-| Registro | aponta grupos para versões específicas e permite rollback |
+| Journey Registry | entrega o destino autorizado já resolvido para a sessão |
 | Contrato da plataforma | versionamento semântico e faixa de compatibilidade |
 | APIs/BFFs | contrato versionado, preferencialmente OpenAPI |
 | Libraries compartilhadas | evolução compatível e janela de depreciação |
@@ -294,10 +297,10 @@ A unidade de migração é uma capacidade ou fluxo, não necessariamente a aplic
 flowchart LR
     Inventory["1. Inventário"] --> Integrate["2. Entrada controlada"]
     Integrate --> Modernize["3. Modernização por capacidade"]
-    Modernize --> Pilot["4. Piloto e rollout"]
+    Modernize --> Pilot["4. Piloto operacional"]
     Pilot --> Default["5. Moderno como padrão"]
     Default --> Retire["6. Desativação do legado"]
-    Pilot -. "falha" .-> Rollback["Rollback por registro"]
+    Pilot -. "falha" .-> Rollback["Rollback pela plataforma de deployment"]
     Rollback --> Integrate
 ```
 
@@ -309,9 +312,9 @@ No aplicativo, somente origens modernas autorizadas recebem bridge. Páginas leg
 
 ### Rollout e rollback
 
-O registro pode manter legado, versão moderna estável e versão candidata. A seleção considera grupos piloto, plataforma, versão do app, elegibilidade e percentual estável de usuários. O backend ou serviço de configuração resolve a decisão; o navegador não concede autorização.
+O CI/CD gera e publica releases imutáveis. A plataforma de deployment aplica Canary ou Blue-Green, controla tráfego, promoção e rollback. Quando a migração exigir público específico, feature flags ou serviços backend resolvem elegibilidade e autorização antes da resposta ao frontend.
 
-Rollback troca o destino do registro para a versão anterior ou, temporariamente, para o legado, sem rebuild do shell.
+O Journey Registry pode consumir essas decisões externas e entrega ao shell somente o destino já resolvido. O navegador não seleciona versão, público ou percentual, e o monorepo não contém canais candidate/stable nem mecanismos operacionais de rollback.
 
 ### Indicadores de avanço
 
@@ -329,7 +332,7 @@ Uma capacidade só é desligada quando alcança o público previsto, atende aos 
 
 ## Observabilidade transversal
 
-O shell inicializa o contexto de correlação e fornece um contrato pequeno. Cada domínio emite logs estruturados, erros, métricas de performance e analytics com identificador do domínio, versão, rota, plataforma e rollout.
+O shell inicializa o contexto de correlação e fornece um contrato pequeno. Cada domínio emite logs estruturados, erros, métricas de performance e analytics com identificador do domínio, versão, rota e plataforma. Sinais operacionais de rollout pertencem à plataforma de deployment.
 
 ```mermaid
 flowchart LR
@@ -423,7 +426,7 @@ Ela mantém contratos, generators e regras automatizadas. Releases rotineiros pe
 |---|---|
 | Arquitetura de alto nível | Seção 1: shell, remotes, app móvel, bridge, BFFs, APIs, Design System, observabilidade e destinos legados no mesmo desenho. |
 | Estratégia web + mobile | Seção 2: responsabilidades nativas, reuso via React responsivo e WebView, bridge mínima, consistência por tokens e comparação com PWA, React Native e interfaces totalmente nativas. |
-| Múltiplas squads | Seção 3: publicação e rollback independentes, Nx affected, CODEOWNERS, ownership operacional, versionamento, golden path, gates e governança federada. |
+| Múltiplas squads | Seção 3: código e builds independentes, publicação e rollback por plataformas externas, Nx affected, CODEOWNERS, ownership operacional, versionamento, golden path, gates e governança federada. |
 | Microfrontends ou alternativa | Seção 4: decisão por Module Federation coarse-grained e comparação explícita com SPA única, packages, Single-SPA, Web Components, iframes, polyrepo e monorepo com legado. |
 | Design System | Seção 5: tokens, componentes base e compostos, componentes de negócio, artefatos por plataforma, Storybook, versionamento, governança e adoção. |
 | Migração | Seção 6: convivência com legado, substituição por capacidade, redirecionamento controlado, rollout, rollback, métricas de avanço e critérios de desativação. |

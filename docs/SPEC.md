@@ -33,7 +33,8 @@ Conduzir a modernização do Portal Pessoas em incrementos demonstráveis: prese
 
 - A baseline e as fronteiras de `docs/ARCHITECTURE.md` são obrigatórias.
 - O desenvolvimento é incremental; somente specs aprovadas e ligadas abaixo constituem escopo ativo.
-- APIs, BFFs, registry remoto, mobile nativo, infraestrutura e fornecedores externos são simulados.
+- APIs, BFFs, mobile nativo e jornadas externas podem usar simulações locais quando necessários à experiência demonstrável.
+- CI/CD, publicação de releases, Journey Registry corporativo, feature flags, Canary, Blue-Green, promoção, rollout, rollback e infraestrutura de produção são responsabilidades externas documentadas, não reimplementadas no monorepo.
 - A referência pública do Itaú orienta a linguagem visual, mas não fornece código ou ativos ao projeto.
 
 ## Assumptions
@@ -64,6 +65,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Experiências Transversais](specs/parte-2-experiencias-transversais.md)
 - [Parte 2 — Jornada Benefícios](specs/parte-2-beneficios.md)
 - [Parte 2 — Jornada Férias](specs/parte-2-ferias.md)
+- [Parte 2 — Legado, Rollout e Resiliência](specs/parte-2-legado-rollout-resiliencia.md)
 
 ## Delivery Roadmap
 

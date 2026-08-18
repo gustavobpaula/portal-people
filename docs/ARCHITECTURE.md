@@ -4,7 +4,7 @@
 
 O Portal Pessoas deve sustentar mais de 10 squads, aplicações web e mobile, entregas independentes, integração temporária com sistemas legados e inclusão de domínios sem alteração recorrente do shell.
 
-Autonomia sustentável é o principal direcionador, equilibrado com performance, consistência, segurança, governança e operação. A arquitetura cobre `FR-1`, `FR-5`, `FR-6` e `FR-8–FR-15`.
+Autonomia sustentável é o principal direcionador, equilibrado com performance, consistência, segurança, governança e operação. A arquitetura cobre `FR-1`, `FR-5`, `FR-6` e `FR-8–FR-15` de `docs/SPEC.md` e as fronteiras de responsabilidade definidas em `docs/specs/parte-2-legado-rollout-resiliencia.md`.
 
 ## Technology Baseline
 
@@ -39,7 +39,9 @@ flowchart TB
     WebView <--> Bridge["Bridge de capacidades"]
     Bridge <--> Mobile
 
-    Registry["Registro dinâmico"] --> Shell
+    Flags["Feature flags e segmentação backend"] --> Registry
+    Registry["Journey Registry: jornadas resolvidas"] --> Shell
+    Delivery["CI/CD e plataforma de deploy"] --> Remotes
 
     Tokens["Design System corporativo"] --> DSWeb["Design System web"]
     Tokens --> DSNative["Temas nativos"]
@@ -65,7 +67,7 @@ flowchart TB
     Mobile --> Obs
 ```
 
-O shell possui bootstrap, navegação, contexto de plataforma, descoberta, composição, loading, fallback, rollout e observabilidade transversal. Não possui regras, estado ou orquestração de APIs de negócio.
+O shell possui bootstrap, navegação, contexto de plataforma, descoberta, composição, loading, fallback e observabilidade transversal. Não possui regras, estado ou orquestração de APIs de negócio, nem decide público, versão de release, percentual de rollout, promoção ou rollback.
 
 ## Directory Organization
 
@@ -100,9 +102,9 @@ Na arquitetura corporativa, o Storybook será mantido junto ao Design System ext
 
 ## State and Data Ownership
 
-O shell mantém somente sessão, tema, idioma, navegação, capabilities, rollout e correlação. Cada domínio mantém estado de interface, formulários e cache de consultas.
+O shell mantém somente sessão, tema, idioma, navegação, capabilities e correlação. Cada domínio mantém estado de interface, formulários e cache de consultas.
 
-O backend é autoritativo para dados, autorização, invariantes e processos. Estado navegável permanece na URL; dados sensíveis não são persistidos no armazenamento do navegador.
+O backend é autoritativo para dados, autorização, invariantes, processos e, quando necessário, seleção de jornadas por usuário. Estado navegável permanece na URL; dados sensíveis não são persistidos no armazenamento do navegador.
 
 A comunicação utiliza um contrato versionado de capacidades. Não existe store global de negócio, import remoto-remoto ou event bus genérico.
 
@@ -116,7 +118,11 @@ O registro descreve estratégias, não a classificação “legado”:
 - `external-web`;
 - `native-route`.
 
-O manifesto informa destino, versão, contrato da plataforma, ownership, observabilidade e regras de rollout.
+O Journey Registry é uma API backend que entrega ao shell uma coleção de jornadas já resolvidas para a requisição ou sessão. Quando houver seleção por público, feature flag ou política operacional, ela ocorre antes da resposta do registro e permanece fora do frontend.
+
+O manifesto informa identidade, rota, estratégia, destino, versão técnica, compatibilidade, ownership e observabilidade. Versão e compatibilidade servem para validação, diagnóstico e telemetria; não comandam release, promoção ou rollout dentro do shell.
+
+O CI/CD produz releases imutáveis dos artefatos. A plataforma de deploy controla ambientes, aliases, Canary, Blue-Green, promoção e rollback. Essas decisões não são reproduzidas no monorepo nem executadas pelo código do shell.
 
 O Portal BFF atende apenas home, catálogo, busca e notificações. Cada domínio usa uma API adequada ou BFF próprio quando agregação, adaptação ou segurança justificarem.
 
@@ -145,7 +151,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - expor somente seu contrato público;
 - declarar integração, telemetria e estratégia de erro;
 - respeitar DS, acessibilidade e fronteiras Nx;
-- possuir testes proporcionais ao risco.
+- possuir testes proporcionais ao risco;
 - iniciar pelo golden path com `src/app/` e materializar outras pastas somente quando sua responsabilidade existir.
 
 **A feature may:**
@@ -153,7 +159,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - usar Zustand dentro do domínio quando React local for insuficiente;
 - possuir BFF próprio quando houver justificativa;
 - manter stories dos seus componentes de negócio dentro do domínio;
-- divergir do golden path por ADR aprovado.
+- divergir do golden path por ADR aprovado;
 - criar `hooks/` quando um hook encapsular uma capacidade reutilizada ou integração relevante; tipos, mappers e transforms devem permanecer junto da responsabilidade que os possui.
 
 **A feature must not:**
@@ -163,7 +169,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - publicar componentes de negócio no Storybook central antes de sua promoção ao DS;
 - criar estado ou eventos globais;
 - expor tokens;
-- adicionar dependência runtime compartilhada unilateralmente.
+- adicionar dependência runtime compartilhada unilateralmente;
 - criar diretórios vazios, `utils/`, `entities/`, `models/` ou `mappers/` genéricos. `entities` não é o nome padrão para payload HTTP; a exceção requer uma distinção concreta que `api-contracts`, `domain` ou `app` não expressem.
 
 ## Testing Strategy
@@ -200,7 +206,7 @@ O Storybook é gerado como artefato estático independente. Sua publicação oco
 | AD-10 | App nativo mínimo com uma WebView principal; maximiza reuso, com menor fidelidade nativa. |
 | AD-11 | Tokens externos e neutros; o case os simula como library local extraível. |
 | AD-12 | Nx e pnpm; maior governança em troca de configuração adicional. |
-| AD-13 | Build, deploy e rollback independentes por domínio. |
+| AD-13 | Build e release são independentes por domínio; deploy, promoção e rollback pertencem ao CI/CD e à plataforma de entrega. |
 | AD-14 | Governança federada; plataforma define contratos, squads operam domínios. |
 | AD-15 | Golden path e conformidade automatizada; exceções usam ADR. |
 | AD-16 | Skills de IA auxiliam implementação e revisão, sem substituir CI ou humanos. |
@@ -208,7 +214,7 @@ O Storybook é gerado como artefato estático independente. Sua publicação oco
 | AD-18 | Fronteiras de erro isolam carregamento e execução dos remotes. |
 | AD-19 | Migração Strangler por capacidade, sem reescrita integral. |
 | AD-20 | Navegação legada controlada, com SSO, retorno seguro e bridge restrita. |
-| AD-21 | Rollout e rollback resolvidos pelo registro, sem rebuild do shell. |
+| AD-21 | Release, rollout de tráfego, promoção e rollback pertencem ao CI/CD e à plataforma de deploy. O Journey Registry entrega destinos já resolvidos, e o shell não interpreta públicos, percentuais ou canais de release. |
 | AD-22 | Estado e cache pertencem ao domínio. |
 | AD-23 | Shell e domínios comunicam-se somente pelo contrato de plataforma. |
 | AD-24 | Sessão segura sem tokens disponíveis ao JavaScript. |

@@ -22,6 +22,8 @@ corepack pnpm nx test ferias
 corepack pnpm nx build ferias
 corepack pnpm verify:federation
 corepack pnpm verify:shell
+corepack pnpm demo:external-web
+corepack pnpm verify:external-web
 corepack pnpm golden-path -- --name nova-jornada --dry-run
 corepack pnpm storybook
 corepack pnpm storybook:build
@@ -41,9 +43,47 @@ corepack pnpm exec playwright install chromium
 
 Os valores visuais são aproximações locais, não oficiais e substituíveis. O verificador de ativos impede referências remotas, fontes e recursos oficiais nos fontes do Design System.
 
-`portal-host` e `neutral-remote` também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. O host usa o manifesto local em `apps/portal-host/src/assets/journey-manifest.json` e carrega o remote em runtime.
+`portal-host` e os remotes também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. No case, o host lê uma fixture local determinística de manifestos já resolvidos e carrega cada jornada conforme sua estratégia. Em produção, essa coleção viria da API backend Journey Registry.
 
 Durante o desenvolvimento do `portal-host`, o Portal BFF simulado é iniciado automaticamente no navegador. Ele fornece dados sintéticos para Produtos, busca e notificações; nenhum backend externo é necessário.
+
+## Testando `external-web` e Holerite legado
+
+O comando abaixo inicia o host (`4200`), a jornada neutra, Benefícios (`4300`), Férias (`4301`) e a aplicação estática independente Holerite legado (`4500`). Encerre tudo com `Ctrl+C`.
+
+```sh
+corepack pnpm demo:external-web
+```
+
+Abra `http://localhost:4200` e confirme que Produtos possui entradas distintas para Benefícios, Férias e Holerite legado. Depois selecione **Holerite legado** e verifique que:
+
+- a jornada abre na mesma aba em `http://localhost:4500/holerite`;
+- a página externa lista apenas holerites sintéticos;
+- a URL possui somente `returnTo=http://localhost:4200/retorno/holerite-legado`, sem token, matrícula ou dados pessoais;
+- **Voltar ao Portal Pessoas** retorna ao host em `localhost:4200`.
+
+Benefícios e Férias continuam sendo remotes modernos independentes. Não existem Benefícios legado, Benefícios candidate, perfis de usuário ou controles locais de percentual e rollback.
+
+Para demonstrar indisponibilidade externa sem afetar o portal, abra `http://localhost:4500/indisponivel` enquanto o demo estiver ativo. A página mantém a ação segura de retorno. Origem proibida, manifesto inválido e rota de retorno inválida são cobertos pelos testes unitários do runtime e do host.
+
+O fluxo completo em desktop e viewport mobile é verificável em Chromium:
+
+```sh
+corepack pnpm verify:external-web
+```
+
+### Como funcionaria em produção
+
+O monorepo contém o código atual das aplicações e as estratégias de composição. O fluxo operacional acontece fora dele:
+
+1. A squad aprova e integra uma mudança na branch principal.
+2. O CI/CD testa, gera uma release e publica um artefato imutável.
+3. A plataforma de deployment controla ambiente, Canary, Blue-Green, promoção e rollback.
+4. Feature flags ou serviços backend podem decidir quais jornadas um usuário está autorizado a acessar.
+5. A API backend **Journey Registry** devolve ao shell somente os manifestos e destinos já resolvidos para aquela sessão.
+6. O shell valida cada manifesto e executa `federated-module`, `external-web` ou `native-route`; ele não escolhe candidate, stable, público ou percentual.
+
+Versão e compatibilidade permanecem no manifesto para identificação, diagnóstico, telemetria e validação técnica. O case não reproduz CI/CD, plataforma de deployment, feature flags ou segmentação.
 
 O golden path cria um domínio a partir de um template versionado, sem editar configurações internas do shell. Para materializá-lo, remova `--dry-run`.
 
@@ -128,6 +168,6 @@ Uma library transversal requer ownership da Plataforma Frontend. Para tokens e c
 | Fundação atual | Nome válido, estrutura de domínio, tag Nx e contrato de plataforma. |
 | Shell e contrato da plataforma | Remote Vite, configuração de Module Federation, manifesto local, fallback e teste de composição. |
 | Jornadas de negócio | Telemetria do domínio, testes de jornada, estados de dados e consumo do Design System. |
-| Operação e entrega | Manifesto por ambiente, rollout, budgets, observabilidade e gates afetados no CI. |
+| Operação e entrega | Contratos de manifesto, budgets, observabilidade e gates afetados no CI; rollout permanece na plataforma externa de deployment. |
 
 Cada etapa depende de uma spec aprovada. Até ela existir, mantenha o domínio no esqueleto atual em vez de antecipar infraestrutura ou contratos.
