@@ -1,0 +1,41 @@
+docs/specs/parte-2-shell-plataforma.md
+  s_e32de4e9c30a8c::t_c22bbead12eb96 10,33,39,51
+docs/PARTE-2-ROADMAP.md
+  s_e32de4e9c30a8c::t_18e6e3d420e2a9 19
+  s_e32de4e9c30a8c::t_08dc2650418097 46
+docs/SPEC.md
+  s_e32de4e9c30a8c::t_5a9883c543560f 68
+  s_e32de4e9c30a8c::t_c22bbead12eb96 36-37
+docs/specs/parte-2-legado-rollout-resiliencia.md
+  s_e32de4e9c30a8c::t_7ae4d0285500fe 1-54
+docs/specs/parte-2-fundacao-plataforma.md
+  s_e32de4e9c30a8c::t_c22bbead12eb96 12,24,37,48
+README.md
+  s_e32de4e9c30a8c::t_b8cf1f3f19c01d 51,53-54,56-57,59,63-64,66,68,70,74,76,78
+  s_e32de4e9c30a8c::t_dbea09ced7a3f8 25-26,46,50,52,55,58,60-62,65,67,69,71-73,75,77,79-87,171
+docs/ARCHITECTURE.md
+  s_e32de4e9c30a8c::t_83606f8c3e514e 7,42-44,70,105,107,121-125,154,162,172,209,217
+docs/PROPOSTA-TECNICA.md
+  s_e32de4e9c30a8c::t_5d6e7444a955d1 16,30-32,61,63,77,143,154-156,158,163,182,300,303,315,317,335,429
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b65c0f40dc1a68ece288c08f21645e51d9e584f7",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e32de4e9c30a8c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a011d4-9eec-77c2-a8f5-7608ec9a70e8",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
