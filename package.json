@@ -12,6 +12,8 @@
     "golden-path": "node tools/generators/create-domain.mjs",
     "verify:federation": "node scripts/verify-federation.mjs",
     "verify:shell": "node scripts/verify-shell.mjs",
+    "demo:external-web": "node scripts/demo-external-web.mjs",
+    "verify:external-web": "node scripts/verify-external-web.mjs",
     "storybook": "nx serve design-system-docs",
     "storybook:build": "nx build design-system-docs",
     "test:design-system": "nx run-many -t test --projects=design-tokens,design-system-web,design-system-docs",

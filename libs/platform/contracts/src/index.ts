@@ -10,7 +10,7 @@ const semanticVersion = z
 const compatibilityRange = z
   .string()
   .regex(/^[~^]?\d+\.\d+\.\d+$/, "Use a supported compatibility range.");
-const route = z
+export const journeyRouteSchema = z
   .string()
   .regex(
     /^\/[a-z0-9][a-z0-9/-]*$/,
@@ -21,17 +21,13 @@ const route = z
 const commonJourney = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   displayName: z.string().trim().min(1).optional(),
-  route,
+  route: journeyRouteSchema,
   version: semanticVersion,
   platformCompatibility: compatibilityRange,
   owner: z.object({ squad: z.string().min(1), contact: z.email() }),
   observability: z.object({
     domain: z.string().min(1),
     eventNamespace: z.string().min(1),
-  }),
-  rollout: z.object({
-    audience: z.enum(["all", "pilot"]),
-    percentage: z.number().int().min(0).max(100),
   }),
 });
 
@@ -51,12 +47,24 @@ export const journeyManifestSchema = z.discriminatedUnion("strategy", [
   commonJourney.extend({
     strategy: z.literal("external-web"),
     destination: z.url(),
+    returnRoute: journeyRouteSchema,
   }),
   commonJourney.extend({
     strategy: z.literal("native-route"),
     nativeRoute: z.string().min(1),
   }),
-]);
+]).superRefine((journey, context) => {
+  if (
+    journey.strategy === "external-web" &&
+    journey.returnRoute !== `/retorno/${journey.id}`
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["returnRoute"],
+      message: "External journeys must return through their registered portal route.",
+    });
+  }
+});
 
 export type JourneyManifest = z.infer<typeof journeyManifestSchema>;
 export type JourneyStrategy = JourneyManifest["strategy"];

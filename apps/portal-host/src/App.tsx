@@ -1,7 +1,13 @@
-import { Component, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  Component,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useNavigate, Routes, Route } from "react-router-dom";
-import registry from "./assets/journey-registry.json";
+import { useNavigate, useParams, Routes, Route } from "react-router-dom";
 import {
   Alert,
   AppHeader,
@@ -18,24 +24,36 @@ import type {
 import {
   createWebCapabilities,
   loadFederatedJourney,
+  prepareExternalJourney,
   resolveJourneyRegistry,
   type JourneyLoadResult,
 } from "@portal/platform-runtime";
 import styles from "./styles.module.scss";
 import { PortalHome, PortalNotifications } from "./portal-experiences";
 import { portalBffClient, type PortalBffClient } from "./portal-bff";
+import registry from "./assets/journey-registry.json";
 
 type FederatedManifest = Extract<
   JourneyManifest,
   { strategy: "federated-module" }
 >;
+type ExternalManifest = Extract<JourneyManifest, { strategy: "external-web" }>;
 type JourneyLoader = typeof loadFederatedJourney;
+type FallbackReason =
+  | Exclude<JourneyLoadResult, { status: "ready" }>["reason"]
+  | "render-error"
+  | "external-origin-not-allowed"
+  | "invalid-return-route";
+
+const EXTERNAL_WEB_ALLOWED_ORIGINS = ["http://localhost:4500"];
 
 export interface AppProps {
   registryData?: unknown;
   loadJourney?: JourneyLoader;
   createCapabilities?: typeof createWebCapabilities;
   portalBffClient?: PortalBffClient;
+  externalOrigins?: readonly string[];
+  navigateExternal?: (destination: string) => void;
 }
 
 function getJourneyLabel(manifest: JourneyManifest) {
@@ -65,11 +83,11 @@ function shouldHandleNavigation(event: {
   );
 }
 
-/** Emits a journey lifecycle event with the manifest's safe observability context. */
+/** Emits a journey lifecycle event with only safe manifest and platform context. */
 function trackJourney(
   platform: PlatformCapabilities,
   name: string,
-  manifest: FederatedManifest,
+  manifest: JourneyManifest,
   extra: Record<string, string | number | boolean> = {},
 ) {
   platform.telemetry.track({
@@ -78,6 +96,23 @@ function trackJourney(
       domain: manifest.observability.domain,
       version: manifest.version,
       route: manifest.route,
+      platform: platform.context.platform,
+      correlationId: platform.context.correlationId,
+      ...extra,
+    },
+  });
+}
+
+function trackRegistry(
+  platform: PlatformCapabilities,
+  name: string,
+  route: string,
+  extra: Record<string, string | number | boolean> = {},
+) {
+  platform.telemetry.track({
+    name,
+    properties: {
+      route,
       platform: platform.context.platform,
       correlationId: platform.context.correlationId,
       ...extra,
@@ -122,23 +157,24 @@ function JourneyFallback({
   onRetry,
   onReturn,
 }: {
-  reason:
-    | Exclude<JourneyLoadResult, { status: "ready" }>["reason"]
-    | "render-error";
+  reason: FallbackReason;
   onRetry: () => void;
   onReturn: () => void;
 }) {
-  const message = {
+  const message: Record<FallbackReason, string> = {
     "invalid-manifest": "A configuração da jornada não é válida.",
     "incompatible-contract":
       "A jornada requer uma versão incompatível da plataforma.",
     "remote-timeout": "A jornada demorou mais que o esperado para responder.",
     "remote-unavailable": "A jornada está temporariamente indisponível.",
     "render-error": "A jornada encontrou um erro ao ser exibida.",
-  }[reason];
+    "external-origin-not-allowed":
+      "O destino externo não é permitido pela plataforma.",
+    "invalid-return-route": "A rota de retorno da jornada não é válida.",
+  };
   return (
     <Alert tone="error" title="Jornada indisponível">
-      <Text>{message}</Text>
+      <Text>{message[reason]}</Text>
       <div className={styles.actions}>
         <Button type="button" onClick={onRetry}>
           Tentar novamente
@@ -225,26 +261,140 @@ function JourneySlot({
   );
 }
 
-/** Composes transversal routes and registered remotes without importing domain code. */
+function ExternalJourneySlot({
+  manifest,
+  platform,
+  allowedOrigins,
+  navigateExternal,
+}: {
+  manifest: ExternalManifest;
+  platform: PlatformCapabilities;
+  allowedOrigins: readonly string[];
+  navigateExternal: (destination: string) => void;
+}) {
+  const navigate = useNavigate();
+  const started = useRef(false);
+  const prepared = useMemo(
+    () => prepareExternalJourney(manifest, allowedOrigins, window.location.origin),
+    [allowedOrigins, manifest],
+  );
+
+  useEffect(() => {
+    if (prepared.status === "fallback") {
+      trackJourney(platform, "portal.journey.load.failed", manifest, {
+        reason: prepared.reason,
+      });
+    }
+  }, [manifest, platform, prepared]);
+
+  useEffect(() => {
+    if (prepared.status !== "ready" || started.current) return;
+    started.current = true;
+    trackJourney(platform, "portal.journey.external.transitioned", manifest);
+    navigateExternal(prepared.destination);
+  }, [manifest, navigateExternal, platform, prepared]);
+
+  if (prepared.status === "fallback")
+    return (
+      <JourneyFallback
+        reason={prepared.reason}
+        onRetry={() => {
+          trackJourney(platform, "portal.journey.load.retried", manifest);
+          window.location.reload();
+        }}
+        onReturn={() => navigate("/")}
+      />
+    );
+  return (
+    <div className={styles.loading}>
+      <Spinner size="lg" label={`Abrindo ${getJourneyLabel(manifest)}`} />
+    </div>
+  );
+}
+
+function RejectedJourneySlot({
+  route,
+  platform,
+  onRetry,
+}: {
+  route: string;
+  platform: PlatformCapabilities;
+  onRetry: () => void;
+}) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    trackRegistry(platform, "portal.journey.load.failed", route, {
+      reason: "invalid-manifest",
+    });
+  }, [platform, route]);
+  return (
+    <JourneyFallback
+      reason="invalid-manifest"
+      onRetry={onRetry}
+      onReturn={() => navigate("/")}
+    />
+  );
+}
+
+function ExternalReturn({
+  journeys,
+  platform,
+}: {
+  journeys: JourneyManifest[];
+  platform: PlatformCapabilities;
+}) {
+  const navigate = useNavigate();
+  const { journeyId } = useParams();
+  const expectedReturnRoute = journeyId ? `/retorno/${journeyId}` : undefined;
+  const manifest = journeys.find(
+    (journey): journey is ExternalManifest =>
+      journey.id === journeyId &&
+      journey.strategy === "external-web" &&
+      journey.returnRoute === expectedReturnRoute,
+  );
+  useEffect(() => {
+    if (manifest) {
+      trackJourney(platform, "portal.journey.external.returned", manifest);
+      navigate("/", { replace: true });
+      return;
+    }
+    trackRegistry(
+      platform,
+      "portal.journey.load.failed",
+      expectedReturnRoute ?? "/retorno",
+      { reason: "invalid-return-route" },
+    );
+  }, [expectedReturnRoute, manifest, navigate, platform]);
+
+  if (!manifest)
+    return (
+      <JourneyFallback
+        reason="invalid-return-route"
+        onRetry={() => {
+          trackRegistry(
+            platform,
+            "portal.journey.load.retried",
+            expectedReturnRoute ?? "/retorno",
+            { reason: "invalid-return-route" },
+          );
+          window.location.reload();
+        }}
+        onReturn={() => navigate("/")}
+      />
+    );
+  return <Spinner label="Retornando ao Portal Pessoas" />;
+}
+
+/** Composes transversal routes and registered journeys without importing domain code. */
 function ShellContent({
   registryData = registry,
   loadJourney = loadFederatedJourney,
   createCapabilities = createWebCapabilities,
   portalBffClient: bffClient = portalBffClient,
+  externalOrigins = EXTERNAL_WEB_ALLOWED_ORIGINS,
+  navigateExternal = (destination) => window.location.assign(destination),
 }: AppProps) {
   const navigate = useNavigate();
-  const resolution = useMemo(
-    () => resolveJourneyRegistry(registryData),
-    [registryData],
-  );
-  const journeys = useMemo(
-    () =>
-      resolution.journeys.filter(
-        (manifest): manifest is FederatedManifest =>
-          manifest.strategy === "federated-module",
-      ),
-    [resolution.journeys],
-  );
   const [platform] = useState(() =>
     createCapabilities({
       navigate: (path) => navigate(path),
@@ -256,6 +406,19 @@ function ShellContent({
   );
   const [portalQueryClient] = useState(
     () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+  );
+
+  const resolution = useMemo(
+    () => resolveJourneyRegistry(registryData),
+    [registryData],
+  );
+  const journeys = resolution.journeys.filter(
+    (manifest): manifest is FederatedManifest | ExternalManifest =>
+      manifest.strategy === "federated-module" || manifest.strategy === "external-web",
+  );
+  const rejectedRoutes = resolution.rejected.filter(
+    (rejected): rejected is typeof rejected & { route: string } =>
+      Boolean(rejected.route),
   );
 
   useEffect(() => {
@@ -328,15 +491,41 @@ function ShellContent({
                 <PortalNotifications client={bffClient} platform={platform} />
               }
             />
+            <Route
+              path="/retorno/:journeyId"
+              element={<ExternalReturn journeys={journeys} platform={platform} />}
+            />
             {journeys.map((manifest) => (
               <Route
                 key={manifest.id}
                 path={`${manifest.route}/*`}
                 element={
-                  <JourneySlot
-                    manifest={manifest}
+                  manifest.strategy === "federated-module" ? (
+                    <JourneySlot
+                      manifest={manifest}
+                      platform={platform}
+                      loadJourney={loadJourney}
+                    />
+                  ) : (
+                    <ExternalJourneySlot
+                      manifest={manifest}
+                      platform={platform}
+                      allowedOrigins={externalOrigins}
+                      navigateExternal={navigateExternal}
+                    />
+                  )
+                }
+              />
+            ))}
+            {rejectedRoutes.map((rejected) => (
+              <Route
+                key={`rejected-${rejected.index}`}
+                path={`${rejected.route}/*`}
+                element={
+                  <RejectedJourneySlot
+                    route={rejected.route}
                     platform={platform}
-                    loadJourney={loadJourney}
+                    onRetry={() => window.location.reload()}
                   />
                 }
               />
@@ -362,7 +551,7 @@ function ShellContent({
   );
 }
 
-/** Composes routes from the local registry without importing domain implementations. */
+/** Composes routes from the resolved registry without importing domain implementations. */
 export function App(props: AppProps) {
   return <ShellContent {...props} />;
 }

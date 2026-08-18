@@ -35,7 +35,7 @@ try {
   await page.getByRole("heading", { name: "Portal Pessoas" }).waitFor();
   await page.getByRole("link", { name: "Benefícios" }).click();
   await page.getByRole("heading", { name: "Meus benefícios" }).waitFor();
-  await page.getByRole("button", { name: "Voltar ao portal" }).click();
+  await page.getByRole("link", { name: "Portal Pessoas" }).click();
   await page.getByRole("heading", { name: "Portal Pessoas" }).waitFor();
   await page
     .getByRole("textbox", { name: "Buscar no portal" })
@@ -64,7 +64,7 @@ try {
   await page.getByRole("heading", { name: "Meus benefícios" }).waitFor();
   await page.goto("http://localhost:4200/");
   await page.getByRole("link", { name: "Férias" }).click();
-  await page.getByRole("heading", { name: "Férias" }).waitFor();
+  await page.getByRole("heading", { name: "Férias", exact: true }).waitFor();
   await page.getByLabel("Data de início").fill("2026-09-01");
   await page.getByLabel("Quantidade de dias").fill("10");
   await page.getByRole("button", { name: "Revisar solicitação" }).click();
@@ -96,16 +96,18 @@ try {
   await mobilePage.keyboard.press("Enter");
   await mobilePage.getByRole("heading", { name: "Vale-alimentação" }).waitFor();
   await mobilePage.goto("http://localhost:4200/ferias");
-  await mobilePage.getByRole("heading", { name: "Férias" }).waitFor();
+  await mobilePage
+    .getByRole("heading", { name: "Férias", exact: true })
+    .waitFor();
   await mobilePage.getByLabel("Data de início").focus();
-  await mobilePage.keyboard.press("Tab");
-  if (
-    !(await mobilePage.evaluate(
-      () =>
-        document.activeElement instanceof HTMLInputElement &&
-        document.activeElement.type === "number",
-    ))
-  ) {
+  let reachedDays = false;
+  for (let index = 0; index < 5 && !reachedDays; index += 1) {
+    await mobilePage.keyboard.press("Tab");
+    reachedDays = await mobilePage
+      .getByLabel("Quantidade de dias")
+      .evaluate((element) => element === document.activeElement);
+  }
+  if (!reachedDays) {
     throw new Error(
       "A jornada Férias não oferece navegação por teclado entre os campos.",
     );

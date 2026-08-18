@@ -10,7 +10,9 @@
     "design-tokens"
   ],
   "targets": {
-    "serve": { "command": "vite --config apps/beneficios/vite.config.ts" },
+    "serve": {
+      "command": "vite --config apps/beneficios/vite.config.ts"
+    },
     "build": {
       "command": "vite build --config apps/beneficios/vite.config.ts",
       "outputs": ["{workspaceRoot}/dist/apps/beneficios"]

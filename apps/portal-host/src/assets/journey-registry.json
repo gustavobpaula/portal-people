@@ -8,7 +8,6 @@
     "platformCompatibility": "^1.0.0",
     "owner": { "squad": "platform", "contact": "platform@example.test" },
     "observability": { "domain": "foundation", "eventNamespace": "foundation" },
-    "rollout": { "audience": "all", "percentage": 100 },
     "remote": { "name": "neutral-remote", "entry": "http://localhost:4201/mf-manifest.json", "exposedModule": "./Journey" }
   },
   {
@@ -20,7 +19,6 @@
     "platformCompatibility": "^1.0.0",
     "owner": { "squad": "Squad Benefícios", "contact": "beneficios@example.test" },
     "observability": { "domain": "beneficios", "eventNamespace": "beneficios" },
-    "rollout": { "audience": "all", "percentage": 100 },
     "remote": { "name": "beneficios", "entry": "http://localhost:4300/mf-manifest.json", "exposedModule": "./Journey" }
   },
   {
@@ -32,7 +30,18 @@
     "platformCompatibility": "^1.0.0",
     "owner": { "squad": "Squad Férias", "contact": "ferias@example.test" },
     "observability": { "domain": "ferias", "eventNamespace": "ferias" },
-    "rollout": { "audience": "all", "percentage": 100 },
     "remote": { "name": "ferias", "entry": "http://localhost:4301/mf-manifest.json", "exposedModule": "./Journey" }
+  },
+  {
+    "id": "holerite-legado",
+    "displayName": "Holerite legado",
+    "route": "/holerite",
+    "strategy": "external-web",
+    "version": "0.9.0",
+    "platformCompatibility": "^1.0.0",
+    "owner": { "squad": "Folha de Pagamento", "contact": "folha@example.test" },
+    "observability": { "domain": "holerite-legado", "eventNamespace": "holerite-legado" },
+    "destination": "http://localhost:4500/holerite",
+    "returnRoute": "/retorno/holerite-legado"
   }
 ]

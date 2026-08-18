@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PlatformCapabilities } from "@portal/platform-contracts";
 import { App } from "./App";
 import { server } from "./mocks/server";
+import registry from "./assets/journey-registry.json";
 
 const track = vi.fn();
 const capabilities: PlatformCapabilities = {
@@ -32,7 +33,7 @@ function renderHome(initialEntry = "/") {
   track.mockClear();
   return render(
     <MemoryRouter initialEntries={[initialEntry]}>
-      <App createCapabilities={() => capabilities} />
+      <App createCapabilities={() => capabilities} registryData={registry} />
       <LocationProbe />
     </MemoryRouter>,
   );
@@ -53,7 +54,7 @@ describe("portal experiences", () => {
       "href",
       "/notificacoes",
     );
-    await screen.findByText("3 resultados");
+    await screen.findByText("4 resultados");
     expect(
       screen.getAllByRole("link", { name: /Fundação da plataforma/ }),
     ).toHaveLength(1);
@@ -65,6 +66,9 @@ describe("portal experiences", () => {
       "href",
       "/ferias",
     );
+    expect(
+      screen.getByRole("link", { name: /Holerite legado/ }),
+    ).toHaveAttribute("href", "/holerite");
   });
 
   it("keeps submitted search results on the home route and restores them from q", async () => {

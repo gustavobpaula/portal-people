@@ -1,6 +1,7 @@
 import { createInstance, type ModuleFederation } from '@module-federation/runtime';
 import {
   PLATFORM_CONTRACT_VERSION,
+  journeyRouteSchema,
   journeyManifestSchema,
   type FederatedJourneyModule,
   type JourneyManifest,
@@ -16,8 +17,12 @@ export type JourneyLoadResult =
 
 export type JourneyRegistryResolution = Readonly<{
   journeys: JourneyManifest[];
-  rejected: Array<{ index: number; reason: 'invalid-manifest' | 'invalid-registry' }>;
+  rejected: Array<{ index: number; reason: 'invalid-manifest' | 'invalid-registry'; route?: string }>;
 }>;
+
+export type ExternalJourneyPreparation =
+  | { status: 'ready'; manifest: Extract<JourneyManifest, { strategy: 'external-web' }>; destination: string }
+  | { status: 'fallback'; reason: 'invalid-manifest' | 'incompatible-contract' | 'external-origin-not-allowed' | 'invalid-return-route' };
 
 export type WebCapabilityAdapters = Readonly<{
   navigate?: PlatformCapabilities['navigate'];
@@ -54,9 +59,43 @@ export function resolveJourneyRegistry(value: unknown): JourneyRegistryResolutio
   value.forEach((entry, index) => {
     const manifest = resolveManifest(entry);
     if (manifest) journeys.push(manifest);
-    else rejected.push({ index, reason: 'invalid-manifest' });
+    else {
+      const route = typeof entry === 'object' && entry !== null
+        ? journeyRouteSchema.safeParse((entry as { route?: unknown }).route)
+        : null;
+      rejected.push({ index, reason: 'invalid-manifest', ...(route?.success ? { route: route.data } : {}) });
+    }
   });
   return { journeys, rejected };
+}
+
+/**
+ * Builds the only URL allowed for an external handoff. The shell owns the
+ * allowlist and the fixed portal return route; neither comes from browser input.
+ */
+export function prepareExternalJourney(
+  value: unknown,
+  allowedOrigins: readonly string[],
+  portalOrigin: string,
+): ExternalJourneyPreparation {
+  const manifest = resolveManifest(value);
+  if (!manifest || manifest.strategy !== 'external-web') return { status: 'fallback', reason: 'invalid-manifest' };
+  if (!isCompatible(manifest.platformCompatibility)) return { status: 'fallback', reason: 'incompatible-contract' };
+
+  let destination: URL;
+  let returnUrl: URL;
+  try {
+    destination = new URL(manifest.destination);
+    returnUrl = new URL(manifest.returnRoute, portalOrigin);
+  } catch {
+    return { status: 'fallback', reason: 'invalid-return-route' };
+  }
+  if (returnUrl.origin !== portalOrigin) return { status: 'fallback', reason: 'invalid-return-route' };
+  if (!allowedOrigins.includes(destination.origin)) return { status: 'fallback', reason: 'external-origin-not-allowed' };
+  destination.search = '';
+  destination.hash = '';
+  destination.searchParams.set('returnTo', returnUrl.toString());
+  return { status: 'ready', manifest, destination: destination.toString() };
 }
 
 /**

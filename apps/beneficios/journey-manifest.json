@@ -10,7 +10,6 @@
     "contact": "beneficios@example.test"
   },
   "observability": { "domain": "beneficios", "eventNamespace": "beneficios" },
-  "rollout": { "audience": "all", "percentage": 100 },
   "remote": {
     "name": "beneficios",
     "entry": "http://localhost:4300/mf-manifest.json",

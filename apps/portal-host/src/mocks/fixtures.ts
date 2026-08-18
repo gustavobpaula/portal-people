@@ -22,6 +22,13 @@ export const catalogItems: CatalogItem[] = [
     route: "/ferias",
     keywords: ["férias", "ferias", "solicitação", "descanso"],
   },
+  {
+    id: "holerite-legado",
+    title: "Holerite legado",
+    description: "Consulte holerites no sistema anterior de folha de pagamento.",
+    route: "/holerite",
+    keywords: ["holerite", "contracheque", "folha", "pagamento", "legado"],
+  },
 ];
 
 export const notifications: NotificationItem[] = [
