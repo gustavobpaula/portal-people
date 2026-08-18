@@ -1,0 +1,94 @@
+fixtures/holerite-legado/index.html
+  s_e32de4e9c30a8c::t_3f3ea982036c9e 1-28
+libs/platform/contracts/src/index.ts
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 56-67
+  s_e32de4e9c30a8c::t_e73289e5f7a563 13,50
+  s_e32de4e9c30a8c::t_8e3947ce28af29 24
+libs/platform/runtime/src/index.spec.ts
+  s_e32de4e9c30a8c::t_9734527de93084 55
+  s_e32de4e9c30a8c::t_eb0f25a8a625e4 72-78,89,100
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 90-98
+  s_e32de4e9c30a8c::t_d5064151e00206 3,45-54,56,59-63,65-67,69
+  s_e32de4e9c30a8c::t_59342baf50c9bd 8,57-58,64,68,70-71,79-88,99
+apps/beneficios/project.json
+  s_e32de4e9c30a8c::t_6396cd92a32d92 13,15
+  s_e32de4e9c30a8c::t_7b9f422fc0f823 14
+scripts/verify-shell.mjs
+  s_e32de4e9c30a8c::t_a8b054234b6270 103-110
+  s_e32de4e9c30a8c::t_52415967890dd4 38
+  s_e32de4e9c30a8c::t_add9d6999ff17c 67,99-101
+apps/portal-host/src/App.spec.tsx
+  s_e32de4e9c30a8c::t_40aea8b8692914 1-10,13-25,31-35,39,42-50,55,58-70,72-73,77-81,88,90-102,105-106,109-111,114,116-125,128-139,141-145,147-167,172-185,187-199,201-232,234-236,239-258
+  s_e32de4e9c30a8c::t_4e7412a94ba914 261-280
+  s_e32de4e9c30a8c::t_48dae60f585ae9 168-171,186,200
+  s_e32de4e9c30a8c::t_20caebec4ca0cb 233
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 281-291
+tools/generators/templates/domain/journey-manifest.json
+  s_e32de4e9c30a8c::t_19f9197ab829c4 1
+fixtures/holerite-legado/styles.css
+  s_e32de4e9c30a8c::t_3f3ea982036c9e 1-59
+apps/portal-host/src/assets/journey-registry.json
+  s_e32de4e9c30a8c::t_19f9197ab829c4 34-45
+libs/platform/runtime/src/index.ts
+  s_e32de4e9c30a8c::t_e73289e5f7a563 4,20,23-26,62-67,72-94,97-98
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 95-96
+  s_e32de4e9c30a8c::t_3ad720d4db8f53 99-100
+scripts/verify-external-web.mjs
+  s_e32de4e9c30a8c::t_adf8aed16391ba 1-79
+apps/portal-host/src/portal-experiences.spec.tsx
+  s_e32de4e9c30a8c::t_bfd9eda8ad6b70 57,69-71
+  s_e32de4e9c30a8c::t_ded23b88fc4df1 9,36
+apps/portal-host/src/App.tsx
+  s_e32de4e9c30a8c::t_d89ef30ecd1c60 109,115,327
+  s_e32de4e9c30a8c::t_a6090ea5cfab57 326
+  s_e32de4e9c30a8c::t_7415c7a4845ba1 10,34,354,411-415,418-419,422,528
+  s_e32de4e9c30a8c::t_789e8fca7ca018 347,496
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 356-367,373-381
+  s_e32de4e9c30a8c::t_eb50f592d0ccad 1-8,27,40,42-48,55-56,86,90,121,160,164,171-174,177,264-280,289-300,305-311,336-346,349-350,355,368-372,382-388,394-395,416-417,420-421,494-495,503-523,554
+  s_e32de4e9c30a8c::t_953c7f2ca990e2 106-108,110-114,281-288,301-304,312-325,328-335,525-526
+  s_e32de4e9c30a8c::t_4e7412a94ba914 348,351-353
+  s_e32de4e9c30a8c::t_9bf9cbfbdeef2f 116-120
+  s_e32de4e9c30a8c::t_17ed87f6ea724a 122
+  s_e32de4e9c30a8c::t_072e7fe982947b 423
+  s_e32de4e9c30a8c::t_17a5ec234b423a 497
+  s_e32de4e9c30a8c::t_aced49531ecfcd 524
+fixtures/holerite-legado/legacy.js
+  s_e32de4e9c30a8c::t_3f3ea982036c9e 1-3
+apps/portal-host/src/mocks/fixtures.ts
+  s_e32de4e9c30a8c::t_19f9197ab829c4 25-31
+scripts/demo-external-web.mjs
+  s_e32de4e9c30a8c::t_adf8aed16391ba 1-23
+package.json
+  s_e32de4e9c30a8c::t_adf8aed16391ba 15-16
+tools/external-web-demo/server.mjs
+  s_e32de4e9c30a8c::t_3f3ea982036c9e 1-27,29-62
+  s_e32de4e9c30a8c::t_18e6e3d420e2a9 28
+libs/platform/contracts/src/index.spec.ts
+  s_e32de4e9c30a8c::t_9734527de93084 29
+  s_e32de4e9c30a8c::t_eb0f25a8a625e4 43-53,60
+  s_e32de4e9c30a8c::t_98e1d90ac43a24 35
+  s_e32de4e9c30a8c::t_d5064151e00206 27-28,30,33-34
+  s_e32de4e9c30a8c::t_59342baf50c9bd 7,26,31-32,42,54-59
+  s_e32de4e9c30a8c::t_ff2ff791bb0478 36-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "88ae8714422d025092f6c05204183d6b51580b98",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e32de4e9c30a8c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a011d4-9eec-77c2-a8f5-7608ec9a70e8",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
