@@ -18,7 +18,7 @@ import {
   type CatalogItem,
   type NotificationItem,
   type PortalBffClient,
-} from "./portal-bff";
+} from "../services/portal-bff/portal-bff";
 import styles from "./styles.module.scss";
 
 type NavigateHandler = (

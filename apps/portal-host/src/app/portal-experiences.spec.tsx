@@ -5,8 +5,8 @@ import { MemoryRouter, useLocation } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PlatformCapabilities } from "@portal/platform-contracts";
 import { App } from "./App";
-import { server } from "./mocks/server";
-import registry from "./assets/journey-registry.json";
+import { server } from "../mocks/server";
+import registry from "../assets/journey-registry.json";
 
 const track = vi.fn();
 const capabilities: PlatformCapabilities = {

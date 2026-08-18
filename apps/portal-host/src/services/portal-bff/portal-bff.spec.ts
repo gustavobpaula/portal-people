@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { describe, expect, it } from "vitest";
 import { portalBffClient } from "./portal-bff";
-import { server } from "./mocks/server";
+import { server } from "../../mocks/server";
 
 describe("portalBffClient", () => {
   it("queries the catalog case-insensitively through the HTTP contract", async () => {

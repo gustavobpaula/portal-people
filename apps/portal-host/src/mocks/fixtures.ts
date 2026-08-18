@@ -1,4 +1,4 @@
-import type { CatalogItem, NotificationItem } from "../portal-bff";
+import type { CatalogItem, NotificationItem } from "../services/portal-bff/portal-bff";
 
 export const catalogItems: CatalogItem[] = [
   {
