@@ -1,4 +1,5 @@
 import { http, HttpResponse } from "msw";
+import registry from "../assets/journey-registry.json";
 import { catalogItems, notifications } from "./fixtures";
 
 function normalize(value: string) {
@@ -6,6 +7,7 @@ function normalize(value: string) {
 }
 
 export const handlers = [
+  http.get("/api/journeys", () => HttpResponse.json(registry)),
   http.get("/api/portal/catalog", () =>
     HttpResponse.json({ items: catalogItems }),
   ),

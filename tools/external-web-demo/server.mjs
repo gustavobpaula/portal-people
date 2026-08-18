@@ -6,6 +6,7 @@ import { join, normalize } from "node:path";
 const workspaceRoot = fileURLToPath(new URL("../../", import.meta.url));
 const fixtureRoot = join(workspaceRoot, "fixtures/holerite-legado");
 const allowedReturnUrl = "http://localhost:4200/retorno/holerite-legado";
+const portalOrigin = "http://localhost:4200";
 
 function contentType(pathname) {
   if (pathname.endsWith(".css")) return "text/css; charset=utf-8";
@@ -21,6 +22,14 @@ export async function startExternalWebServer({ port = 4500 } = {}) {
   const origin = `http://localhost:${port}`;
   const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? "/", origin);
+    if (url.pathname === "/health" && request.method === "GET") {
+      response.writeHead(204, {
+        "Access-Control-Allow-Origin": portalOrigin,
+        "Cache-Control": "no-store",
+      });
+      response.end();
+      return;
+    }
     const isPage = url.pathname === "/holerite" || url.pathname === "/indisponivel";
     const relativePath = isPage ? "index.html" : url.pathname.slice(1);
     const target = normalize(join(fixtureRoot, relativePath || "index.html"));

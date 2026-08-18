@@ -46,6 +46,7 @@ function renderShell(
     loadJourney?: (value: unknown) => Promise<JourneyLoadResult>;
     navigateExternal?: (destination: string) => void;
     externalOrigins?: readonly string[];
+    checkExternalAvailability?: (destination: string) => Promise<boolean>;
   } = {},
 ) {
   const createCapabilities = vi.fn(() => capabilities);
@@ -68,6 +69,7 @@ function renderShell(
           }
           navigateExternal={options.navigateExternal}
           externalOrigins={options.externalOrigins}
+          checkExternalAvailability={options.checkExternalAvailability}
         />
       </MemoryRouter>,
     ),
@@ -186,6 +188,7 @@ describe("App", () => {
       initialPath: "/holerite?destination=http://localhost:4600/holerite",
       navigateExternal,
       externalOrigins: ["http://localhost:4500"],
+      checkExternalAvailability: async () => true,
     });
 
     await waitFor(() =>
@@ -230,6 +233,52 @@ describe("App", () => {
     expect(
       await screen.findByRole("heading", { name: "Portal Pessoas" }),
     ).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: /Férias/ })).toHaveAttribute(
+      "href",
+      "/ferias",
+    );
+  });
+
+  it("keeps the shell available when the legacy service is offline", async () => {
+    const navigateExternal = vi.fn();
+    const external = {
+      ...manifest,
+      id: "holerite-legado",
+      displayName: "Holerite legado",
+      route: "/holerite",
+      strategy: "external-web",
+      version: "0.9.0",
+      destination: "http://localhost:4500/holerite",
+      returnRoute: "/retorno/holerite-legado",
+    } as const;
+    const ferias = {
+      ...manifest,
+      id: "ferias",
+      displayName: "Férias",
+      route: "/ferias",
+      remote: { ...manifest.remote, name: "ferias" },
+    } as const;
+
+    renderShell({
+      registryData: [external, ferias],
+      initialPath: "/holerite",
+      navigateExternal,
+      externalOrigins: ["http://localhost:4500"],
+      checkExternalAvailability: async () => false,
+    });
+
+    expect(
+      await screen.findByText("A jornada está temporariamente indisponível."),
+    ).toBeInTheDocument();
+    expect(navigateExternal).not.toHaveBeenCalled();
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "portal.journey.load.failed",
+        properties: expect.objectContaining({ reason: "external-unavailable" }),
+      }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Voltar ao portal" }));
     expect(await screen.findByRole("link", { name: /Férias/ })).toHaveAttribute(
       "href",
       "/ferias",

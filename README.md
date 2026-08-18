@@ -22,7 +22,8 @@ corepack pnpm nx test ferias
 corepack pnpm nx build ferias
 corepack pnpm verify:federation
 corepack pnpm verify:shell
-corepack pnpm demo:external-web
+corepack pnpm demo:portal
+corepack pnpm demo:legacy
 corepack pnpm verify:external-web
 corepack pnpm golden-path -- --name nova-jornada --dry-run
 corepack pnpm storybook
@@ -43,7 +44,7 @@ corepack pnpm exec playwright install chromium
 
 Os valores visuais são aproximações locais, não oficiais e substituíveis. O verificador de ativos impede referências remotas, fontes e recursos oficiais nos fontes do Design System.
 
-`portal-host` e os remotes também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. No case, o host lê uma fixture local determinística de manifestos já resolvidos e carrega cada jornada conforme sua estratégia. Em produção, essa coleção viria da API backend Journey Registry.
+`portal-host` e os remotes também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. No case, o host consome `GET /api/journeys`; o MSW responde com uma fixture local determinística de manifestos já resolvidos. Em produção, essa mesma rota seria fornecida pela API backend Journey Registry.
 
 Durante o desenvolvimento do `portal-host`, o Portal BFF simulado é iniciado automaticamente no navegador. Ele fornece dados sintéticos para Produtos, busca e notificações; nenhum backend externo é necessário.
 
@@ -52,7 +53,7 @@ Durante o desenvolvimento do `portal-host`, o Portal BFF simulado é iniciado au
 O comando abaixo inicia o host (`4200`), a jornada neutra, Benefícios (`4300`), Férias (`4301`) e a aplicação estática independente Holerite legado (`4500`). Encerre tudo com `Ctrl+C`.
 
 ```sh
-corepack pnpm demo:external-web
+corepack pnpm demo:portal
 ```
 
 Abra `http://localhost:4200` e confirme que Produtos possui entradas distintas para Benefícios, Férias e Holerite legado. Depois selecione **Holerite legado** e verifique que:
@@ -64,7 +65,17 @@ Abra `http://localhost:4200` e confirme que Produtos possui entradas distintas p
 
 Benefícios e Férias continuam sendo remotes modernos independentes. Não existem Benefícios legado, Benefícios candidate, perfis de usuário ou controles locais de percentual e rollback.
 
+Para iniciar ou interromper somente o legado, em outro terminal, use:
+
+```sh
+corepack pnpm demo:legacy
+```
+
+Encerre esse terminal com `Ctrl+C`. Portal, Benefícios e Férias permanecem em execução quando iniciados separadamente.
+
 Para demonstrar indisponibilidade externa sem afetar o portal, abra `http://localhost:4500/indisponivel` enquanto o demo estiver ativo. A página mantém a ação segura de retorno. Origem proibida, manifesto inválido e rota de retorno inválida são cobertos pelos testes unitários do runtime e do host.
+
+Para demonstrar uma indisponibilidade real, inicie Portal, remotes e legado em terminais separados; depois encerre somente `demo:legacy`. Ao selecionar Holerite, o shell consulta `GET /health` no destino externo antes de navegar. Se não houver resposta, mantém o usuário no Portal, apresenta fallback com nova tentativa e preserva Benefícios e Férias.
 
 O fluxo completo em desktop e viewport mobile é verificável em Chromium:
 

@@ -59,14 +59,27 @@ try {
   await page.getByRole("link", { name: "Voltar ao Portal Pessoas" }).click();
   await page.getByRole("heading", { name: "Portal Pessoas" }).waitFor();
 
+  await externalWeb.close();
+  externalWeb = undefined;
+  await page.getByRole("link", { name: "Holerite legado" }).click();
+  await page
+    .getByText("A jornada está temporariamente indisponível.")
+    .waitFor();
+  if (new URL(page.url()).origin !== "http://localhost:4200") {
+    throw new Error("A indisponibilidade do legado removeu o usuário do shell.");
+  }
+  await page.getByRole("button", { name: "Voltar ao portal" }).click();
+  await page.getByRole("heading", { name: "Portal Pessoas" }).waitFor();
+
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await mobile.goto("http://localhost:4200/holerite");
-  await mobile.waitForURL(/localhost:4500\/holerite/);
-  await mobile.getByRole("heading", { name: "Holerite", exact: true }).waitFor();
+  await mobile
+    .getByText("A jornada está temporariamente indisponível.")
+    .waitFor();
   const fitsViewport = await mobile.evaluate(
     () => document.documentElement.scrollWidth <= window.innerWidth,
   );
-  if (!fitsViewport) throw new Error("Holerite legado excede o viewport mobile.");
+  if (!fitsViewport) throw new Error("Fallback de Holerite excede o viewport mobile.");
   await mobile.close();
 
   console.log(

@@ -29,11 +29,21 @@ function LocationProbe() {
   );
 }
 
-function renderHome(initialEntry = "/") {
+function renderHome(initialEntry = "/", registryData: unknown = registry) {
   track.mockClear();
   return render(
     <MemoryRouter initialEntries={[initialEntry]}>
-      <App createCapabilities={() => capabilities} registryData={registry} />
+      <App createCapabilities={() => capabilities} registryData={registryData} />
+      <LocationProbe />
+    </MemoryRouter>,
+  );
+}
+
+function renderHomeFromRegistry() {
+  track.mockClear();
+  return render(
+    <MemoryRouter initialEntries={["/"]}>
+      <App createCapabilities={() => capabilities} />
       <LocationProbe />
     </MemoryRouter>,
   );
@@ -41,6 +51,14 @@ function renderHome(initialEntry = "/") {
 
 describe("portal experiences", () => {
   afterEach(cleanup);
+
+  it("loads registered journeys through the Journey Registry HTTP boundary", async () => {
+    renderHomeFromRegistry();
+
+    expect(
+      await screen.findByRole("link", { name: /Holerite legado/ }),
+    ).toHaveAttribute("href", "/holerite");
+  });
 
   it("renders search and Produtos on the home route without repeating journeys in the header", async () => {
     renderHome();

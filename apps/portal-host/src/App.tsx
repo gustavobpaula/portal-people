@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams, Routes, Route } from "react-router-dom";
 import {
   Alert,
@@ -31,6 +31,11 @@ import {
 import styles from "./styles.module.scss";
 import { PortalHome, PortalNotifications } from "./portal-experiences";
 import { portalBffClient, type PortalBffClient } from "./portal-bff";
+import { isExternalJourneyAvailable } from "./external-availability";
+import {
+  journeyRegistryClient,
+  type JourneyRegistryClient,
+} from "./journey-registry";
 import registry from "./assets/journey-registry.json";
 
 type FederatedManifest = Extract<
@@ -43,6 +48,7 @@ type FallbackReason =
   | Exclude<JourneyLoadResult, { status: "ready" }>["reason"]
   | "render-error"
   | "external-origin-not-allowed"
+  | "external-unavailable"
   | "invalid-return-route";
 
 const EXTERNAL_WEB_ALLOWED_ORIGINS = ["http://localhost:4500"];
@@ -52,7 +58,9 @@ export interface AppProps {
   loadJourney?: JourneyLoader;
   createCapabilities?: typeof createWebCapabilities;
   portalBffClient?: PortalBffClient;
+  journeyRegistryClient?: JourneyRegistryClient;
   externalOrigins?: readonly string[];
+  checkExternalAvailability?: (destination: string) => Promise<boolean>;
   navigateExternal?: (destination: string) => void;
 }
 
@@ -170,6 +178,8 @@ function JourneyFallback({
     "render-error": "A jornada encontrou um erro ao ser exibida.",
     "external-origin-not-allowed":
       "O destino externo não é permitido pela plataforma.",
+    "external-unavailable":
+      "A jornada está temporariamente indisponível.",
     "invalid-return-route": "A rota de retorno da jornada não é válida.",
   };
   return (
@@ -265,15 +275,19 @@ function ExternalJourneySlot({
   manifest,
   platform,
   allowedOrigins,
+  checkExternalAvailability,
   navigateExternal,
 }: {
   manifest: ExternalManifest;
   platform: PlatformCapabilities;
   allowedOrigins: readonly string[];
+  checkExternalAvailability: (destination: string) => Promise<boolean>;
   navigateExternal: (destination: string) => void;
 }) {
   const navigate = useNavigate();
   const started = useRef(false);
+  const [attempt, setAttempt] = useState(0);
+  const [isUnavailable, setIsUnavailable] = useState(false);
   const prepared = useMemo(
     () => prepareExternalJourney(manifest, allowedOrigins, window.location.origin),
     [allowedOrigins, manifest],
@@ -289,10 +303,25 @@ function ExternalJourneySlot({
 
   useEffect(() => {
     if (prepared.status !== "ready" || started.current) return;
-    started.current = true;
-    trackJourney(platform, "portal.journey.external.transitioned", manifest);
-    navigateExternal(prepared.destination);
-  }, [manifest, navigateExternal, platform, prepared]);
+    let active = true;
+    setIsUnavailable(false);
+    void checkExternalAvailability(prepared.destination).then((available) => {
+      if (!active) return;
+      if (!available) {
+        setIsUnavailable(true);
+        trackJourney(platform, "portal.journey.load.failed", manifest, {
+          reason: "external-unavailable",
+        });
+        return;
+      }
+      started.current = true;
+      trackJourney(platform, "portal.journey.external.transitioned", manifest);
+      navigateExternal(prepared.destination);
+    });
+    return () => {
+      active = false;
+    };
+  }, [attempt, checkExternalAvailability, manifest, navigateExternal, platform, prepared]);
 
   if (prepared.status === "fallback")
     return (
@@ -301,6 +330,20 @@ function ExternalJourneySlot({
         onRetry={() => {
           trackJourney(platform, "portal.journey.load.retried", manifest);
           window.location.reload();
+        }}
+        onReturn={() => navigate("/")}
+      />
+    );
+  if (isUnavailable)
+    return (
+      <JourneyFallback
+        reason="external-unavailable"
+        onRetry={() => {
+          trackJourney(platform, "portal.journey.load.retried", manifest, {
+            reason: "external-unavailable",
+          });
+          started.current = false;
+          setAttempt((current) => current + 1);
         }}
         onReturn={() => navigate("/")}
       />
@@ -387,11 +430,12 @@ function ExternalReturn({
 
 /** Composes transversal routes and registered journeys without importing domain code. */
 function ShellContent({
-  registryData = registry,
+  registryData,
   loadJourney = loadFederatedJourney,
   createCapabilities = createWebCapabilities,
   portalBffClient: bffClient = portalBffClient,
   externalOrigins = EXTERNAL_WEB_ALLOWED_ORIGINS,
+  checkExternalAvailability = isExternalJourneyAvailable,
   navigateExternal = (destination) => window.location.assign(destination),
 }: AppProps) {
   const navigate = useNavigate();
@@ -404,10 +448,6 @@ function ShellContent({
       },
     }),
   );
-  const [portalQueryClient] = useState(
-    () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
-  );
-
   const resolution = useMemo(
     () => resolveJourneyRegistry(registryData),
     [registryData],
@@ -473,8 +513,7 @@ function ShellContent({
             <Text>As jornadas disponíveis continuam acessíveis.</Text>
           </Alert>
         ) : null}
-        <QueryClientProvider client={portalQueryClient}>
-          <Routes>
+        <Routes>
             <Route
               path="/"
               element={
@@ -511,6 +550,7 @@ function ShellContent({
                       manifest={manifest}
                       platform={platform}
                       allowedOrigins={externalOrigins}
+                      checkExternalAvailability={checkExternalAvailability}
                       navigateExternal={navigateExternal}
                     />
                   )
@@ -544,8 +584,7 @@ function ShellContent({
                 />
               }
             />
-          </Routes>
-        </QueryClientProvider>
+        </Routes>
       </main>
     </div>
   );
@@ -553,5 +592,46 @@ function ShellContent({
 
 /** Composes routes from the resolved registry without importing domain implementations. */
 export function App(props: AppProps) {
-  return <ShellContent {...props} />;
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+  );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <JourneyRegistryBoundary {...props} />
+    </QueryClientProvider>
+  );
+}
+
+/** Retrieves the resolved catalog through the Journey Registry boundary. */
+function JourneyRegistryBoundary({
+  registryData,
+  journeyRegistryClient: registryClient = journeyRegistryClient,
+  ...props
+}: AppProps) {
+  const registryQuery = useQuery({
+    queryKey: ["journey-registry"],
+    queryFn: ({ signal }) => registryClient.getJourneys(signal),
+    enabled: registryData === undefined,
+    retry: false,
+  });
+  const isUsingFallback = registryData === undefined && registryQuery.isError;
+  const resolvedRegistry = registryData ?? registryQuery.data ?? registry;
+
+  return (
+    <>
+      {isUsingFallback ? <RegistryUnavailable onRetry={() => void registryQuery.refetch()} /> : null}
+      <ShellContent {...props} registryData={resolvedRegistry} />
+    </>
+  );
+}
+
+function RegistryUnavailable({ onRetry }: { onRetry: () => void }) {
+  return (
+    <div className={styles.registryFallback} role="alert">
+      <Text>Não foi possível atualizar as jornadas. Exibimos o último catálogo seguro.</Text>
+      <Button type="button" onClick={onRetry}>
+        Tentar novamente
+      </Button>
+    </div>
+  );
 }
