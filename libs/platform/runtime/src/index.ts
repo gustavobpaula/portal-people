@@ -27,6 +27,8 @@ export type ExternalJourneyPreparation =
 export type WebCapabilityAdapters = Readonly<{
   navigate?: PlatformCapabilities['navigate'];
   telemetry?: PlatformCapabilities['telemetry'];
+  platform?: PlatformCapabilities['context']['platform'];
+  device?: PlatformCapabilities['device'];
 }>;
 
 /**
@@ -138,16 +140,21 @@ export async function loadFederatedJourney(
  * Creates the browser implementation of the narrow platform contract supplied to remotes.
  * It deliberately exposes device availability rather than browser internals or credentials.
  */
-export function createWebCapabilities(adapters: WebCapabilityAdapters = {}): PlatformCapabilities {
+export function createPlatformCapabilities(adapters: WebCapabilityAdapters = {}): PlatformCapabilities {
   return {
     navigate: adapters.navigate ?? ((path) => {
       window.history.pushState({}, '', path);
       window.dispatchEvent(new PopStateEvent('popstate'));
     }),
-    context: { correlationId: crypto.randomUUID(), locale: navigator.language, platform: 'web' },
+    context: { correlationId: crypto.randomUUID(), locale: navigator.language, platform: adapters.platform ?? 'web' },
     telemetry: adapters.telemetry ?? { track: (event) => console.info('portal-event', event.name, event.properties) },
     flags: {},
     notifications: { show: (message) => console.info('portal-notification', message) },
-    device: { isAvailable: () => false }
+    device: adapters.device ?? { isAvailable: () => false }
   };
+}
+
+/** Backwards-compatible browser capability factory. */
+export function createWebCapabilities(adapters: Omit<WebCapabilityAdapters, 'platform'> = {}): PlatformCapabilities {
+  return createPlatformCapabilities({ ...adapters, platform: 'web' });
 }

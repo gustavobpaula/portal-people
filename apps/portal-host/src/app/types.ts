@@ -1,5 +1,6 @@
 import type { JourneyManifest, PlatformCapabilities } from "@portal/platform-contracts";
 import type { loadFederatedJourney } from "@portal/platform-runtime";
+import type { NativeBridge, PlatformAdapter, PlatformAdapterOptions } from "@portal/platform-mobile-bridge";
 import type { JourneyRegistryClient } from "../services/journey-registry/journey-registry";
 import type { PortalBffClient } from "../services/portal-bff/portal-bff";
 
@@ -11,6 +12,10 @@ export type ExternalManifest = Extract<
   JourneyManifest,
   { strategy: "external-web" }
 >;
+export type NativeManifest = Extract<
+  JourneyManifest,
+  { strategy: "native-route" }
+>;
 export type JourneyLoader = typeof loadFederatedJourney;
 
 export interface AppProps {
@@ -20,6 +25,9 @@ export interface AppProps {
     navigate: (path: string) => void;
     telemetry: PlatformCapabilities["telemetry"];
   }) => PlatformCapabilities;
+  createPlatformAdapter?: (options: PlatformAdapterOptions) => PlatformAdapter;
+  platformMode?: "web" | "webview";
+  nativeBridge?: NativeBridge;
   portalBffClient?: PortalBffClient;
   journeyRegistryClient?: JourneyRegistryClient;
   externalOrigins?: readonly string[];

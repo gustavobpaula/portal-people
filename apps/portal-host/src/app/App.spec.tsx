@@ -5,6 +5,7 @@ import type {
   FederatedJourneyModule,
   PlatformCapabilities,
 } from "@portal/platform-contracts";
+import type { PlatformAdapter } from "@portal/platform-mobile-bridge";
 import type { JourneyLoadResult } from "@portal/platform-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
@@ -47,9 +48,11 @@ function renderShell(
     navigateExternal?: (destination: string) => void;
     externalOrigins?: readonly string[];
     checkExternalAvailability?: (destination: string) => Promise<boolean>;
+    createPlatformAdapter?: PlatformAdapter;
   } = {},
 ) {
   const createCapabilities = vi.fn(() => capabilities);
+  const injectedPlatformAdapter = options.createPlatformAdapter;
   return {
     createCapabilities,
     ...render(
@@ -64,9 +67,8 @@ function renderShell(
                 module: { default: () => <p>Jornada carregada</p> },
               }))) as typeof import("@portal/platform-runtime").loadFederatedJourney
           }
-          createCapabilities={
-            createCapabilities as typeof import("@portal/platform-runtime").createWebCapabilities
-          }
+          createCapabilities={injectedPlatformAdapter ? undefined : createCapabilities as typeof import("@portal/platform-runtime").createWebCapabilities}
+          createPlatformAdapter={injectedPlatformAdapter ? () => injectedPlatformAdapter : undefined}
           navigateExternal={options.navigateExternal}
           externalOrigins={options.externalOrigins}
           checkExternalAvailability={options.checkExternalAvailability}
@@ -125,6 +127,29 @@ describe("App", () => {
         properties: expect.objectContaining({ invalidCount: 1 }),
       }),
     );
+  });
+
+  it("keeps the shell available when a native route is opened in the browser", async () => {
+    const native = { ...manifest, id: "recursos-do-app", displayName: "Recursos do aplicativo", route: "/recursos-do-app", strategy: "native-route", nativeRoute: "portal-pessoas://recursos" } as const;
+    renderShell({ registryData: [native], initialPath: "/recursos-do-app" });
+    expect(await screen.findByText("Este recurso está disponível apenas no aplicativo.")).toBeInTheDocument();
+    expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.fallback.shown" }));
+  });
+
+  it("emits sanitized telemetry for a successful native activation", async () => {
+    const native = { ...manifest, id: "recursos-do-app", displayName: "Recursos do aplicativo", route: "/recursos-do-app", strategy: "native-route", nativeRoute: "portal-pessoas://recursos" } as const;
+    const adapter: PlatformAdapter = {
+      capabilities: { ...capabilities, context: { ...capabilities.context, platform: "webview" } },
+      openNativeRoute: async () => ({ status: "opened" }),
+    };
+    renderShell({ registryData: [native], initialPath: "/recursos-do-app", createPlatformAdapter: adapter });
+
+    expect(await screen.findByText("Recursos do aplicativo aberto")).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.activation.started" }));
+    expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.opened" }));
+    const telemetry = JSON.stringify(track.mock.calls);
+    expect(telemetry).not.toMatch(/portal-pessoas|requestId|token|matr[ií]cula|mobile@example\.test/i);
   });
 
   it("retries only the selected federated journey", async () => {

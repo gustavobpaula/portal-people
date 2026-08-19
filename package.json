@@ -15,6 +15,7 @@
     "demo:portal": "node scripts/demo-portal.mjs",
     "demo:legacy": "node scripts/demo-legacy.mjs",
     "verify:external-web": "node scripts/verify-external-web.mjs",
+    "verify:web-mobile-bridge": "node scripts/verify-web-mobile-bridge.mjs",
     "storybook": "nx serve design-system-docs",
     "storybook:build": "nx build design-system-docs",
     "test:design-system": "nx run-many -t test --projects=design-tokens,design-system-web,design-system-docs",

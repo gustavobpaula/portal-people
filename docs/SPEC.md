@@ -66,6 +66,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Jornada Benefícios](specs/parte-2-beneficios.md)
 - [Parte 2 — Jornada Férias](specs/parte-2-ferias.md)
 - [Parte 2 — Legado, Rollout e Resiliência](specs/parte-2-legado-rollout-resiliencia.md)
+- [Parte 2 — Web/Mobile e Bridge](specs/parte-2-web-mobile-bridge.md)
 
 ## Delivery Roadmap
 

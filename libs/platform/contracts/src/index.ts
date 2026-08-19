@@ -3,6 +3,8 @@ import { z } from "zod";
 
 /** The semantic version of the platform contract implemented by this workspace. */
 export const PLATFORM_CONTRACT_VERSION = "1.0.0";
+/** Version of the deliberately small WebView bridge protocol. */
+export const BRIDGE_CONTRACT_VERSION = "1.0.0";
 
 const semanticVersion = z
   .string()
@@ -15,6 +17,12 @@ export const journeyRouteSchema = z
   .regex(
     /^\/[a-z0-9][a-z0-9/-]*$/,
     "Routes must be absolute kebab-case paths.",
+  );
+const nativeRouteSchema = z
+  .string()
+  .regex(
+    /^portal-pessoas:\/\/[a-z0-9][a-z0-9/-]*$/,
+    "Native routes must use the portal-pessoas scheme.",
   );
 
 /** Fields shared by every routing strategy before its destination-specific data is added. */
@@ -51,7 +59,7 @@ export const journeyManifestSchema = z.discriminatedUnion("strategy", [
   }),
   commonJourney.extend({
     strategy: z.literal("native-route"),
-    nativeRoute: z.string().min(1),
+    nativeRoute: nativeRouteSchema,
   }),
 ]).superRefine((journey, context) => {
   if (
@@ -68,6 +76,10 @@ export const journeyManifestSchema = z.discriminatedUnion("strategy", [
 
 export type JourneyManifest = z.infer<typeof journeyManifestSchema>;
 export type JourneyStrategy = JourneyManifest["strategy"];
+export type NativeJourneyManifest = Extract<
+  JourneyManifest,
+  { strategy: "native-route" }
+>;
 
 /** The complete allowlist of capabilities that a journey may request from the platform. */
 export const platformCapabilitySchema = z.enum([
@@ -85,6 +97,38 @@ export const platformCapabilitiesRequestSchema = z
   })
   .strict();
 export type PlatformCapabilityName = z.infer<typeof platformCapabilitySchema>;
+
+export const nativeBridgeCapabilitySchema = z.enum(["native-navigation"]);
+export type NativeBridgeCapability = z.infer<typeof nativeBridgeCapabilitySchema>;
+
+export const nativeBridgeDescriptorSchema = z
+  .object({
+    version: semanticVersion,
+    capabilities: z.array(nativeBridgeCapabilitySchema),
+  })
+  .strict();
+export type NativeBridgeDescriptor = z.infer<typeof nativeBridgeDescriptorSchema>;
+
+export const nativeBridgeRequestSchema = z
+  .object({
+    requestId: z.string().uuid(),
+    version: semanticVersion,
+    command: z.literal("open-native-route"),
+    payload: z.object({ route: nativeRouteSchema }).strict(),
+  })
+  .strict();
+export type NativeBridgeRequest = z.infer<typeof nativeBridgeRequestSchema>;
+
+export const nativeBridgeResponseSchema = z.discriminatedUnion("status", [
+  z.object({ requestId: z.string().uuid(), status: z.literal("success") }).strict(),
+  z
+    .object({
+      requestId: z.string().uuid(),
+      status: z.literal("rejected"),
+    })
+    .strict(),
+]);
+export type NativeBridgeResponse = z.infer<typeof nativeBridgeResponseSchema>;
 
 /** Minimal, non-sensitive context that the shell propagates to an embedded journey. */
 export type PlatformContext = Readonly<{
@@ -109,7 +153,9 @@ export type PlatformCapabilities = Readonly<{
   flags: Readonly<Record<string, boolean>>;
   notifications: { show: (message: string) => void };
   device: {
-    isAvailable: (capability: "share" | "camera" | "file-picker") => boolean;
+    isAvailable: (
+      capability: "share" | "camera" | "file-picker" | "native-navigation",
+    ) => boolean;
   };
 }>;
 

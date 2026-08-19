@@ -29,6 +29,13 @@ export const catalogItems: CatalogItem[] = [
     route: "/holerite",
     keywords: ["holerite", "contracheque", "folha", "pagamento", "legado"],
   },
+  {
+    id: "recursos-do-app",
+    title: "Recursos do aplicativo",
+    description: "Acesse recursos disponíveis no aplicativo mobile.",
+    route: "/recursos-do-app",
+    keywords: ["aplicativo", "app", "mobile", "nativo"],
+  },
 ];
 
 export const notifications: NotificationItem[] = [

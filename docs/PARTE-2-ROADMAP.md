@@ -17,7 +17,7 @@ Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas
 | 5 | Jornada Benefícios | Fases 2–3 | Remote consultivo independente e estados de dados | Planejada |
 | 6 | Jornada Férias | Fases 2–3 | Remote transacional independente, validação e confirmação | Planejada |
 | 7 | Legado, rollout e resiliência | Fases 3–6 | Holerite externo, retorno e isolamento; responsabilidades externas de rollout documentadas | Concluída |
-| 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Planejada |
+| 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Concluída |
 | 9 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Planejada |
 | 10 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Planejada |
 
@@ -28,7 +28,6 @@ Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas
 - `parte-2-beneficios.md`
 - `parte-2-ferias.md`
 - `parte-2-legado-rollout-resiliencia.md`
-- `parte-2-web-mobile-bridge.md`
 - `parte-2-observabilidade-operacao.md`
 
 Os nomes acima reservam intenção no roadmap, mas os arquivos não serão criados nem tratados como requisitos aprovados antes do refinamento.

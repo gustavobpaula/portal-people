@@ -43,5 +43,16 @@
     "observability": { "domain": "holerite-legado", "eventNamespace": "holerite-legado" },
     "destination": "http://localhost:4500/holerite",
     "returnRoute": "/retorno/holerite-legado"
+  },
+  {
+    "id": "recursos-do-app",
+    "displayName": "Recursos do aplicativo",
+    "route": "/recursos-do-app",
+    "strategy": "native-route",
+    "version": "1.0.0",
+    "platformCompatibility": "^1.0.0",
+    "owner": { "squad": "Plataforma Mobile", "contact": "mobile@example.test" },
+    "observability": { "domain": "recursos-do-app", "eventNamespace": "recursos-do-app" },
+    "nativeRoute": "portal-pessoas://recursos"
   }
 ]

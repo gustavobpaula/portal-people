@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { journeyManifestSchema, platformCapabilitiesRequestSchema } from './index';
+import { journeyManifestSchema, nativeBridgeRequestSchema, platformCapabilitiesRequestSchema } from './index';
 
 const validManifest = {
   id: 'neutral-journey', route: '/foundation', strategy: 'federated-module', version: '1.0.0',
@@ -50,6 +50,14 @@ describe('journeyManifestSchema', () => {
       strategy: 'native-route',
       nativeRoute: 'portal-pessoas://holerite'
     });
+  });
+  it('rejects a native route outside the controlled application scheme', () => {
+    expect(journeyManifestSchema.safeParse({ ...validManifest, strategy: 'native-route', nativeRoute: 'https://example.test/native' }).success).toBe(false);
+  });
+  it('validates a strict, correlated native bridge request', () => {
+    const request = { requestId: '550e8400-e29b-41d4-a716-446655440000', version: '1.0.0', command: 'open-native-route', payload: { route: 'portal-pessoas://recursos' } };
+    expect(nativeBridgeRequestSchema.safeParse(request).success).toBe(true);
+    expect(nativeBridgeRequestSchema.safeParse({ ...request, token: 'private' }).success).toBe(false);
   });
   it('does not expose rollout metadata in the parsed contract', () => {
     const parsed = journeyManifestSchema.parse({

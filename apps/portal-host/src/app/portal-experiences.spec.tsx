@@ -72,7 +72,7 @@ describe("portal experiences", () => {
       "href",
       "/notificacoes",
     );
-    await screen.findByText("4 resultados");
+    await screen.findByText("5 resultados");
     expect(
       screen.getAllByRole("link", { name: /Fundação da plataforma/ }),
     ).toHaveLength(1);

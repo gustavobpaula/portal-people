@@ -25,6 +25,7 @@ corepack pnpm verify:shell
 corepack pnpm demo:portal
 corepack pnpm demo:legacy
 corepack pnpm verify:external-web
+corepack pnpm verify:web-mobile-bridge
 corepack pnpm golden-path -- --name nova-jornada --dry-run
 corepack pnpm storybook
 corepack pnpm storybook:build
@@ -81,6 +82,46 @@ O fluxo completo em desktop e viewport mobile é verificável em Chromium:
 
 ```sh
 corepack pnpm verify:external-web
+```
+
+## Web/mobile e bridge simulada
+
+Produtos também contém **Recursos do aplicativo**, uma jornada sintética `native-route`. No navegador ela exibe o fallback “Este recurso está disponível apenas no aplicativo.”, sem desmontar o Portal.
+
+Durante o desenvolvimento, abra `http://localhost:4200/?platform=webview` e selecione a jornada para usar a bridge simulada. Ela aceita somente a rota registrada `portal-pessoas://recursos`, não armazena sessão ou dados e confirma a abertura no próprio case. O parâmetro é ignorado em builds de produção.
+
+### Modelo mental: WebView, bridge e `native-route`
+
+Em produção, o aplicativo nativo abre o `portal-host` em uma WebView. A mesma composição React — shell, Home, Produtos, busca, notificações e remotes de domínio — continua executando dentro dessa WebView. A bridge é o canal estrito entre esse conteúdo web e o aplicativo, não uma segunda aplicação web nem um backend.
+
+```text
+App nativo
+  └─ WebView
+      └─ portal-host
+          ├─ shell e experiências transversais
+          └─ domínios React registrados
+```
+
+O case demonstra o sentido **web → nativo**. A rota web `/recursos-do-app` e o destino nativo `portal-pessoas://recursos` são distintos: a primeira mostra a jornada dentro do Portal; o segundo é um destino que pertence ao aplicativo nativo.
+
+```text
+Usuário acessa /recursos-do-app
+  → NativeJourneySlot lê o manifesto `native-route`
+  → PlatformAdapter valida modo, origem, versão, capability e payload
+  → bridge recebe `open-native-route(portal-pessoas://recursos)`
+  → app nativo decide como abrir a tela nativa
+```
+
+No navegador, o shell usa o adapter `web`. A rota `/recursos-do-app` é renderizada, mas nenhuma navegação nativa é disparada: o adapter responde `native-unavailable` e o Portal mostra o fallback controlado. Dentro do app, o shell usa o adapter `webview`; se a bridge negociar a capability `native-navigation`, o destino registrado é enviado ao host nativo. Versão incompatível, origem negada, payload inválido, ausência, timeout ou rejeição da bridge também preservam o shell e exibem um fallback.
+
+O monorepo não conhece Android Intents, Swift ou a implementação final de deep links. Ele só conhece uma `nativeRoute` validada no manifesto. O aplicativo pode implementar a abertura usando deep link internamente, mas essa decisão fica no host nativo. Somente o shell acessa a bridge; os domínios recebem apenas `PlatformCapabilities`.
+
+O sentido **nativo → web** já existe no nível de hospedagem: o app carrega o Portal na WebView. Esta fase não define mensagens de contexto adicionais do nativo para o Portal, como rota inicial, tema, conectividade ou retorno de tela nativa. Caso sejam necessárias, devem ser adicionadas em contrato versionado e com dados mínimos; tokens, sessão, perfil completo e objetos de negócio não devem transitar pela bridge.
+
+Verifique browser, WebView simulada e viewport mobile com:
+
+```sh
+corepack pnpm verify:web-mobile-bridge
 ```
 
 ### Como funcionaria em produção

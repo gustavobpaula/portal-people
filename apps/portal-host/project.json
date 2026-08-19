@@ -4,11 +4,22 @@
   "projectType": "application",
   "tags": ["scope:shell", "type:app"],
   "metadata": { "owner": "Plataforma Frontend" },
-  "implicitDependencies": ["platform-runtime", "platform-contracts", "design-system-web", "design-tokens"],
+  "implicitDependencies": [
+    "platform-runtime",
+    "platform-contracts",
+    "platform-mobile-bridge",
+    "design-system-web",
+    "design-tokens"
+  ],
   "targets": {
     "serve": { "command": "vite --config apps/portal-host/vite.config.ts" },
-    "build": { "command": "vite build --config apps/portal-host/vite.config.ts", "outputs": ["{workspaceRoot}/dist/apps/portal-host"] },
-    "test": { "command": "vitest run --config apps/portal-host/vitest.config.ts" },
+    "build": {
+      "command": "vite build --config apps/portal-host/vite.config.ts",
+      "outputs": ["{workspaceRoot}/dist/apps/portal-host"]
+    },
+    "test": {
+      "command": "vitest run --config apps/portal-host/vitest.config.ts"
+    },
     "lint": { "command": "eslint apps/portal-host --max-warnings=0" }
   }
 }

@@ -1,0 +1,11 @@
+{
+  "name": "platform-mobile-bridge",
+  "sourceRoot": "libs/platform/mobile-bridge/src",
+  "projectType": "library",
+  "tags": ["scope:platform-host", "type:runtime"],
+  "implicitDependencies": ["platform-contracts", "platform-runtime"],
+  "targets": {
+    "test": { "command": "vitest run --config libs/platform/mobile-bridge/vitest.config.ts" },
+    "lint": { "command": "eslint libs/platform/mobile-bridge --max-warnings=0" }
+  }
+}
