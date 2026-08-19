@@ -1,0 +1,86 @@
+libs/platform/mobile-bridge/src/index.spec.ts
+  h_4c750985969531 14,31,39,47,49-50,53,57,62-63,73,75,77,83,85,90,98,102,104,115,121,124,133,137-138,143,148-166,168-169,173,177,179-182,185,187
+  s_6484b056b79510::t_841bb17300cd56 1-13,15-30,32-38,40-46,48,51-52,54-56,58-61,64-72,74,76,78-82,84,86-89,91-97,99-101,103,105-106,186,188-190
+  s_6484b056b79510::t_40a758845f4730 107-114,116-120,122-123,125-132,134-136,139-142,144-147,167,170-172,174-176,178,183-184
+apps/portal-host/src/app/portal-experiences.spec.tsx
+  s_6484b056b79510::t_841bb17300cd56 75
+eslint.config.mjs
+  s_6484b056b79510::t_fddbfb11909e2e 22,25
+README.md
+  s_6484b056b79510::t_00821735922bdb 93-120,125
+  s_6484b056b79510::t_1bf98906282b27 28,87-92,121-124
+  s_6484b056b79510::t_fd771120429f2e 126
+libs/platform/contracts/src/index.ts
+  s_6484b056b79510::t_6ba9a008f37054 6-7,21-26,62,79-82,101-132,156-158
+libs/platform/mobile-bridge/src/index.ts
+  s_6484b056b79510::t_6ba9a008f37054 1-54,64-80,82-120
+  s_6484b056b79510::t_40a758845f4730 55-63,81
+apps/portal-host/src/assets/journey-registry.json
+  s_6484b056b79510::t_fddbfb11909e2e 46-56
+apps/portal-host/src/app/journeys/NativeJourneySlot.tsx
+  s_6484b056b79510::t_fddbfb11909e2e 1-58
+libs/platform/runtime/src/index.ts
+  s_6484b056b79510::t_6ba9a008f37054 30-31,143,149,153,156-159
+  s_6484b056b79510::t_fc2e96db3a743f 160
+tsconfig.base.json
+  s_6484b056b79510::t_fddbfb11909e2e 18
+apps/portal-host/vitest.config.ts
+  s_6484b056b79510::t_fddbfb11909e2e 8
+libs/platform/contracts/src/index.spec.ts
+  s_6484b056b79510::t_841bb17300cd56 2,54-61
+docs/SPEC.md
+  s_6484b056b79510::t_f0cc3c010f1401 69
+docs/PARTE-2-ROADMAP.md
+  s_6484b056b79510::t_1bf98906282b27 20
+libs/platform/mobile-bridge/project.json
+  s_6484b056b79510::t_ecddfe90c9f993 8
+  s_6484b056b79510::t_6ba9a008f37054 1-7,9-11
+libs/platform/mobile-bridge/vitest.config.ts
+  s_6484b056b79510::t_6ba9a008f37054 1-12
+apps/portal-host/src/app/App.spec.tsx
+  s_6484b056b79510::t_40a758845f4730 70,138-141,143-153
+  s_6484b056b79510::t_841bb17300cd56 132-137
+  s_6484b056b79510::t_9c740e7a90e1cd 55,71
+  s_6484b056b79510::t_9714981d3db081 8,51,142
+  s_6484b056b79510::t_d28a0ffb0e27c6 154
+apps/portal-host/src/app/App.tsx
+  s_6484b056b79510::t_fddbfb11909e2e 5-6,14,17,25,27-30,32,53
+apps/portal-host/src/app/types.ts
+  s_6484b056b79510::t_fddbfb11909e2e 3,15-18,28-30
+apps/portal-host/vite.config.ts
+  s_6484b056b79510::t_fddbfb11909e2e 15
+apps/portal-host/src/main.tsx
+  s_6484b056b79510::t_fddbfb11909e2e 5,15,19
+docs/specs/parte-2-web-mobile-bridge.md
+  s_6484b056b79510::t_f0cc3c010f1401 1-54
+package.json
+  s_6484b056b79510::t_1bf98906282b27 18
+apps/portal-host/src/mocks/fixtures.ts
+  s_6484b056b79510::t_fddbfb11909e2e 32-38
+apps/portal-host/project.json
+  s_6484b056b79510::t_fddbfb11909e2e 7-13
+  h_4c750985969531 16-22
+scripts/verify-web-mobile-bridge.mjs
+  s_6484b056b79510::t_1bf98906282b27 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e86f175a9ec3ec0299659e1539990ee0ef8f3039",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_6484b056b79510": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a015c1-b347-77c3-89f8-3437c27ac619",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
