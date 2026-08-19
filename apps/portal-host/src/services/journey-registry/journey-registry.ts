@@ -1,3 +1,8 @@
+import {
+  journeyRegistryResponseSchema,
+  type JourneyRegistryResponse,
+} from "@portal/platform-contracts";
+
 /** Provides the shell boundary for the externally resolved journey registry. */
 export class JourneyRegistryError extends Error {
   constructor(readonly kind: "http" | "invalid-response" | "network") {
@@ -6,10 +11,12 @@ export class JourneyRegistryError extends Error {
 }
 
 export interface JourneyRegistryClient {
-  getJourneys(signal?: AbortSignal): Promise<unknown>;
+  getJourneys(signal?: AbortSignal): Promise<JourneyRegistryResponse>;
 }
 
-async function getJourneys(signal?: AbortSignal): Promise<unknown> {
+async function getJourneys(
+  signal?: AbortSignal,
+): Promise<JourneyRegistryResponse> {
   let response: Response;
   try {
     response = await fetch("/api/journeys", {
@@ -22,11 +29,15 @@ async function getJourneys(signal?: AbortSignal): Promise<unknown> {
 
   if (!response.ok) throw new JourneyRegistryError("http");
 
+  let body: unknown;
   try {
-    return await response.json();
+    body = await response.json();
   } catch {
     throw new JourneyRegistryError("invalid-response");
   }
+  const parsed = journeyRegistryResponseSchema.safeParse(body);
+  if (!parsed.success) throw new JourneyRegistryError("invalid-response");
+  return parsed.data;
 }
 
 /** Default HTTP client. Production supplies this endpoint from Journey Registry. */

@@ -23,6 +23,7 @@ export default [
           ...domainConstraints,
           { sourceTag: 'scope:platform', onlyDependOnLibsWithTags: ['scope:platform'] },
           { sourceTag: 'scope:platform-host', onlyDependOnLibsWithTags: ['scope:platform'] },
+          { sourceTag: 'scope:platform-service', onlyDependOnLibsWithTags: ['scope:platform'] },
           { sourceTag: 'scope:design-system', onlyDependOnLibsWithTags: ['scope:design-system'] },
           { sourceTag: 'scope:design-system-docs', onlyDependOnLibsWithTags: ['scope:design-system'] }
         ]

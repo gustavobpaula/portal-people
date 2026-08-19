@@ -7,7 +7,11 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
   cacheDir: fileURLToPath(new URL('../../node_modules/.vite/portal-host', import.meta.url)),
-  plugins: [react(), federation(federationConfig)], server: { port: 4200, strictPort: true },
+  plugins: [react(), federation(federationConfig)], server: {
+    port: 4200,
+    strictPort: true,
+    proxy: { "/api/journeys": { target: "http://127.0.0.1:4204", changeOrigin: true } },
+  },
   build: { target: 'chrome89', outDir: fileURLToPath(new URL('../../dist/apps/portal-host', import.meta.url)), emptyOutDir: true },
   resolve: { alias: {
     '@portal/platform-contracts': fileURLToPath(new URL('../../libs/platform/contracts/src/index.ts', import.meta.url)),

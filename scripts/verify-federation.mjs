@@ -12,7 +12,7 @@ const registry = JSON.parse(
 );
 for (const domain of ["beneficios", "ferias"]) {
   const manifest = JSON.parse(
-    await readFile(`apps/${domain}/journey-manifest.json`, "utf8"),
+    await readFile(`journeys/${domain}/manifest.json`, "utf8"),
   );
   const registryManifest = registry.find((entry) => entry.id === domain);
   if (JSON.stringify(registryManifest) !== JSON.stringify(manifest)) {

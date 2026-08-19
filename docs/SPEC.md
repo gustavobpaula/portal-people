@@ -16,6 +16,7 @@ Conduzir a modernização do Portal Pessoas em incrementos demonstráveis: prese
 - **FR-8:** A experiência deve ser responsiva e compatível com uma bridge móvel simulada, sem exigir aplicativos nativos no case.
 - **FR-9:** Logs, erros, métricas de experiência e analytics devem possuir contexto mínimo de domínio, versão, rota, plataforma e correlação.
 - **FR-10:** Instalação, execução, testes e builds devem ser reproduzíveis localmente.
+- **FR-11:** O shell deve descobrir jornadas por uma aplicação Journey Registry demonstrativa, executada separadamente e mantida sob ownership da Plataforma Frontend.
 
 ## Acceptance Criteria
 
@@ -28,6 +29,7 @@ Conduzir a modernização do Portal Pessoas em incrementos demonstráveis: prese
 - **AC-7 [FR-8]:** Fluxos críticos funcionam em desktop e viewport mobile e exercitam o adapter web da bridge.
 - **AC-8 [FR-9]:** Eventos demonstrativos propagam contexto e não registram tokens ou dados pessoais.
 - **AC-9 [FR-10]:** Os comandos documentados de lint, tipos, testes, builds e Storybook executam sem erro.
+- **AC-10 [FR-4, FR-7, FR-11]:** O `portal-host` consome por HTTP manifestos válidos de um Journey Registry independente e preserva um catálogo seguro quando o serviço está indisponível ou responde de forma inválida.
 
 ## Constraints
 
@@ -49,7 +51,7 @@ Conduzir a modernização do Portal Pessoas em incrementos demonstráveis: prese
 
 ## Out of Scope
 
-- Publicação em produção, backend real e aplicativos Kotlin ou Swift.
+- Publicação em produção, backend corporativo real e aplicativos Kotlin ou Swift.
 - Implementação antecipada das specs futuras registradas somente no roadmap.
 
 ## Open Questions
@@ -67,6 +69,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Jornada Férias](specs/parte-2-ferias.md)
 - [Parte 2 — Legado, Rollout e Resiliência](specs/parte-2-legado-rollout-resiliencia.md)
 - [Parte 2 — Web/Mobile e Bridge](specs/parte-2-web-mobile-bridge.md)
+- [Parte 2 — Journey Registry Demonstrativo](specs/parte-2-journey-registry.md)
 
 ## Delivery Roadmap
 

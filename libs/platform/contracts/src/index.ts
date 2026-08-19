@@ -81,6 +81,25 @@ export type NativeJourneyManifest = Extract<
   { strategy: "native-route" }
 >;
 
+/** A resolved registry response cannot publish ambiguous journey identities or routes. */
+export const journeyRegistryResponseSchema = z
+  .array(journeyManifestSchema)
+  .superRefine((journeys, context) => {
+    const ids = new Set<string>();
+    const routes = new Set<string>();
+    journeys.forEach((journey, index) => {
+      if (ids.has(journey.id)) {
+        context.addIssue({ code: "custom", path: [index, "id"], message: "Journey ids must be unique." });
+      }
+      if (routes.has(journey.route)) {
+        context.addIssue({ code: "custom", path: [index, "route"], message: "Journey routes must be unique." });
+      }
+      ids.add(journey.id);
+      routes.add(journey.route);
+    });
+  });
+export type JourneyRegistryResponse = z.infer<typeof journeyRegistryResponseSchema>;
+
 /** The complete allowlist of capabilities that a journey may request from the platform. */
 export const platformCapabilitySchema = z.enum([
   "navigation",

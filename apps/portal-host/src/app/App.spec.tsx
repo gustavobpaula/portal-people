@@ -8,6 +8,7 @@ import type {
 import type { PlatformAdapter } from "@portal/platform-mobile-bridge";
 import type { JourneyLoadResult } from "@portal/platform-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { JourneyRegistryError, type JourneyRegistryClient } from "../services/journey-registry/journey-registry";
 import { App } from "./App";
 
 const manifest = {
@@ -49,6 +50,8 @@ function renderShell(
     externalOrigins?: readonly string[];
     checkExternalAvailability?: (destination: string) => Promise<boolean>;
     createPlatformAdapter?: PlatformAdapter;
+    journeyRegistryClient?: JourneyRegistryClient;
+    fromRegistry?: boolean;
   } = {},
 ) {
   const createCapabilities = vi.fn(() => capabilities);
@@ -58,7 +61,8 @@ function renderShell(
     ...render(
       <MemoryRouter initialEntries={[options.initialPath ?? "/foundation"]}>
         <App
-          registryData={options.registryData ?? [manifest]}
+          registryData={options.fromRegistry ? undefined : options.registryData ?? [manifest]}
+          journeyRegistryClient={options.journeyRegistryClient}
           loadJourney={
             (options.loadJourney ??
               (async () => ({
@@ -127,6 +131,16 @@ describe("App", () => {
         properties: expect.objectContaining({ invalidCount: 1 }),
       }),
     );
+  });
+
+  it("uses the safe catalog and emits sanitized telemetry when the Registry is unavailable", async () => {
+    const registryClient: JourneyRegistryClient = { getJourneys: async () => { throw new JourneyRegistryError("network"); } };
+    renderShell({ fromRegistry: true, journeyRegistryClient: registryClient });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Não foi possível atualizar as jornadas");
+    expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.registry.fetch.failed" }));
+    const telemetry = JSON.stringify(track.mock.calls);
+    expect(telemetry).not.toMatch(/portal-pessoas|mobile@example\.test|token|matr[ií]cula/i);
   });
 
   it("keeps the shell available when a native route is opened in the browser", async () => {

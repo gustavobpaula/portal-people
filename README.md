@@ -23,6 +23,8 @@ corepack pnpm nx build ferias
 corepack pnpm verify:federation
 corepack pnpm verify:shell
 corepack pnpm demo:portal
+corepack pnpm demo:journey-registry
+corepack pnpm verify:journey-registry
 corepack pnpm demo:legacy
 corepack pnpm verify:external-web
 corepack pnpm verify:web-mobile-bridge
@@ -45,9 +47,51 @@ corepack pnpm exec playwright install chromium
 
 Os valores visuais são aproximações locais, não oficiais e substituíveis. O verificador de ativos impede referências remotas, fontes e recursos oficiais nos fontes do Design System.
 
-`portal-host` e os remotes também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. No case, o host consome `GET /api/journeys`; o MSW responde com uma fixture local determinística de manifestos já resolvidos. Em produção, essa mesma rota seria fornecida pela API backend Journey Registry.
+`portal-host` e os remotes também podem ser iniciados separadamente por `corepack pnpm nx serve <projeto>`. No desenvolvimento isolado do host, o MSW responde `GET /api/journeys` com uma fixture local. Em modo integrado, essa rota é atendida pelo Journey Registry real por meio do proxy Vite.
 
 Durante o desenvolvimento do `portal-host`, o Portal BFF simulado é iniciado automaticamente no navegador. Ele fornece dados sintéticos para Produtos, busca e notificações; nenhum backend externo é necessário.
+
+## Journey Registry demonstrativo
+
+O Registry é um serviço Fastify independente, mantido pela Plataforma Frontend. Ele lê, ordena e valida atomicamente os manifestos versionados em `journeys/<id>/manifest.json` antes de publicar `GET /api/journeys` na porta `4204`. Se qualquer manifesto for inválido ou houver ID/rota duplicado, o catálogo inteiro não é publicado.
+
+Cada squad mantém o manifesto da jornada cujo `owner` a identifica. O serviço mantém o mecanismo, não a definição central das jornadas. Em uma organização real, esses caminhos devem ser protegidos por `CODEOWNERS` ou mecanismo equivalente associado aos times reais.
+
+### Governança e resolução de jornadas
+
+A governança é federada: a Plataforma Frontend mantém o Registry, seus contratos, validações e disponibilidade; cada squad mantém a declaração versionada da jornada pela qual responde. A separação é intencional:
+
+```text
+apps/beneficios/       → implementação React da experiência
+journeys/beneficios/   → declaração de composição, rota, estratégia e owner
+apps/journey-registry/ → descoberta, validação e publicação do catálogo
+apps/portal-host/      → consumo do catálogo já resolvido
+```
+
+Ao iniciar, o Registry lê os manifestos em ordem determinística e valida a coleção inteira. Schema inválido, `owner` ausente, diretório diferente do ID declarado, ID duplicado ou rota duplicada impede a publicação integral: o serviço nunca entrega um catálogo parcial. Uma nova declaração válida não exige editar o shell nem o código do Registry.
+
+O manifesto declara as possibilidades técnicas da jornada; ele não autoriza usuários nem decide público, canal ou rollout. Em produção, um BFF ou serviço confiável resolve essas regras antes de responder ao Registry — por exemplo, elegibilidade, feature flags, manutenção e contexto web ou aplicativo. O shell recebe apenas a coleção final permitida para aquela requisição e não escolhe entre alternativas de negócio.
+
+Por exemplo, a mesma intenção de FAQ pode resultar em uma experiência web no navegador e em uma tela nativa dentro do aplicativo:
+
+```text
+Browser → BFF/Registry resolve FAQ como external-web ou federated-module → shell abre a experiência web
+App     → BFF/Registry resolve FAQ como native-route                    → adapter WebView solicita a abertura nativa
+```
+
+No case, os arquivos são estáticos e determinísticos para demonstrar discovery, validação, consumo HTTP e fallback. A seleção contextual por sessão é uma evolução do serviço corporativo e preserva o mesmo contrato consumido pelo `portal-host`.
+
+Para executar somente o Registry em watch:
+
+```sh
+corepack pnpm demo:journey-registry
+```
+
+Para a demonstração integrada, que inicia Registry, remotes, host e legado, use `corepack pnpm demo:portal`. Se o Registry ficar indisponível, o host preserva seu snapshot seguro, informa o fallback e permite nova tentativa. A verificação automatizada exercita o endpoint HTTP, o proxy, o fallback e a recuperação:
+
+```sh
+corepack pnpm verify:journey-registry
+```
 
 ## Testando `external-web` e Holerite legado
 
@@ -175,7 +219,7 @@ corepack pnpm nx lint beneficios
 corepack pnpm typecheck
    ```
 
-> O generator cria um remote Vite com Module Federation, manifesto local e teste smoke. Use `--port` para evitar colisão entre remotes e adicione o conteúdo de `journey-manifest.json` ao registro local do host quando a jornada for aprovada; o generator não altera o shell.
+> O generator cria um remote Vite com Module Federation, manifesto em `journeys/<id>/manifest.json` e teste smoke. Use `--port` para evitar colisão entre remotes. Após aprovação, a declaração é descoberta pelo Registry sem alteração do shell.
 
 ## Criando uma library
 

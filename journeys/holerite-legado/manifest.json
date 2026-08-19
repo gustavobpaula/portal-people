@@ -1,0 +1,15 @@
+{
+  "id": "holerite-legado",
+  "displayName": "Holerite legado",
+  "route": "/holerite",
+  "strategy": "external-web",
+  "version": "1.0.0",
+  "platformCompatibility": "^1.0.0",
+  "owner": { "squad": "Folha de Pagamento", "contact": "folha@example.test" },
+  "observability": {
+    "domain": "holerite-legado",
+    "eventNamespace": "holerite-legado"
+  },
+  "destination": "http://localhost:4500/holerite",
+  "returnRoute": "/retorno/holerite-legado"
+}

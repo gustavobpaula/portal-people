@@ -36,6 +36,9 @@ export async function createDomain({ name, displayName = humanizeName(name), por
     '__PORT__': String(port),
     '// @ts-nocheck\n': ''
   });
+  const journeyDestination = resolve(workspaceRoot, 'journeys', name);
+  await mkdir(journeyDestination, { recursive: true });
+  await rename(resolve(destination, 'journey-manifest.json'), resolve(journeyDestination, 'manifest.json'));
   await registerDomain(workspaceRoot, name);
   return destination;
 }

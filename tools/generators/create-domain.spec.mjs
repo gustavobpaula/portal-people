@@ -25,7 +25,7 @@ describe('golden path', () => {
   it('materializes a complete federated remote outside the shell', async () => {
     const workspaceRoot = await createWorkspace(['legado']);
     const destination = await createDomain({ name: 'nova-jornada', displayName: 'Nova jornada', port: 4301, workspaceRoot });
-    expect(await readFile(join(destination, 'journey-manifest.json'), 'utf8')).toContain('http://localhost:4301/mf-manifest.json');
+    expect(await readFile(join(workspaceRoot, 'journeys', 'nova-jornada', 'manifest.json'), 'utf8')).toContain('http://localhost:4301/mf-manifest.json');
     const viteConfig = await readFile(join(destination, 'vite.config.ts'), 'utf8');
     expect(viteConfig).toContain('federation(config)');
     expect(viteConfig).toContain('port: Number("4301")');

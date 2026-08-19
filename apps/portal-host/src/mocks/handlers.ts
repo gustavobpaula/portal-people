@@ -6,8 +6,11 @@ function normalize(value: string) {
   return value.trim().toLocaleLowerCase("pt-BR");
 }
 
-export const handlers = [
-  http.get("/api/journeys", () => HttpResponse.json(registry)),
+export const journeyRegistryHandler = http.get("/api/journeys", () =>
+  HttpResponse.json(registry),
+);
+
+export const portalHandlers = [
   http.get("/api/portal/catalog", () =>
     HttpResponse.json({ items: catalogItems }),
   ),
@@ -26,3 +29,5 @@ export const handlers = [
     HttpResponse.json({ items: notifications }),
   ),
 ];
+
+export const handlers = [journeyRegistryHandler, ...portalHandlers];

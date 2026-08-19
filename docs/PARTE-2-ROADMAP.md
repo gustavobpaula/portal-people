@@ -18,8 +18,9 @@ Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas
 | 6 | Jornada Férias | Fases 2–3 | Remote transacional independente, validação e confirmação | Planejada |
 | 7 | Legado, rollout e resiliência | Fases 3–6 | Holerite externo, retorno e isolamento; responsabilidades externas de rollout documentadas | Concluída |
 | 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Concluída |
-| 9 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Planejada |
-| 10 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Planejada |
+| 9 | Journey Registry demonstrativo | Fases 3–8 | Aplicação server-side independente, catálogo por HTTP e fallback seguro | Concluída |
+| 10 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Planejada |
+| 11 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Planejada |
 
 ## Specs futuras previstas
 
@@ -36,15 +37,16 @@ Os nomes acima reservam intenção no roadmap, mas os arquivos não serão criad
 
 | Tema aprovado | Origem | Fases responsáveis |
 |---|---|---|
-| Shell, catálogo e carregamento | `docs/CASE.md`, Parte 2.1; `docs/ARCHITECTURE.md`, AD-1 e AD-26 | 1, 3 e 4 |
+| Shell, catálogo e carregamento | `docs/CASE.md`, Parte 2.1; `docs/ARCHITECTURE.md`, AD-1 e AD-26 | 1, 3, 4 e 9 |
 | Duas jornadas e squads distintas | `docs/CASE.md`, Parte 2.2; AD-5, AD-13 e AD-14 | 5 e 6 |
-| Inclusão sem alterar o core | `docs/CASE.md`, requisitos funcionais; AD-3, AD-4 e AD-23 | 1 e 3 |
-| Module Federation, monorepo e governança | `docs/PROPOSTA-TECNICA.md`, seções 3–4; AD-4, AD-12 e AD-15 | 1, 3 e 10 |
+| Inclusão sem alterar o core | `docs/CASE.md`, requisitos funcionais; AD-3, AD-4 e AD-23 | 1, 3 e 9 |
+| Module Federation, monorepo e governança | `docs/PROPOSTA-TECNICA.md`, seções 3–4; AD-4, AD-12 e AD-15 | 1, 3, 9 e 11 |
 | Design System web/mobile | `docs/PROPOSTA-TECNICA.md`, seção 5; AD-11, AD-29 e AD-31 | 2 e 8 |
 | Home, busca e notificações | `docs/CASE.md`, requisitos funcionais; AD-7 | 4 |
+| Journey Registry e catálogo resolvido | `docs/ARCHITECTURE.md`, AD-3, AD-7, AD-8 e AD-21 | 9 |
 | Legado e migração incremental | `docs/PROPOSTA-TECNICA.md`, seção 6; AD-19–AD-21; rollout operado externamente por CI/CD e deployment | 7 |
 | Mobile mínimo e bridge | `docs/PROPOSTA-TECNICA.md`, seção 2; AD-9, AD-10 e AD-24 | 8 |
-| Observabilidade e isolamento | `docs/PROPOSTA-TECNICA.md`, Observabilidade; AD-17 e AD-18 | 1, 3, 7 e 9 |
+| Observabilidade e isolamento | `docs/PROPOSTA-TECNICA.md`, Observabilidade; AD-17 e AD-18 | 1, 3, 7, 9 e 10 |
 | Estado, dados e testes | AD-22, AD-27, AD-28 e AD-30 | Todas as fases aplicáveis |
 
 ## Limites do primeiro marco

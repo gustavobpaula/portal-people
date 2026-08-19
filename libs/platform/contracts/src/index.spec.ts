@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { journeyManifestSchema, nativeBridgeRequestSchema, platformCapabilitiesRequestSchema } from './index';
+import { journeyManifestSchema, journeyRegistryResponseSchema, nativeBridgeRequestSchema, platformCapabilitiesRequestSchema } from './index';
 
 const validManifest = {
   id: 'neutral-journey', route: '/foundation', strategy: 'federated-module', version: '1.0.0',
@@ -65,5 +65,12 @@ describe('journeyManifestSchema', () => {
       rollout: { audience: 'pilot', percentage: 10, variant: 'candidate' }
     });
     expect(parsed).not.toHaveProperty('rollout');
+  });
+});
+
+describe('journeyRegistryResponseSchema', () => {
+  it('rejects duplicate journey ids and routes', () => {
+    expect(journeyRegistryResponseSchema.safeParse([validManifest, validManifest]).success).toBe(false);
+    expect(journeyRegistryResponseSchema.safeParse([validManifest, { ...validManifest, id: 'another-journey' }]).success).toBe(false);
   });
 });

@@ -14,6 +14,8 @@ Autonomia sustentável é o principal direcionador, equilibrado com performance,
 | Rendering | CSR/SPA | Portal autenticado sem necessidade de SEO ou SSR |
 | Workspace | Nx e pnpm | Grafo, cache, projetos afetados, generators e fronteiras |
 | Build | Vite | Build e desenvolvimento do shell e dos remotes |
+| Serviços de plataforma | Node.js 24 e Fastify | Serviços/BFFs mantidos pela Plataforma Frontend, sem regras de negócio corporativas |
+| Build server-side | Nx esbuild e `@nx/js:node` | Artefatos Node ESM e execução local com watch |
 | Composition | Module Federation Runtime | Carregamento independente e dinâmico por rota |
 | Routing | React Router | Shell controla rotas principais; domínio controla rotas relativas |
 | HTTP | `fetch` e clientes por domínio | Sem cliente global contendo endpoints de negócio |
@@ -29,7 +31,7 @@ Versões concretas serão fixadas no lockfile no início da Parte 2.
 
 ## Architectural Style and Boundaries
 
-O portal adota monorepo para o frontend moderno e microfrontends coarse-grained compostos em runtime.
+O portal adota monorepo para o frontend moderno e serviços server-side mantidos pela Plataforma Frontend, com microfrontends coarse-grained compostos em runtime.
 
 ```mermaid
 flowchart TB
@@ -74,6 +76,7 @@ O shell possui bootstrap, navegação, contexto de plataforma, descoberta, compo
 | Pattern | Responsibility | Allowed dependencies | Forbidden |
 |---|---|---|---|
 | `apps/<shell>/` | Composição e experiências transversais | Plataforma e DS web | Internals de domínio |
+| `apps/<platform-service>/` | Serviço/BFF server-side da Plataforma Frontend | Contratos e infraestrutura pública da plataforma | Shell, implementações de domínio, regras corporativas e segredos |
 | `apps/<domain>/` | Entrada independente do remote | Libraries do próprio domínio, plataforma e DS | Outros domínios ou shell |
 | `apps/<domain>/src/app/` | Componentes, telas, estilos e estado estritamente visual do remote | Domínio, serviços, plataforma e DS | Contratos HTTP externos ou regras de negócio duplicadas |
 | `apps/<domain>/src/domain/` | Modelos internos, schemas, invariantes e regras puras | Somente outros módulos do próprio domínio sem I/O | React, HTTP, MSW ou APIs da plataforma |
@@ -84,6 +87,7 @@ O shell possui bootstrap, navegação, contexto de plataforma, descoberta, compo
 | `libs/platform/<capability>/` | Contratos e adaptadores transversais | Infraestrutura aprovada | Regras de negócio |
 | `libs/design-system-web/` | Componentes React e padrões visuais | Tokens | Componentes com regra de negócio |
 | `libs/design-tokens/` | Simulação local do pacote externo no case | Nenhuma aplicação | Kotlin, Swift ou regras de domínio |
+| `journeys/<journey-id>/manifest.json` | Declaração de composição versionada pela squad indicada em `owner` | Schema público de manifesto | Código de aplicação, segredos, políticas de autorização ou integração interna |
 | `tools/<concern>/` | Generators e verificações | Configuração do workspace | Código de produto |
 
 Na arquitetura corporativa, o Storybook será mantido junto ao Design System externo. No case, `apps/design-system-docs/` representa essa superfície documental sem exigir outro repositório.
@@ -96,6 +100,8 @@ Na arquitetura corporativa, o Storybook será mantido junto ao Design System ext
 - Query, Form, Zod, Zustand e DS são compilados pelo consumidor que os utiliza.
 - O Storybook depende somente de tokens e componentes do DS web.
 - Dependências transversais exigem ownership da Plataforma Frontend.
+- Serviços de plataforma dependem somente de contratos e infraestrutura pública da plataforma; não importam shell ou implementações de domínio.
+- A Plataforma Frontend mantém o mecanismo do Journey Registry; squads mantêm seus manifestos em `journeys/<journey-id>/`.
 - Regras Nx e ESLint verificam as fronteiras.
 - Mudanças excepcionais exigem ADR com owner e condição de revisão.
 - Um contrato de backend não atravessa a fronteira de `services/`: payloads externos ficam em `api-contracts` (ou `dto`) e a tradução fica coesa com a integração. Modelos internos ficam em `domain/`; modelos exclusivamente de apresentação ficam em `app/`.
@@ -118,7 +124,7 @@ O registro descreve estratégias, não a classificação “legado”:
 - `external-web`;
 - `native-route`.
 
-O Journey Registry é uma API backend que entrega ao shell uma coleção de jornadas já resolvidas para a requisição ou sessão. Quando houver seleção por público, feature flag ou política operacional, ela ocorre antes da resposta do registro e permanece fora do frontend.
+O Journey Registry é uma API server-side mantida pela Plataforma Frontend que entrega ao shell uma coleção de jornadas já resolvidas para a requisição ou sessão. No case, agrega manifestos declarativos do repositório. Quando houver seleção por público, feature flag ou política operacional, ela ocorre antes da resposta do registro e permanece fora do frontend.
 
 O manifesto informa identidade, rota, estratégia, destino, versão técnica, compatibilidade, ownership e observabilidade. Versão e compatibilidade servem para validação, diagnóstico e telemetria; não comandam release, promoção ou rollout dentro do shell.
 
@@ -153,6 +159,7 @@ Diretórios e arquivos não-componentes usam `kebab-case`. Componentes e tipos R
 - respeitar DS, acessibilidade e fronteiras Nx;
 - possuir testes proporcionais ao risco;
 - iniciar pelo golden path com `src/app/` e materializar outras pastas somente quando sua responsabilidade existir.
+- criar e manter seu manifesto em `journeys/<journey-id>/manifest.json`; uma declaração válida não exige edição no shell ou no Registry.
 
 **A feature may:**
 
@@ -195,7 +202,7 @@ O Storybook é gerado como artefato estático independente. Sua publicação oco
 | ID | Decision and consequence |
 |---|---|
 | AD-1 | Shell fino; evita centralização, exige contratos explícitos. |
-| AD-2 | Monorepo somente do frontend moderno; legado permanece isolado. |
+| AD-2 | Monorepo do frontend moderno e de serviços server-side mantidos pela Plataforma Frontend; legado e backends corporativos permanecem isolados. |
 | AD-3 | Registro baseado em estratégia; não cria um campo temporário `isLegacy`. |
 | AD-4 | Module Federation dinâmico por rota; aumenta autonomia e operação. |
 | AD-5 | Um remote coarse-grained por domínio; evita fragmentação e waterfalls. |
@@ -226,7 +233,12 @@ O Storybook é gerado como artefato estático independente. Sua publicação oco
 | AD-30 | Testes orientados a risco e contratos, sem meta de cobertura isolada. |
 | AD-31 | Storybook documenta e valida o DS web em aplicação independente do shell. |
 | AD-32 | Remotes organizam código por responsabilidade, começando em `app/`; domínio e integrações surgem sob demanda. Contratos externos são traduzidos na borda de serviços, evitando o vazamento de payloads de backend e árvores de diretórios vazias. |
+| AD-33 | Serviços de plataforma frontend-owned usam Fastify sobre Node 24, com build Nx/esbuild. A Plataforma mantém o mecanismo do Registry; squads mantêm declarações versionadas de jornadas. |
 
 ## Deferred Decisions
 
 Nenhuma decisão obrigatória da Parte 1 permanece aberta. Fornecedor de CI/CD, registry, analytics, feature flags, regressão visual e observabilidade será selecionado conforme o ecossistema corporativo; isso não altera os contratos ou limites definidos.
+
+| ID | Decisão adiada | Gatilho |
+|---|---|---|
+| DD-1 | Generator específico para serviços/BFFs. | Reavaliar na fase 11, quando houver ao menos outro serviço com convenções repetidas. |
