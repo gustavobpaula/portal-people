@@ -1,0 +1,54 @@
+libs/platform/runtime/src/index.ts
+  s_96a1c583b22548::t_0ba57b592ec2aa 2,21-22,25-26
+  s_96a1c583b22548::t_85ee31fad2f7f6 20,23-24
+  s_96a1c583b22548::t_204b84cc22439c 183,195-198,200
+apps/portal-host/module-federation.config.ts
+  s_96a1c583b22548::t_e7ee43e26ec4a8 7-8,10
+apps/beneficios/module-federation.config.ts
+  s_96a1c583b22548::t_e7ee43e26ec4a8 10-11,13
+apps/portal-host/src/app/hooks/usePlatformAdapter.ts
+  s_96a1c583b22548::t_c4034c617a8c69 1-57
+tools/generators/templates/domain/module-federation.config.ts
+  s_96a1c583b22548::t_e19e7147d221cf 11-12,14
+apps/portal-host/src/app/ShellRoutes.tsx
+  s_96a1c583b22548::t_351257ba0fd4a3 1-171
+tools/generators/create-domain.spec.mjs
+  s_96a1c583b22548::t_e19e7147d221cf 74-81
+apps/portal-host/src/app/Shell.tsx
+  s_96a1c583b22548::t_351257ba0fd4a3 1-143
+apps/portal-host/src/app/types.ts
+  s_96a1c583b22548::t_4e5302efc1757a 27-31
+apps/neutral-remote/module-federation.config.ts
+  s_96a1c583b22548::t_e7ee43e26ec4a8 6-13
+apps/portal-host/src/app/hooks/useShellObservability.ts
+  s_96a1c583b22548::t_c4034c617a8c69 1-113
+apps/ferias/module-federation.config.ts
+  s_96a1c583b22548::t_e7ee43e26ec4a8 10-11,13
+apps/portal-host/src/app/App.spec.tsx
+  s_96a1c583b22548::t_d1bdc4ec513a38 162-167
+apps/portal-host/src/app/App.tsx
+  s_96a1c583b22548::t_c4034c617a8c69 1-5,7,15
+apps/portal-host/src/app/JourneyRegistryBoundary.tsx
+  s_96a1c583b22548::t_c4034c617a8c69 1-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "03a9bf485b92f5666a11eaa1396e420c8fa9228a",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_96a1c583b22548": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a01a99-f4d1-7390-bdfc-cad04a659353",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
