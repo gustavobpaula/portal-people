@@ -1,0 +1,30 @@
+tools/external-web-demo/server.mjs
+  s_2c1b679e1f670a::t_0d090b0a5c34ec 25-34
+apps/portal-host/src/app/App.spec.tsx
+  s_2c1b679e1f670a::t_8041961688d2f9 168-172
+apps/portal-host/src/app/journeys/NativeJourneySlot.tsx
+  s_2c1b679e1f670a::t_01092bbe1887a6 101,105-125,127-131,141
+docs/PARTE-2-ROADMAP.md
+  s_2c1b679e1f670a::t_0c0fda9ab7dbb8 5,7,13-18,20-23,25,27-37,39,57,59-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "35944c0fe9af4cb607701356f8c416c6a63b0156",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_2c1b679e1f670a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a01ac3-4acb-7e61-996d-3a934dc1089c",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
