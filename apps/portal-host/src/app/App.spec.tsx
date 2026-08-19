@@ -165,6 +165,11 @@ describe("App", () => {
         level: 1,
       }),
     ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("heading", {
+        name: "Recursos do aplicativo aberto",
+      }),
+    ).toHaveLength(1);
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.activation.started" }));
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.opened" }));
     const telemetry = JSON.stringify(track.mock.calls);

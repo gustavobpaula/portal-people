@@ -98,12 +98,37 @@ export function NativeJourneySlot({
     );
   if (state === "opened")
     return (
-      <Alert tone="success" title="Recursos do aplicativo aberto">
+      <>
         <Text as="h1" variant="heading">
           Recursos do aplicativo aberto
         </Text>
-        <Text>O aplicativo recebeu a navegação solicitada.</Text>
+        <Alert tone="success" title="Navegação concluída">
+          <Text>O aplicativo recebeu a navegação solicitada.</Text>
+          <div className={styles.actions}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate("/")}
+            >
+              Voltar ao portal
+            </Button>
+          </div>
+        </Alert>
+      </>
+    );
+  return (
+    <>
+      <Text as="h1" variant="heading">
+        Jornada indisponível
+      </Text>
+      <Alert tone="error" title="Não foi possível abrir este recurso">
+        <Text>{messages[state]}</Text>
         <div className={styles.actions}>
+          {retryable.has(state) ? (
+            <Button type="button" onClick={retry}>
+              Tentar novamente
+            </Button>
+          ) : null}
           <Button
             type="button"
             variant="secondary"
@@ -113,23 +138,6 @@ export function NativeJourneySlot({
           </Button>
         </div>
       </Alert>
-    );
-  return (
-    <Alert tone="error" title="Jornada indisponível">
-      <Text as="h1" variant="heading">
-        Jornada indisponível
-      </Text>
-      <Text>{messages[state]}</Text>
-      <div className={styles.actions}>
-        {retryable.has(state) ? (
-          <Button type="button" onClick={retry}>
-            Tentar novamente
-          </Button>
-        ) : null}
-        <Button type="button" variant="secondary" onClick={() => navigate("/")}>
-          Voltar ao portal
-        </Button>
-      </div>
-    </Alert>
+    </>
   );
 }

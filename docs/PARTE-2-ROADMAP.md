@@ -2,36 +2,41 @@
 
 ## Estratégia de entrega
 
-A Parte 2 será construída em incrementos verticais. O primeiro marco entrega somente fundação e Design System; a aplicação mínima do case será considerada concluída após shell, duas jornadas modernas e convivência legada simulada.
+A Parte 2 foi construída em incrementos verticais. A aplicação mínima do case está concluída com fundação executável, Design System, shell, experiências transversais, duas jornadas modernas independentes, convivência legada simulada, adaptação web/mobile, descoberta HTTP, observabilidade e gates reproduzíveis de entrega.
 
-Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas.
+Todas as specs da Parte 2 listadas em `docs/SPEC.md` foram detalhadas, aprovadas, implementadas e verificadas. Infraestrutura corporativa e integrações reais permanecem fora do monorepo, conforme os limites documentados abaixo.
 
 ## Sequenciamento
 
 | Fase | Incremento | Dependências | Evidência de conclusão | Status |
 |---|---|---|---|---|
-| 1 | Fundação da plataforma | Arquitetura aprovada | Host + remote neutro, contratos, fronteiras e builds independentes | Spec aprovada; implementação pendente |
-| 2 | Design System | Fundação | Tokens, API pública, testes e Storybook estático | Spec aprovada; implementação pendente |
-| 3 | Shell e contrato da plataforma | Fases 1–2 | Layout, navegação, registro dinâmico, loading e fallback | Planejada |
-| 4 | Experiências transversais | Fase 3 | Home, catálogo, busca e notificações com Portal BFF simulado | Planejada |
-| 5 | Jornada Benefícios | Fases 2–3 | Remote consultivo independente e estados de dados | Planejada |
-| 6 | Jornada Férias | Fases 2–3 | Remote transacional independente, validação e confirmação | Planejada |
+| 1 | Fundação da plataforma | Arquitetura aprovada | Host + remote neutro, contratos públicos, fronteiras automatizadas, golden path e builds independentes | Concluída |
+| 2 | Design System | Fundação | Tokens semânticos, API pública, estados, testes, assets locais e Storybook estático independente | Concluída |
+| 3 | Shell e contrato da plataforma | Fases 1–2 | Layout, navegação hierárquica, registro dinâmico, capabilities estáveis, loading, timeout, retry e fallback | Concluída |
+| 4 | Experiências transversais | Fase 3 | Home, Produtos, busca com estado na URL e notificações com estado de sessão sobre Portal BFF simulado | Concluída |
+| 5 | Jornada Benefícios | Fases 2–3 | Remote consultivo independente, lista, detalhe, estados assíncronos, cache local ao domínio e telemetria sanitizada | Concluída |
+| 6 | Jornada Férias | Fases 2–3 | Remote transacional independente, elegibilidade, validação, revisão, envio simulado e confirmação | Concluída |
 | 7 | Legado, rollout e resiliência | Fases 3–6 | Holerite externo, retorno e isolamento; responsabilidades externas de rollout documentadas | Concluída |
-| 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Concluída |
-| 9 | Journey Registry demonstrativo | Fases 3–8 | Aplicação server-side independente, catálogo por HTTP e fallback seguro | Concluída |
-| 10 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Concluída |
-| 11 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Concluída |
+| 8 | Web/mobile e bridge | Fases 3–7 | Fluxos desktop/mobile, adapters web e WebView, bridge simulada validada e jornada `native-route` | Concluída |
+| 9 | Journey Registry demonstrativo | Fases 3–8 | Aplicação server-side independente, manifestos mantidos pelas squads, catálogo por HTTP, fallback seguro e recuperação | Concluída |
+| 10 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação W3C ponta a ponta, logs, erros, métricas, analytics sanitizados, Web Vitals e ownership | Concluída |
+| 11 | Qualidade e entrega | Todas | Gate completo, validação de afetados, testes, builds, Storybook, acessibilidade, budgets, README e demonstração reproduzível | Concluída |
 
-## Specs futuras previstas
+## Specs aprovadas e entregues
 
-- `parte-2-shell-plataforma.md`
-- `parte-2-experiencias-transversais.md`
-- `parte-2-beneficios.md`
-- `parte-2-ferias.md`
-- `parte-2-legado-rollout-resiliencia.md`
-- `parte-2-observabilidade-operacao.md`
+- [Fundação da Plataforma](specs/parte-2-fundacao-plataforma.md)
+- [Design System](specs/parte-2-design-system.md)
+- [Shell e Contrato da Plataforma](specs/parte-2-shell-plataforma.md)
+- [Experiências Transversais](specs/parte-2-experiencias-transversais.md)
+- [Jornada Benefícios](specs/parte-2-beneficios.md)
+- [Jornada Férias](specs/parte-2-ferias.md)
+- [Legado, Rollout e Resiliência](specs/parte-2-legado-rollout-resiliencia.md)
+- [Web/Mobile e Bridge](specs/parte-2-web-mobile-bridge.md)
+- [Journey Registry Demonstrativo](specs/parte-2-journey-registry.md)
+- [Observabilidade e Operação](specs/parte-2-observabilidade-operacao.md)
+- [Qualidade e Entrega](specs/parte-2-qualidade-entrega.md)
 
-Os nomes acima reservam intenção no roadmap, mas os arquivos não serão criados nem tratados como requisitos aprovados antes do refinamento.
+Esses documentos constituem o escopo aprovado da Parte 2 e permanecem ligados no catálogo canônico `docs/SPEC.md`.
 
 ## Rastreabilidade
 
@@ -49,6 +54,22 @@ Os nomes acima reservam intenção no roadmap, mas os arquivos não serão criad
 | Observabilidade e isolamento | `docs/PROPOSTA-TECNICA.md`, Observabilidade; AD-17 e AD-18 | 1, 3, 7, 9 e 10 |
 | Estado, dados e testes | AD-22, AD-27, AD-28 e AD-30 | Todas as fases aplicáveis |
 
-## Limites do primeiro marco
+## Validação da entrega
 
-Não serão implementados ainda: shell funcional, jornadas Benefícios e Férias, BFFs, registry remoto, destino legado, bridge nativa, fornecedores de telemetria, deploy ou infraestrutura. O remote neutro existe apenas para provar os riscos técnicos da composição.
+O comando `corepack pnpm quality` executa lint, tipos, testes, builds independentes, Storybook estático e as verificações integradas de federação, shell, Journey Registry, legado, web/mobile, observabilidade, acessibilidade e performance. O gate completo da implementação atual encerra sem erro.
+
+O JavaScript inicial do shell permanece na faixa de alerta do budget, abaixo do limite bloqueante. O relatório detalhado é gerado em `dist/quality/performance-budgets.json`.
+
+## Limites da entrega concluída
+
+Permanecem intencionalmente fora do monorepo:
+
+- publicação e infraestrutura de produção;
+- CI/CD, repositório corporativo de releases, Canary, Blue-Green, promoção, rollout e rollback reais;
+- Journey Registry corporativo, feature flags, autenticação, autorização e segmentação reais;
+- Portal BFF, BFFs de domínio e APIs corporativas reais;
+- aplicativos Kotlin/Swift, WebView nativa e bridge nativa de produção;
+- SSO, fornecedores de observabilidade, dashboards, alertas e SLOs de produção;
+- migração ou desativação de sistemas legados reais.
+
+O monorepo usa simulações locais e dados sintéticos para demonstrar os contratos e comportamentos exigidos pelo case sem reimplementar essas responsabilidades externas.

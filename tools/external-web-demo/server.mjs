@@ -22,6 +22,16 @@ export async function startExternalWebServer({ port = 4500 } = {}) {
   const origin = `http://localhost:${port}`;
   const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? "/", origin);
+    if (url.pathname === "/health" && request.method === "OPTIONS") {
+      response.writeHead(204, {
+        "Access-Control-Allow-Origin": portalOrigin,
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "traceparent, x-portal-platform",
+        "Cache-Control": "no-store",
+      });
+      response.end();
+      return;
+    }
     if (url.pathname === "/health" && request.method === "GET") {
       response.writeHead(204, {
         "Access-Control-Allow-Origin": portalOrigin,
