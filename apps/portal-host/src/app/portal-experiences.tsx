@@ -34,9 +34,15 @@ function track(
   extra: Record<string, string | number | boolean> = {},
 ) {
   platform.telemetry.track({
+    kind: name.includes("failed")
+      ? "error"
+      : name.includes("loaded")
+        ? "log"
+        : "analytics",
     name,
     properties: {
       route,
+      eventNamespace: "portal-core",
       platform: platform.context.platform,
       correlationId: platform.context.correlationId,
       ...extra,

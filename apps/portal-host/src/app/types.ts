@@ -1,6 +1,13 @@
-import type { JourneyManifest, PlatformCapabilities } from "@portal/platform-contracts";
+import type {
+  JourneyManifest,
+  PlatformCapabilities,
+} from "@portal/platform-contracts";
 import type { loadFederatedJourney } from "@portal/platform-runtime";
-import type { NativeBridge, PlatformAdapter, PlatformAdapterOptions } from "@portal/platform-mobile-bridge";
+import type {
+  NativeBridge,
+  PlatformAdapter,
+  PlatformAdapterOptions,
+} from "@portal/platform-mobile-bridge";
 import type { JourneyRegistryClient } from "../services/journey-registry/journey-registry";
 import type { PortalBffClient } from "../services/portal-bff/portal-bff";
 
@@ -24,6 +31,7 @@ export interface AppProps {
   createCapabilities?: (options: {
     navigate: (path: string) => void;
     telemetry: PlatformCapabilities["telemetry"];
+    context?: PlatformCapabilities["context"];
   }) => PlatformCapabilities;
   createPlatformAdapter?: (options: PlatformAdapterOptions) => PlatformAdapter;
   platformMode?: "web" | "webview";
@@ -31,6 +39,9 @@ export interface AppProps {
   portalBffClient?: PortalBffClient;
   journeyRegistryClient?: JourneyRegistryClient;
   externalOrigins?: readonly string[];
-  checkExternalAvailability?: (destination: string) => Promise<boolean>;
+  checkExternalAvailability?: (
+    destination: string,
+    platform?: PlatformCapabilities,
+  ) => Promise<boolean>;
   navigateExternal?: (destination: string) => void;
 }

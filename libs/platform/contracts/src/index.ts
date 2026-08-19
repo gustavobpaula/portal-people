@@ -43,36 +43,39 @@ const commonJourney = z.object({
  * Validates a registry entry before the shell decides how to open a journey.
  * The strategy discriminant prevents consumers from treating legacy, native, and federated targets alike.
  */
-export const journeyManifestSchema = z.discriminatedUnion("strategy", [
-  commonJourney.extend({
-    strategy: z.literal("federated-module"),
-    remote: z.object({
-      name: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-      entry: z.url(),
-      exposedModule: z.string().regex(/^\.\/[A-Za-z][A-Za-z0-9]*$/),
+export const journeyManifestSchema = z
+  .discriminatedUnion("strategy", [
+    commonJourney.extend({
+      strategy: z.literal("federated-module"),
+      remote: z.object({
+        name: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+        entry: z.url(),
+        exposedModule: z.string().regex(/^\.\/[A-Za-z][A-Za-z0-9]*$/),
+      }),
     }),
-  }),
-  commonJourney.extend({
-    strategy: z.literal("external-web"),
-    destination: z.url(),
-    returnRoute: journeyRouteSchema,
-  }),
-  commonJourney.extend({
-    strategy: z.literal("native-route"),
-    nativeRoute: nativeRouteSchema,
-  }),
-]).superRefine((journey, context) => {
-  if (
-    journey.strategy === "external-web" &&
-    journey.returnRoute !== `/retorno/${journey.id}`
-  ) {
-    context.addIssue({
-      code: "custom",
-      path: ["returnRoute"],
-      message: "External journeys must return through their registered portal route.",
-    });
-  }
-});
+    commonJourney.extend({
+      strategy: z.literal("external-web"),
+      destination: z.url(),
+      returnRoute: journeyRouteSchema,
+    }),
+    commonJourney.extend({
+      strategy: z.literal("native-route"),
+      nativeRoute: nativeRouteSchema,
+    }),
+  ])
+  .superRefine((journey, context) => {
+    if (
+      journey.strategy === "external-web" &&
+      journey.returnRoute !== `/retorno/${journey.id}`
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["returnRoute"],
+        message:
+          "External journeys must return through their registered portal route.",
+      });
+    }
+  });
 
 export type JourneyManifest = z.infer<typeof journeyManifestSchema>;
 export type JourneyStrategy = JourneyManifest["strategy"];
@@ -89,16 +92,26 @@ export const journeyRegistryResponseSchema = z
     const routes = new Set<string>();
     journeys.forEach((journey, index) => {
       if (ids.has(journey.id)) {
-        context.addIssue({ code: "custom", path: [index, "id"], message: "Journey ids must be unique." });
+        context.addIssue({
+          code: "custom",
+          path: [index, "id"],
+          message: "Journey ids must be unique.",
+        });
       }
       if (routes.has(journey.route)) {
-        context.addIssue({ code: "custom", path: [index, "route"], message: "Journey routes must be unique." });
+        context.addIssue({
+          code: "custom",
+          path: [index, "route"],
+          message: "Journey routes must be unique.",
+        });
       }
       ids.add(journey.id);
       routes.add(journey.route);
     });
   });
-export type JourneyRegistryResponse = z.infer<typeof journeyRegistryResponseSchema>;
+export type JourneyRegistryResponse = z.infer<
+  typeof journeyRegistryResponseSchema
+>;
 
 /** The complete allowlist of capabilities that a journey may request from the platform. */
 export const platformCapabilitySchema = z.enum([
@@ -118,7 +131,9 @@ export const platformCapabilitiesRequestSchema = z
 export type PlatformCapabilityName = z.infer<typeof platformCapabilitySchema>;
 
 export const nativeBridgeCapabilitySchema = z.enum(["native-navigation"]);
-export type NativeBridgeCapability = z.infer<typeof nativeBridgeCapabilitySchema>;
+export type NativeBridgeCapability = z.infer<
+  typeof nativeBridgeCapabilitySchema
+>;
 
 export const nativeBridgeDescriptorSchema = z
   .object({
@@ -126,7 +141,9 @@ export const nativeBridgeDescriptorSchema = z
     capabilities: z.array(nativeBridgeCapabilitySchema),
   })
   .strict();
-export type NativeBridgeDescriptor = z.infer<typeof nativeBridgeDescriptorSchema>;
+export type NativeBridgeDescriptor = z.infer<
+  typeof nativeBridgeDescriptorSchema
+>;
 
 export const nativeBridgeRequestSchema = z
   .object({
@@ -139,7 +156,9 @@ export const nativeBridgeRequestSchema = z
 export type NativeBridgeRequest = z.infer<typeof nativeBridgeRequestSchema>;
 
 export const nativeBridgeResponseSchema = z.discriminatedUnion("status", [
-  z.object({ requestId: z.string().uuid(), status: z.literal("success") }).strict(),
+  z
+    .object({ requestId: z.string().uuid(), status: z.literal("success") })
+    .strict(),
   z
     .object({
       requestId: z.string().uuid(),
@@ -156,6 +175,15 @@ export type PlatformContext = Readonly<{
   platform: "web" | "webview";
 }>;
 
+export type TelemetryKind = "log" | "error" | "metric" | "analytics";
+export type TelemetryProperties = Record<string, string | number | boolean>;
+export type TelemetryEvent = Readonly<{
+  name: string;
+  /** Omitido por consumidores 1.x mantém o evento como analytics. */
+  kind?: TelemetryKind;
+  properties?: TelemetryProperties;
+}>;
+
 /**
  * The intentionally narrow public API shared by the shell and remotes.
  * Business state, session tokens, and internal browser APIs are excluded by design.
@@ -164,10 +192,7 @@ export type PlatformCapabilities = Readonly<{
   navigate: (path: string) => void;
   context: PlatformContext;
   telemetry: {
-    track: (event: {
-      name: string;
-      properties?: Record<string, string | number | boolean>;
-    }) => void;
+    track: (event: TelemetryEvent) => void;
   };
   flags: Readonly<Record<string, boolean>>;
   notifications: { show: (message: string) => void };

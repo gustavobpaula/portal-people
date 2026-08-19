@@ -17,27 +17,25 @@ export default defineConfig({
   base: "http://localhost:4301",
   build: {
     target: "chrome89",
-    outDir: fileURLToPath(
-      new URL("../../dist/apps/ferias", import.meta.url),
-    ),
+    outDir: fileURLToPath(new URL("../../dist/apps/ferias", import.meta.url)),
     emptyOutDir: true,
   },
   resolve: {
     alias: {
       "@portal/platform-contracts": fileURLToPath(
-        new URL(
-          "../../libs/platform/contracts/src/index.ts",
-          import.meta.url,
-        ),
+        new URL("../../libs/platform/contracts/src/index.ts", import.meta.url),
       ),
       "@portal/platform-runtime": fileURLToPath(
         new URL("../../libs/platform/runtime/src/index.ts", import.meta.url),
       ),
-      "@portal/design-system-web": fileURLToPath(
+      "@portal/platform-observability": fileURLToPath(
         new URL(
-          "../../libs/design-system-web/src/index.tsx",
+          "../../libs/platform/observability/src/index.ts",
           import.meta.url,
         ),
+      ),
+      "@portal/design-system-web": fileURLToPath(
+        new URL("../../libs/design-system-web/src/index.tsx", import.meta.url),
       ),
       "@portal/design-tokens": fileURLToPath(
         new URL("../../libs/design-tokens/src/index.ts", import.meta.url),

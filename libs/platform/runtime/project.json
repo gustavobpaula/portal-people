@@ -3,7 +3,7 @@
   "sourceRoot": "libs/platform/runtime/src",
   "projectType": "library",
   "tags": ["scope:platform", "type:runtime"],
-  "implicitDependencies": ["platform-contracts"],
+  "implicitDependencies": ["platform-contracts", "platform-observability"],
   "targets": {
     "test": { "command": "vitest run libs/platform/runtime" },
     "lint": { "command": "eslint libs/platform/runtime --max-warnings=0" }

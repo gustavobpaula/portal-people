@@ -38,6 +38,9 @@ importers:
       react-router-dom:
         specifier: 7.13.1
         version: 7.13.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      web-vitals:
+        specifier: ^6.1.1
+        version: 6.1.1
       zod:
         specifier: 4.3.6
         version: 4.3.6
@@ -3881,6 +3884,9 @@ packages:
 
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
+
+  web-vitals@6.1.1:
+    resolution: {integrity: sha512-r93gKnR6ZC2O8F3JrS0AAGIQ0v0OhXuyg4DAj2oG7K+GPkwXfUSc3ZcWeu50AsV5yIc6xxnTjERipJ6EvSw2vg==}
 
   webidl-conversions@8.0.1:
     resolution: {integrity: sha512-BMhLD/Sw+GbJC21C/UgyaZX41nPt8bUTg+jWyDeg7e7YN4xOM05YPSIXceACnXVtqyEw/LMClUQMtMZ+PGGpqQ==}
@@ -7864,6 +7870,8 @@ snapshots:
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
+
+  web-vitals@6.1.1: {}
 
   webidl-conversions@8.0.1: {}
 

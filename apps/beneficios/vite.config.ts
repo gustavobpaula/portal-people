@@ -30,6 +30,12 @@ export default defineConfig({
       "@portal/platform-runtime": fileURLToPath(
         new URL("../../libs/platform/runtime/src/index.ts", import.meta.url),
       ),
+      "@portal/platform-observability": fileURLToPath(
+        new URL(
+          "../../libs/platform/observability/src/index.ts",
+          import.meta.url,
+        ),
+      ),
       "@portal/design-system-web": fileURLToPath(
         new URL("../../libs/design-system-web/src/index.tsx", import.meta.url),
       ),

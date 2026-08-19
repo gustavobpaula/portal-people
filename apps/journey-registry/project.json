@@ -4,11 +4,15 @@
   "projectType": "application",
   "tags": ["scope:platform-service", "type:service"],
   "metadata": { "owner": "Plataforma Frontend" },
-  "implicitDependencies": ["platform-contracts"],
+  "implicitDependencies": ["platform-contracts", "platform-observability"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "inputs": ["production", "^production", "{workspaceRoot}/journeys/**/*.json"],
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/journeys/**/*.json"
+      ],
       "outputs": ["{workspaceRoot}/dist/apps/journey-registry"],
       "options": {
         "main": "apps/journey-registry/src/main.ts",
@@ -19,15 +23,23 @@
         "format": ["esm"],
         "target": "node24",
         "thirdParty": false,
-        "assets": [{ "input": "journeys", "glob": "**/*.json", "output": "journeys" }]
+        "assets": [
+          { "input": "journeys", "glob": "**/*.json", "output": "journeys" }
+        ]
       }
     },
     "serve": {
       "executor": "@nx/js:node",
-      "options": { "buildTarget": "journey-registry:build", "inspect": false, "watch": true }
+      "options": {
+        "buildTarget": "journey-registry:build",
+        "inspect": false,
+        "watch": true
+      }
     },
     "start": { "command": "node dist/apps/journey-registry/main.js" },
-    "test": { "command": "vitest run --config apps/journey-registry/vitest.config.ts" },
+    "test": {
+      "command": "vitest run --config apps/journey-registry/vitest.config.ts"
+    },
     "lint": { "command": "eslint apps/journey-registry --max-warnings=0" }
   }
 }

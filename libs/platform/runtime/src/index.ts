@@ -1,42 +1,92 @@
-import { createInstance, type ModuleFederation } from '@module-federation/runtime';
+import {
+  createInstance,
+  type ModuleFederation,
+} from "@module-federation/runtime";
 import {
   PLATFORM_CONTRACT_VERSION,
   journeyRouteSchema,
   journeyManifestSchema,
   type FederatedJourneyModule,
   type JourneyManifest,
-  type PlatformCapabilities
-} from '@portal/platform-contracts';
+  type PlatformCapabilities,
+} from "@portal/platform-contracts";
+import {
+  createConsoleExporter,
+  createCorrelationId,
+  createTelemetry,
+  type TelemetryExporter,
+} from "@portal/platform-observability";
 
-const defaultRuntime = createInstance({ name: 'portal-host', remotes: [] });
+const defaultRuntime = createInstance({ name: "portal-host", remotes: [] });
 
 /** Result boundary used by the host to distinguish a loadable journey from a safe fallback state. */
 export type JourneyLoadResult =
-  | { status: 'ready'; manifest: Extract<JourneyManifest, { strategy: 'federated-module' }>; module: FederatedJourneyModule }
-  | { status: 'fallback'; reason: 'invalid-manifest' | 'incompatible-contract' | 'remote-timeout' | 'remote-unavailable' };
+  | {
+      status: "ready";
+      manifest: Extract<JourneyManifest, { strategy: "federated-module" }>;
+      module: FederatedJourneyModule;
+    }
+  | {
+      status: "fallback";
+      reason:
+        | "invalid-manifest"
+        | "incompatible-contract"
+        | "remote-timeout"
+        | "remote-unavailable";
+    };
 
 export type JourneyRegistryResolution = Readonly<{
   journeys: JourneyManifest[];
-  rejected: Array<{ index: number; reason: 'invalid-manifest' | 'invalid-registry'; route?: string }>;
+  rejected: Array<{
+    index: number;
+    reason: "invalid-manifest" | "invalid-registry";
+    route?: string;
+  }>;
 }>;
 
 export type ExternalJourneyPreparation =
-  | { status: 'ready'; manifest: Extract<JourneyManifest, { strategy: 'external-web' }>; destination: string }
-  | { status: 'fallback'; reason: 'invalid-manifest' | 'incompatible-contract' | 'external-origin-not-allowed' | 'invalid-return-route' };
+  | {
+      status: "ready";
+      manifest: Extract<JourneyManifest, { strategy: "external-web" }>;
+      destination: string;
+    }
+  | {
+      status: "fallback";
+      reason:
+        | "invalid-manifest"
+        | "incompatible-contract"
+        | "external-origin-not-allowed"
+        | "invalid-return-route";
+    };
 
 export type WebCapabilityAdapters = Readonly<{
-  navigate?: PlatformCapabilities['navigate'];
-  telemetry?: PlatformCapabilities['telemetry'];
-  platform?: PlatformCapabilities['context']['platform'];
-  device?: PlatformCapabilities['device'];
+  navigate?: PlatformCapabilities["navigate"];
+  telemetry?: PlatformCapabilities["telemetry"];
+  platform?: PlatformCapabilities["context"]["platform"];
+  device?: PlatformCapabilities["device"];
+  context?: PlatformCapabilities["context"];
+  telemetryExporter?: TelemetryExporter;
 }>;
+
+export function createPlatformContext(
+  platform: PlatformCapabilities["context"]["platform"] = "web",
+): PlatformCapabilities["context"] {
+  return {
+    correlationId: createCorrelationId(),
+    locale: navigator.language,
+    platform,
+  };
+}
 
 /**
  * Checks whether the manifest's platform contract major version is supported.
  * Compatibility is intentionally limited to the major version in this foundation.
  */
-export function isCompatible(required: string, actual = PLATFORM_CONTRACT_VERSION): boolean {
-  const major = (value: string) => value.replace(/^[~^]/, '').split('.')[0];
+export function isCompatible(
+  required: string,
+  actual = PLATFORM_CONTRACT_VERSION,
+): boolean {
+  const major = (value: string) => value.replace(/^[~^]/, "").split(".")[0];
   return major(required) === major(actual);
 }
 
@@ -51,21 +101,31 @@ export function resolveManifest(value: unknown): JourneyManifest | null {
 /**
  * Resolves each registry entry independently so one malformed journey cannot hide valid ones.
  */
-export function resolveJourneyRegistry(value: unknown): JourneyRegistryResolution {
+export function resolveJourneyRegistry(
+  value: unknown,
+): JourneyRegistryResolution {
   if (!Array.isArray(value)) {
-    return { journeys: [], rejected: [{ index: -1, reason: 'invalid-registry' }] };
+    return {
+      journeys: [],
+      rejected: [{ index: -1, reason: "invalid-registry" }],
+    };
   }
 
   const journeys: JourneyManifest[] = [];
-  const rejected: JourneyRegistryResolution['rejected'] = [];
+  const rejected: JourneyRegistryResolution["rejected"] = [];
   value.forEach((entry, index) => {
     const manifest = resolveManifest(entry);
     if (manifest) journeys.push(manifest);
     else {
-      const route = typeof entry === 'object' && entry !== null
-        ? journeyRouteSchema.safeParse((entry as { route?: unknown }).route)
-        : null;
-      rejected.push({ index, reason: 'invalid-manifest', ...(route?.success ? { route: route.data } : {}) });
+      const route =
+        typeof entry === "object" && entry !== null
+          ? journeyRouteSchema.safeParse((entry as { route?: unknown }).route)
+          : null;
+      rejected.push({
+        index,
+        reason: "invalid-manifest",
+        ...(route?.success ? { route: route.data } : {}),
+      });
     }
   });
   return { journeys, rejected };
@@ -81,8 +141,10 @@ export function prepareExternalJourney(
   portalOrigin: string,
 ): ExternalJourneyPreparation {
   const manifest = resolveManifest(value);
-  if (!manifest || manifest.strategy !== 'external-web') return { status: 'fallback', reason: 'invalid-manifest' };
-  if (!isCompatible(manifest.platformCompatibility)) return { status: 'fallback', reason: 'incompatible-contract' };
+  if (!manifest || manifest.strategy !== "external-web")
+    return { status: "fallback", reason: "invalid-manifest" };
+  if (!isCompatible(manifest.platformCompatibility))
+    return { status: "fallback", reason: "incompatible-contract" };
 
   let destination: URL;
   let returnUrl: URL;
@@ -90,14 +152,16 @@ export function prepareExternalJourney(
     destination = new URL(manifest.destination);
     returnUrl = new URL(manifest.returnRoute, portalOrigin);
   } catch {
-    return { status: 'fallback', reason: 'invalid-return-route' };
+    return { status: "fallback", reason: "invalid-return-route" };
   }
-  if (returnUrl.origin !== portalOrigin) return { status: 'fallback', reason: 'invalid-return-route' };
-  if (!allowedOrigins.includes(destination.origin)) return { status: 'fallback', reason: 'external-origin-not-allowed' };
-  destination.search = '';
-  destination.hash = '';
-  destination.searchParams.set('returnTo', returnUrl.toString());
-  return { status: 'ready', manifest, destination: destination.toString() };
+  if (returnUrl.origin !== portalOrigin)
+    return { status: "fallback", reason: "invalid-return-route" };
+  if (!allowedOrigins.includes(destination.origin))
+    return { status: "fallback", reason: "external-origin-not-allowed" };
+  destination.search = "";
+  destination.hash = "";
+  destination.searchParams.set("returnTo", returnUrl.toString());
+  return { status: "ready", manifest, destination: destination.toString() };
 }
 
 /**
@@ -110,27 +174,39 @@ export function prepareExternalJourney(
  */
 export async function loadFederatedJourney(
   value: unknown,
-  runtime: Pick<ModuleFederation, 'loadRemote' | 'registerRemotes'> = defaultRuntime,
-  timeoutMs = 5_000
+  runtime: Pick<
+    ModuleFederation,
+    "loadRemote" | "registerRemotes"
+  > = defaultRuntime,
+  timeoutMs = 5_000,
 ): Promise<JourneyLoadResult> {
   const manifest = resolveManifest(value);
-  if (!manifest || manifest.strategy !== 'federated-module') return { status: 'fallback', reason: 'invalid-manifest' };
-  if (!isCompatible(manifest.platformCompatibility)) return { status: 'fallback', reason: 'incompatible-contract' };
+  if (!manifest || manifest.strategy !== "federated-module")
+    return { status: "fallback", reason: "invalid-manifest" };
+  if (!isCompatible(manifest.platformCompatibility))
+    return { status: "fallback", reason: "incompatible-contract" };
 
-  runtime.registerRemotes?.([{ name: manifest.remote.name, entry: manifest.remote.entry }]);
-  const timeoutMarker = Symbol('remote-timeout');
+  runtime.registerRemotes?.([
+    { name: manifest.remote.name, entry: manifest.remote.entry },
+  ]);
+  const timeoutMarker = Symbol("remote-timeout");
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
     const module = await Promise.race([
-      runtime.loadRemote<FederatedJourneyModule>(`${manifest.remote.name}/${manifest.remote.exposedModule.slice(2)}`),
+      runtime.loadRemote<FederatedJourneyModule>(
+        `${manifest.remote.name}/${manifest.remote.exposedModule.slice(2)}`,
+      ),
       new Promise<never>((_resolve, reject) => {
         timeoutId = setTimeout(() => reject(timeoutMarker), timeoutMs);
-      })
+      }),
     ]);
-    if (!module) return { status: 'fallback', reason: 'remote-unavailable' };
-    return { status: 'ready', manifest, module };
+    if (!module) return { status: "fallback", reason: "remote-unavailable" };
+    return { status: "ready", manifest, module };
   } catch (error) {
-    return { status: 'fallback', reason: error === timeoutMarker ? 'remote-timeout' : 'remote-unavailable' };
+    return {
+      status: "fallback",
+      reason: error === timeoutMarker ? "remote-timeout" : "remote-unavailable",
+    };
   } finally {
     if (timeoutId) clearTimeout(timeoutId);
   }
@@ -140,21 +216,36 @@ export async function loadFederatedJourney(
  * Creates the browser implementation of the narrow platform contract supplied to remotes.
  * It deliberately exposes device availability rather than browser internals or credentials.
  */
-export function createPlatformCapabilities(adapters: WebCapabilityAdapters = {}): PlatformCapabilities {
+export function createPlatformCapabilities(
+  adapters: WebCapabilityAdapters = {},
+): PlatformCapabilities {
+  const context =
+    adapters.context ?? createPlatformContext(adapters.platform ?? "web");
   return {
-    navigate: adapters.navigate ?? ((path) => {
-      window.history.pushState({}, '', path);
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    }),
-    context: { correlationId: crypto.randomUUID(), locale: navigator.language, platform: adapters.platform ?? 'web' },
-    telemetry: adapters.telemetry ?? { track: (event) => console.info('portal-event', event.name, event.properties) },
+    navigate:
+      adapters.navigate ??
+      ((path) => {
+        window.history.pushState({}, "", path);
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }),
+    context,
+    telemetry:
+      adapters.telemetry ??
+      createTelemetry(
+        context,
+        adapters.telemetryExporter ?? createConsoleExporter(),
+      ),
     flags: {},
-    notifications: { show: (message) => console.info('portal-notification', message) },
-    device: adapters.device ?? { isAvailable: () => false }
+    notifications: {
+      show: (message) => console.info("portal-notification", message),
+    },
+    device: adapters.device ?? { isAvailable: () => false },
   };
 }
 
 /** Backwards-compatible browser capability factory. */
-export function createWebCapabilities(adapters: Omit<WebCapabilityAdapters, 'platform'> = {}): PlatformCapabilities {
-  return createPlatformCapabilities({ ...adapters, platform: 'web' });
+export function createWebCapabilities(
+  adapters: Omit<WebCapabilityAdapters, "platform"> = {},
+): PlatformCapabilities {
+  return createPlatformCapabilities({ ...adapters, platform: "web" });
 }

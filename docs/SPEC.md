@@ -70,6 +70,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Legado, Rollout e Resiliência](specs/parte-2-legado-rollout-resiliencia.md)
 - [Parte 2 — Web/Mobile e Bridge](specs/parte-2-web-mobile-bridge.md)
 - [Parte 2 — Journey Registry Demonstrativo](specs/parte-2-journey-registry.md)
+- [Parte 2 — Observabilidade e Operação](specs/parte-2-observabilidade-operacao.md)
 
 ## Delivery Roadmap
 

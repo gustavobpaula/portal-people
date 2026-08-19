@@ -37,6 +37,28 @@ corepack pnpm verify:design-system-assets
 
 ## Design System
 
+## Observabilidade e operação
+
+O shell cria uma correlação ao iniciar o portal. A mesma correlação é entregue aos remotes por `PlatformCapabilities` e segue para o Journey Registry em um cabeçalho W3C `traceparent`; cada requisição recebe um span distinto. O Registry extrai esse contexto — ou cria outro válido se ele estiver ausente ou inválido — e emite logs e métricas correlacionados.
+
+O case emite sinais sanitizados no console local com o prefixo `portal-observability`. Cada linha é um envelope JSON com categoria (`log`, `error`, `metric` ou `analytics`), nome, timestamp, domínio, versão, rota-template, plataforma, correlação, namespace e atributos operacionais permitidos. Tokens, dados pessoais, conteúdo de jornadas, URLs completas, payloads HTTP e objetos da bridge não são exportados. Uma falha no exporter é isolada e não altera a experiência do portal.
+
+Para observar a demonstração, inicie o portal, abra o DevTools e filtre o Console por `portal-observability`:
+
+```sh
+corepack pnpm demo:portal
+```
+
+O host mede carregamento federado, chamadas do Registry e Core Web Vitals. Os eventos `portal.web-vital.lcp`, `portal.web-vital.inp` e `portal.web-vital.cls` são métricas com somente `value`, `rating` e `navigationType`: carregue a home para LCP, interaja com uma ação como Benefícios para INP e troque de aba para concluir o reporte de LCP/CLS.
+
+```sh
+corepack pnpm verify:observability
+```
+
+Esse comando inicia o Registry local, valida a propagação de `traceparent`, confirma ownership e namespaces dos manifestos e verifica os sinais estruturados do serviço sem credenciais ou fornecedor externo.
+
+Ownership operacional: Plataforma Frontend mantém shell, runtime e Journey Registry; cada remote pertence à squad declarada em seu manifesto; Portal BFF e APIs pertencem aos respectivos times backend; bridge e WebView pertencem à Plataforma Mobile. Cada owner é responsável por dashboards, alertas e incidentes no ambiente corporativo. O case não provisiona fornecedores, alertas, SLOs ou infraestrutura de produção.
+
 O Design System demonstrativo está em `libs/design-tokens` e `libs/design-system-web`; consumidores usam somente `@portal/design-tokens` e `@portal/design-system-web`. A documentação executável é servida de forma independente por Storybook.
 
 `test:design-system` executa em Chromium os smoke tests, as `play` functions e as verificações de acessibilidade das stories. Após instalar as dependências, baixe o browser local uma vez (ou defina `PLAYWRIGHT_CHROMIUM_EXECUTABLE` para usar um Chrome corporativo já instalado):

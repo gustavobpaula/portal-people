@@ -1,0 +1,11 @@
+{
+  "name": "platform-observability",
+  "sourceRoot": "libs/platform/observability/src",
+  "projectType": "library",
+  "tags": ["scope:platform", "type:runtime"],
+  "implicitDependencies": ["platform-contracts"],
+  "targets": {
+    "test": { "command": "vitest run libs/platform/observability" },
+    "lint": { "command": "eslint libs/platform/observability --max-warnings=0" }
+  }
+}

@@ -15,6 +15,7 @@
     "paths": {
       "@portal/platform-contracts": ["./libs/platform/contracts/src/index.ts"],
       "@portal/platform-runtime": ["./libs/platform/runtime/src/index.ts"],
+      "@portal/platform-observability": ["./libs/platform/observability/src/index.ts"],
       "@portal/platform-mobile-bridge": ["./libs/platform/mobile-bridge/src/index.ts"],
       "@portal/design-tokens": ["./libs/design-tokens/src/index.ts"],
       "@portal/design-system-web": ["./libs/design-system-web/src/index.tsx"]

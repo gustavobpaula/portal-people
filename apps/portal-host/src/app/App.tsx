@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { onCLS, onINP, onLCP } from "web-vitals";
 import {
   QueryClient,
   QueryClientProvider,
@@ -15,8 +16,10 @@ import {
 } from "@portal/design-system-web";
 import {
   loadFederatedJourney,
+  createPlatformContext,
   resolveJourneyRegistry,
 } from "@portal/platform-runtime";
+import { createTelemetry } from "@portal/platform-observability";
 import { createPlatformAdapter as defaultCreatePlatformAdapter } from "@portal/platform-mobile-bridge";
 import { isExternalJourneyAvailable } from "../services/external-web/external-availability";
 import { journeyRegistryClient } from "../services/journey-registry/journey-registry";
@@ -57,6 +60,7 @@ function ShellContent({
   registryData,
   registrySource,
   registryFailure,
+  correlationContext,
   loadJourney = loadFederatedJourney,
   createCapabilities,
   createPlatformAdapter = defaultCreatePlatformAdapter,
@@ -70,37 +74,87 @@ function ShellContent({
   registryData: unknown;
   registrySource: RegistrySource;
   registryFailure?: JourneyRegistryError["kind"];
+  correlationContext: import("@portal/platform-contracts").PlatformContext;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [adapter] = useState(() =>
-    createCapabilities
-      ? {
-          capabilities: createCapabilities({
+    (() => {
+      const context = correlationContext;
+      const telemetry = createTelemetry(context);
+      return createCapabilities
+        ? {
+            capabilities: createCapabilities({
+              navigate: (path) => navigate(path),
+              telemetry,
+              context,
+            }),
+            openNativeRoute: async () => ({
+              status: "fallback" as const,
+              reason: "native-unavailable" as const,
+            }),
+          }
+        : createPlatformAdapter({
+            mode: platformMode,
             navigate: (path) => navigate(path),
-            telemetry: {
-              track: (event) =>
-                console.info("portal-event", event.name, event.properties),
-            },
-          }),
-          openNativeRoute: async () => ({
-            status: "fallback" as const,
-            reason: "native-unavailable" as const,
-          }),
-        }
-      : createPlatformAdapter({
-          mode: platformMode,
-          navigate: (path) => navigate(path),
-          telemetry: {
-            track: (event) =>
-              console.info("portal-event", event.name, event.properties),
-          },
-          origin: window.location.origin,
-          allowedOrigins: ["http://localhost:4200"],
-          bridge: nativeBridge,
-        }),
+            telemetry,
+            context,
+            origin: window.location.origin,
+            allowedOrigins: ["http://localhost:4200"],
+            bridge: nativeBridge,
+          });
+    })(),
   );
   const platform = adapter.capabilities;
+  const vitalsStarted = useRef(false);
+  useEffect(() => {
+    if (vitalsStarted.current) return;
+    vitalsStarted.current = true;
+    const report = (metric: {
+      name: string;
+      value: number;
+      rating: string;
+      navigationType: string;
+    }) =>
+      platform.telemetry.track({
+        kind: "metric",
+        name: `portal.web-vital.${metric.name.toLowerCase()}`,
+        properties: {
+          domain: "portal",
+          version: "1.0.0",
+          route: "/",
+          eventNamespace: "portal-core",
+          value: Math.round(metric.value),
+          rating: metric.rating,
+          navigationType: metric.navigationType,
+        },
+      });
+    onCLS(report);
+    onINP(report);
+    onLCP(report);
+  }, [platform]);
+  useEffect(() => {
+    const report = (name: string) =>
+      platform.telemetry.track({
+        kind: "error",
+        name,
+        properties: {
+          domain: "portal",
+          version: "1.0.0",
+          route: "/",
+          eventNamespace: "portal-core",
+          reason: "unhandled",
+        },
+      });
+    const onError = () => report("portal.runtime.error");
+    const onRejection = () => report("portal.runtime.rejection");
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => {
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onRejection);
+    };
+  }, [platform]);
   const resolution = useMemo(
     () => resolveJourneyRegistry(registryData),
     [registryData],
@@ -273,10 +327,13 @@ function JourneyRegistryBoundary({
   registryData,
   journeyRegistryClient: registryClient = journeyRegistryClient,
   ...props
-}: AppProps) {
+}: AppProps & {
+  correlationContext: import("@portal/platform-contracts").PlatformContext;
+}) {
   const registryQuery = useQuery({
     queryKey: ["journey-registry"],
-    queryFn: ({ signal }) => registryClient.getJourneys(signal),
+    queryFn: ({ signal }) =>
+      registryClient.getJourneys(signal, props.correlationContext),
     enabled: registryData === undefined,
     retry: false,
   });
@@ -322,9 +379,15 @@ export function App(props: AppProps) {
   const [queryClient] = useState(
     () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
   );
+  const [correlationContext] = useState(() =>
+    createPlatformContext(props.platformMode ?? "web"),
+  );
   return (
     <QueryClientProvider client={queryClient}>
-      <JourneyRegistryBoundary {...props} />
+      <JourneyRegistryBoundary
+        {...props}
+        correlationContext={correlationContext}
+      />
     </QueryClientProvider>
   );
 }
