@@ -71,9 +71,14 @@ describe("golden path", () => {
     expect(viteConfig).not.toContain("../../../libs");
     expect(viteConfig).not.toContain("../../../dist");
     expect(viteConfig).not.toContain("__PORT__");
-    expect(
-      await readFile(join(destination, "module-federation.config.ts"), "utf8"),
-    ).toContain('"./src/app/Journey.tsx"');
+    const federationConfig = await readFile(
+      join(destination, "module-federation.config.ts"),
+      "utf8",
+    );
+    expect(federationConfig).toContain('"./src/app/Journey.tsx"');
+    expect(federationConfig).toContain('"react/jsx-runtime"');
+    expect(federationConfig).toContain('"react/jsx-dev-runtime"');
+    expect(federationConfig).toContain('"react-dom/client"');
     const vitestConfig = await readFile(
       join(destination, "vitest.config.ts"),
       "utf8",

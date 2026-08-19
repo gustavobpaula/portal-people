@@ -159,7 +159,12 @@ describe("App", () => {
     };
     renderShell({ registryData: [native], initialPath: "/recursos-do-app", createPlatformAdapter: adapter });
 
-    expect(await screen.findByText("Recursos do aplicativo aberto")).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", {
+        name: "Recursos do aplicativo aberto",
+        level: 1,
+      }),
+    ).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.activation.started" }));
     expect(track).toHaveBeenCalledWith(expect.objectContaining({ name: "portal.journey.native.opened" }));
     const telemetry = JSON.stringify(track.mock.calls);

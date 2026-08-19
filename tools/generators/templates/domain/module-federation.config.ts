@@ -8,7 +8,10 @@ export function createFederationConfig(withFallback = true) {
   shared: {
     react: { singleton: true, import: withFallback ? "react" : false },
     "react-dom": { singleton: true, import: withFallback ? "react-dom" : false },
+    "react/jsx-runtime": { singleton: true, import: withFallback ? "react/jsx-runtime" : false },
+    "react/jsx-dev-runtime": { singleton: true, import: withFallback ? "react/jsx-dev-runtime" : false },
     "react-router-dom": { singleton: true, import: withFallback ? "react-router-dom" : false },
+    "react-dom/client": { singleton: true, import: withFallback ? "react-dom/client" : false },
   },
   });
 }

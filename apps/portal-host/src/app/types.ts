@@ -24,6 +24,11 @@ export type NativeManifest = Extract<
   { strategy: "native-route" }
 >;
 export type JourneyLoader = typeof loadFederatedJourney;
+export type RegistrySource =
+  | "bootstrap"
+  | "injected"
+  | "remote"
+  | "safe-fallback";
 
 export interface AppProps {
   registryData?: unknown;

@@ -1,5 +1,5 @@
 import {
-  createInstance,
+  getInstance,
   type ModuleFederation,
 } from "@module-federation/runtime";
 import {
@@ -17,7 +17,13 @@ import {
   type TelemetryExporter,
 } from "@portal/platform-observability";
 
-const defaultRuntime = createInstance({ name: "portal-host", remotes: [] });
+/** Returns the federation instance initialized by the host build plugin. */
+function getHostRuntime() {
+  const runtime = getInstance((instance) => instance.name === "portal-host");
+  if (!runtime)
+    throw new Error("Portal host federation runtime is unavailable.");
+  return runtime;
+}
 
 /** Result boundary used by the host to distinguish a loadable journey from a safe fallback state. */
 export type JourneyLoadResult =
@@ -174,10 +180,7 @@ export function prepareExternalJourney(
  */
 export async function loadFederatedJourney(
   value: unknown,
-  runtime: Pick<
-    ModuleFederation,
-    "loadRemote" | "registerRemotes"
-  > = defaultRuntime,
+  runtime?: Pick<ModuleFederation, "loadRemote" | "registerRemotes">,
   timeoutMs = 5_000,
 ): Promise<JourneyLoadResult> {
   const manifest = resolveManifest(value);
@@ -186,14 +189,15 @@ export async function loadFederatedJourney(
   if (!isCompatible(manifest.platformCompatibility))
     return { status: "fallback", reason: "incompatible-contract" };
 
-  runtime.registerRemotes?.([
-    { name: manifest.remote.name, entry: manifest.remote.entry },
-  ]);
   const timeoutMarker = Symbol("remote-timeout");
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
+    const activeRuntime = runtime ?? getHostRuntime();
+    activeRuntime.registerRemotes([
+      { name: manifest.remote.name, entry: manifest.remote.entry },
+    ]);
     const module = await Promise.race([
-      runtime.loadRemote<FederatedJourneyModule>(
+      activeRuntime.loadRemote<FederatedJourneyModule>(
         `${manifest.remote.name}/${manifest.remote.exposedModule.slice(2)}`,
       ),
       new Promise<never>((_resolve, reject) => {
