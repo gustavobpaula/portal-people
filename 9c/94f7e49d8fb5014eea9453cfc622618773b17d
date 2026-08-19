@@ -1,0 +1,152 @@
+libs/platform/mobile-bridge/vitest.config.ts
+  s_8db95305bde1b5::t_50f043208bbff8 9,12-13,15
+  h_4c750985969531 8,11,14,20
+  h_4c750985969531 7,10,18-19,21
+apps/ferias/vitest.config.ts
+  s_8db95305bde1b5::t_50f043208bbff8 13-15,18
+  h_4c750985969531 16-17
+apps/portal-host/src/app/types.ts
+  s_8db95305bde1b5::t_521fe1e8b7dabd 34
+  h_4c750985969531 3,9,44
+  s_8db95305bde1b5::t_d39cd864100c91 42-43,45
+  h_4c750985969531 1-2,4,6-8,10
+apps/beneficios/vitest.config.ts
+  h_4c750985969531 16-17
+  s_8db95305bde1b5::t_50f043208bbff8 13-15,18
+package.json
+  s_8db95305bde1b5::t_4a7ef43be77bf5 21
+  s_8db95305bde1b5::t_47b0b974335ec6 38
+libs/platform/contracts/src/index.ts
+  h_4c750985969531 54,98,105
+  s_8db95305bde1b5::t_2f47a6a7f09f01 178-186,195
+  h_4c750985969531 46-53,56-78,95-97,99,102-104,106,112-114,134-136,144-146,159-161
+libs/platform/observability/project.json
+  s_8db95305bde1b5::t_2f47a6a7f09f01 1-11
+tsconfig.base.json
+  s_8db95305bde1b5::t_2f47a6a7f09f01 18
+libs/platform/mobile-bridge/src/index.ts
+  s_8db95305bde1b5::t_50f043208bbff8 10,46-47,88-89
+  h_4c750985969531 13,38,58,65,74,93,130,148,160,164
+  h_4c750985969531 11-12,14,37,39,57,59,64,66-69,73,75,82-83,91-92,94,100-109,115-116,124-125,128-129,131,133-136,143-147,149,158-159,161-163,165
+apps/portal-host/src/app/journeys/telemetry.ts
+  s_8db95305bde1b5::t_0632d169764416 24,44
+  s_8db95305bde1b5::t_dfc1fad7ce1755 40
+  h_4c750985969531 3
+  s_8db95305bde1b5::t_28da6e806f0bac 13-19
+  h_4c750985969531 1-2,4
+apps/beneficios/src/app/Journey.tsx
+  s_8db95305bde1b5::t_dfc1fad7ce1755 38-42
+  s_8db95305bde1b5::t_0401e61fe8141b 47
+apps/journey-registry/vitest.config.ts
+  s_8db95305bde1b5::t_b4464667bf561c 9-12,15
+  h_4c750985969531 8,13-14,20
+  h_4c750985969531 7,18-19,21
+apps/portal-host/src/services/journey-registry/journey-registry.ts
+  s_8db95305bde1b5::t_b2486e016a204c 5-6,16-17,19,24,28,31-39,41-42
+  h_4c750985969531 18,40
+apps/portal-host/src/app/portal-experiences.tsx
+  s_8db95305bde1b5::t_0401e61fe8141b 45
+  s_8db95305bde1b5::t_dfc1fad7ce1755 37-41
+docs/PARTE-2-ROADMAP.md
+  s_8db95305bde1b5::t_4a7ef43be77bf5 22
+apps/journey-registry/project.json
+  s_8db95305bde1b5::t_b4464667bf561c 7
+  h_4c750985969531 11-15,26-28,33-37,40-42
+docs/specs/parte-2-observabilidade-operacao.md
+  s_8db95305bde1b5::t_19a2695aa87afa 1-54
+scripts/verify-observability.mjs
+  h_4c750985969531 11,15,24,32
+  s_8db95305bde1b5::t_4a7ef43be77bf5 1-10,12-14,16-23,25-31,33-36
+apps/beneficios/vite.config.ts
+  h_4c750985969531 36-37
+  s_8db95305bde1b5::t_50f043208bbff8 33-35,38
+apps/ferias/src/app/Journey.tsx
+  s_8db95305bde1b5::t_0401e61fe8141b 54
+  s_8db95305bde1b5::t_dfc1fad7ce1755 45-49
+apps/portal-host/vitest.config.ts
+  h_4c750985969531 1-2,7-8,10,12-14,16,18-20,22-23,25-26,28-31,34,36-37,39-40
+  s_8db95305bde1b5::t_50f043208bbff8 9,11,15,17,21,24,27
+  h_4c750985969531 35,38
+apps/portal-host/src/app/journeys/FederatedJourneySlot.tsx
+  s_8db95305bde1b5::t_6f366766b07d6c 59,69-70,72
+  h_4c750985969531 20,38,40,64,71,79,92,96,98,104,107,112,120
+  h_4c750985969531 16-19,21,25-30,33-37,39,60-63,65,73-78,80,82-84,87-91,93-95,97,99-103,108-111,113-119
+libs/platform/observability/src/index.spec.ts
+  h_4c750985969531 7,13,19,36,46-47,51,59-60,66-67,80,84,88
+  s_8db95305bde1b5::t_2f47a6a7f09f01 1-6,8-12,14-18,20-35,37-45,48-50,52-58,61-65,68-79,81-83,85-87,89-91
+apps/portal-host/src/services/external-web/external-availability.ts
+  h_4c750985969531 9
+  s_8db95305bde1b5::t_d39cd864100c91 1-3,7-8,10,19,22-33
+apps/portal-host/src/app/journeys/ExternalJourneySlot.tsx
+  h_4c750985969531 16,23,34,40,53,61,64,75,80,86,92,94,100-101,108
+  s_8db95305bde1b5::t_58a5503e0ce768 21-22,24-25
+  s_8db95305bde1b5::t_d39cd864100c91 47-48
+  h_4c750985969531 11-15,17-20,31-33,35,38-39,41,49-52,54-60,62-63,65-74,76,78-79,81-85,87-91,93,95-99,102-107
+apps/portal-host/vite.config.ts
+  s_8db95305bde1b5::t_50f043208bbff8 31,34,36,40,42,46,49
+  h_4c750985969531 1-5,8,10,17,21,23,25,29-30,32-33,35,37-39,41,43-45,47-48,50-53
+  h_4c750985969531 9,11-13,16,18-20,22,24,26-28
+libs/platform/runtime/project.json
+  s_8db95305bde1b5::t_2f47a6a7f09f01 6
+libs/platform/observability/src/index.ts
+  s_8db95305bde1b5::t_0632d169764416 110-111,113
+  s_8db95305bde1b5::t_d0a6cf4de268ca 34
+  s_8db95305bde1b5::t_2f47a6a7f09f01 1-4,6-23,25-33,35-47,49-54,56-66,68-76,78-106,108-109,112,114-136,138,140-146,148-157,159-162,164-166,168-178,180-186,188-191,193-199,201-211,215-224,228-231
+  h_4c750985969531 5,24,48,55,67,77,107,137,139,147,158,163,167,179,187,192,200,212-214,225-227
+libs/platform/runtime/src/index.ts
+  h_4c750985969531 2-4,11-12,17-18,20,25-27,30-35,42-43,49-51,54-59,63-67,72-73,77,87,89,105,110,115,121,126-127,144-145,147,155,158,160-164,179,181,184-185,187,190,192,197,201,203-204,207-208,220,223,228-229,236,240,242,248,250
+  s_8db95305bde1b5::t_50f043208bbff8 1,13-16,68,71,74-76,78-80,198,222,231-235,237
+  h_4c750985969531 24,28-29,36,40-41,44,48,52-53,60,85-86,88,104,106,108-109,111,120,122-125,128,146,157,159,177-178,180,186,189,191,196,206,209,219,221,225-227,230,239,241,247,249
+apps/portal-host/src/app/App.tsx
+  h_4c750985969531 117,129,146-147,331,383
+  s_8db95305bde1b5::t_6f2f76a2c563ae 1-2,109-116,118-128,130-135
+  s_8db95305bde1b5::t_50b70c67dd5b4b 136-145,148-157
+  s_8db95305bde1b5::t_93c78d49f8be99 86
+  s_8db95305bde1b5::t_b2486e016a204c 63,77,83,330,332,335-336,382,384,387-390
+  s_8db95305bde1b5::t_521fe1e8b7dabd 19,22,82,84-85,89-98,100-106
+  s_8db95305bde1b5::t_9f3af7892eefcc 87-88
+README.md
+  s_8db95305bde1b5::t_abf4041425b03a 42,44-53,57-58
+  s_8db95305bde1b5::t_4a7ef43be77bf5 40-41,43,54-56,59-61
+apps/journey-registry/src/app.ts
+  s_8db95305bde1b5::t_58a5503e0ce768 23-25,28
+  h_4c750985969531 11,17,26-27,33,42,47,52,56
+  s_8db95305bde1b5::t_b4464667bf561c 6-10,12,15-16,18,21-22,29-32,34-41,43-46,48-51,53-54
+  h_4c750985969531 55,57
+apps/ferias/vite.config.ts
+  h_4c750985969531 20,26,31,33,37-38
+  h_4c750985969531 39
+apps/neutral-remote/vite.config.ts
+  h_4c750985969531 1-5,8,10,13-14,16,18,20,24-25,27-28,30,32-34,36-37,39-43
+  s_8db95305bde1b5::t_f53916e1e68fed 26,29,31,35,38
+  h_4c750985969531 9,11-12,15,17,19,21-23
+vitest.config.ts
+  s_8db95305bde1b5::t_0632d169764416 5-6,9,14
+  h_4c750985969531 1-2,7-8,10-13,16-18
+  h_4c750985969531 15
+docs/SPEC.md
+  s_8db95305bde1b5::t_19a2695aa87afa 73
+pnpm-lock.yaml
+  s_8db95305bde1b5::t_b9c2245cbb369b 41-43,3888-3890,7874-7875
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "9c94f7e49d8fb5014eea9453cfc622618773b17d",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_8db95305bde1b5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a01881-6401-7532-afea-86c5f971b9ec",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
