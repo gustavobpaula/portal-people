@@ -71,6 +71,7 @@ Nenhuma para o primeiro marco.
 - [Parte 2 — Web/Mobile e Bridge](specs/parte-2-web-mobile-bridge.md)
 - [Parte 2 — Journey Registry Demonstrativo](specs/parte-2-journey-registry.md)
 - [Parte 2 — Observabilidade e Operação](specs/parte-2-observabilidade-operacao.md)
+- [Parte 2 — Qualidade e Entrega](specs/parte-2-qualidade-entrega.md)
 
 ## Delivery Roadmap
 

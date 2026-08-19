@@ -1,6 +1,9 @@
 import { createModuleFederationConfig } from '@module-federation/vite';
 
-export default createModuleFederationConfig({
+export function createFederationConfig(withFallback = true) {
+  return createModuleFederationConfig({
   name: 'neutral-remote', manifest: true, dts: false, exposes: { './Journey': './src/app/Journey.tsx' },
-  shared: { react: { singleton: true }, 'react-dom': { singleton: true }, 'react-router-dom': { singleton: true } }
-});
+    shared: { react: { singleton: true, import: withFallback ? 'react' : false }, 'react-dom': { singleton: true, import: withFallback ? 'react-dom' : false }, 'react-router-dom': { singleton: true, import: withFallback ? 'react-router-dom' : false } }
+  });
+}
+export default createFederationConfig();

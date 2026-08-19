@@ -30,7 +30,8 @@ export async function startExternalWebServer({ port = 4500 } = {}) {
       response.end();
       return;
     }
-    const isPage = url.pathname === "/holerite" || url.pathname === "/indisponivel";
+    const isPage =
+      url.pathname === "/holerite" || url.pathname === "/indisponivel";
     const relativePath = isPage ? "index.html" : url.pathname.slice(1);
     const target = normalize(join(fixtureRoot, relativePath || "index.html"));
 
@@ -42,12 +43,16 @@ export async function startExternalWebServer({ port = 4500 } = {}) {
     try {
       let content = await readFile(target);
       if (relativePath === "index.html") {
-        const state = url.pathname === "/indisponivel" ? "unavailable" : "ready";
+        const state =
+          url.pathname === "/indisponivel" ? "unavailable" : "ready";
         content = Buffer.from(
           content
             .toString()
             .replace("__LEGACY_STATE__", state)
-            .replace("__RETURN_TO__", safeReturnUrl(url.searchParams.get("returnTo"))),
+            .replace(
+              "__RETURN_TO__",
+              safeReturnUrl(url.searchParams.get("returnTo")),
+            ),
         );
       }
       response.writeHead(200, {
@@ -64,8 +69,9 @@ export async function startExternalWebServer({ port = 4500 } = {}) {
   return {
     port,
     close: () =>
-      new Promise((resolve, reject) =>
-        server.close((error) => (error ? reject(error) : resolve())),
-      ),
+      new Promise((resolve, reject) => {
+        server.closeAllConnections?.();
+        server.close((error) => (error ? reject(error) : resolve()));
+      }),
   };
 }

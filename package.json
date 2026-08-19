@@ -22,7 +22,12 @@
     "storybook": "nx serve design-system-docs",
     "storybook:build": "nx build design-system-docs",
     "test:design-system": "nx run-many -t test --projects=design-tokens,design-system-web,design-system-docs",
-    "verify:design-system-assets": "node scripts/verify-design-system-assets.mjs"
+    "verify:design-system-assets": "node scripts/verify-design-system-assets.mjs",
+    "verify:performance-budgets": "pnpm build && node scripts/verify-performance-budgets.mjs",
+    "verify:accessibility": "nx build journey-registry && node scripts/verify-accessibility.mjs",
+    "verify:delivery": "node scripts/quality-gates.mjs delivery",
+    "quality": "node scripts/quality-gates.mjs full",
+    "quality:affected": "node scripts/quality-gates.mjs affected"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.0",
@@ -39,6 +44,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@nx/esbuild": "23.1.1",
     "@nx/eslint": "23.1.1",
     "@nx/eslint-plugin": "23.1.1",

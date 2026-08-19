@@ -33,6 +33,7 @@ export function JourneyFallback({
 }) {
   return (
     <Alert tone="error" title="Jornada indisponível">
+      <Text as="h1" variant="heading">Jornada indisponível</Text>
       <Text>{messages[reason]}</Text>
       <div className={styles.actions}>
         <Button type="button" onClick={onRetry}>Tentar novamente</Button>

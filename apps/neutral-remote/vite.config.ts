@@ -1,15 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { federation } from "@module-federation/vite";
-import federationConfig from "./module-federation.config.ts";
+import { createFederationConfig } from "./module-federation.config.ts";
 import { fileURLToPath, URL } from "node:url";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   root: fileURLToPath(new URL(".", import.meta.url)),
   cacheDir: fileURLToPath(
     new URL("../../node_modules/.vite/neutral-remote", import.meta.url),
   ),
-  plugins: [react(), federation(federationConfig)],
+  plugins: [react(), federation(createFederationConfig(command === "serve"))],
   server: { origin: "http://localhost:4201", port: 4201, strictPort: true },
   base: "http://localhost:4201",
   build: {
@@ -41,4 +41,4 @@ export default defineConfig({
       ),
     },
   },
-});
+}));

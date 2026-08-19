@@ -23,10 +23,18 @@ export async function startJourneyRegistry(port = 4204) {
     env: { ...globalThis.process.env, JOURNEY_REGISTRY_PORT: String(port) },
     stdio: "inherit",
   });
-  await waitForRegistry(port);
+  try {
+    await waitForRegistry(port);
+  } catch (error) {
+    if (child.exitCode === null) child.kill("SIGTERM");
+    await once(child, "exit").catch(() => undefined);
+    throw error;
+  }
+  let closed = false;
   return {
     async close() {
-      if (child.exitCode !== null) return;
+      if (closed || child.exitCode !== null) return;
+      closed = true;
       child.kill("SIGTERM");
       await once(child, "exit");
     },

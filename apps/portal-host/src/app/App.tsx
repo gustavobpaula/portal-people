@@ -129,7 +129,7 @@ function ShellContent({
           navigationType: metric.navigationType,
         },
       });
-    onCLS(report);
+    onCLS(report, { reportAllChanges: true });
     onINP(report);
     onLCP(report);
   }, [platform]);

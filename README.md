@@ -4,36 +4,102 @@
 
 - Node.js 24+
 - Corepack habilitado (`corepack enable`)
+- Chromium instalado para as verificações de navegador (`corepack pnpm exec playwright install chromium`)
 
 ## Comandos
 
 ```sh
-corepack pnpm install
-corepack pnpm lint
-corepack pnpm typecheck
-corepack pnpm test
-corepack pnpm nx build portal-host
-corepack pnpm nx build neutral-remote
-corepack pnpm nx lint beneficios
-corepack pnpm nx test beneficios
-corepack pnpm nx build beneficios
-corepack pnpm nx lint ferias
-corepack pnpm nx test ferias
-corepack pnpm nx build ferias
-corepack pnpm verify:federation
-corepack pnpm verify:shell
-corepack pnpm demo:portal
-corepack pnpm demo:journey-registry
-corepack pnpm verify:journey-registry
-corepack pnpm demo:legacy
-corepack pnpm verify:external-web
-corepack pnpm verify:web-mobile-bridge
-corepack pnpm golden-path -- --name nova-jornada --dry-run
-corepack pnpm storybook
-corepack pnpm storybook:build
-corepack pnpm test:design-system
-corepack pnpm verify:design-system-assets
+corepack pnpm install --frozen-lockfile                                  # Instala exatamente as dependências do lockfile.
+corepack pnpm quality                                                    # Executa o gate completo de qualidade e entrega.
+corepack pnpm quality:affected -- --files=apps/beneficios/src/app/Journey.tsx # Valida projetos afetados e checks transversais.
+corepack pnpm verify:delivery                                            # Executa somente as verificações integradas de entrega.
+corepack pnpm lint                                                       # Verifica padrões e erros estáticos do workspace.
+corepack pnpm typecheck                                                  # Valida os tipos TypeScript sem gerar artefatos.
+corepack pnpm test                                                       # Executa os testes automatizados de todos os projetos.
+corepack pnpm nx build portal-host                                       # Gera o build de produção do shell.
+corepack pnpm nx build neutral-remote                                    # Gera o build do remote neutro.
+corepack pnpm nx lint beneficios                                         # Executa o lint do domínio Benefícios.
+corepack pnpm nx test beneficios                                         # Executa os testes do domínio Benefícios.
+corepack pnpm nx build beneficios                                        # Gera o build do domínio Benefícios.
+corepack pnpm nx lint ferias                                             # Executa o lint do domínio Férias.
+corepack pnpm nx test ferias                                             # Executa os testes do domínio Férias.
+corepack pnpm nx build ferias                                            # Gera o build do domínio Férias.
+corepack pnpm verify:federation                                          # Valida contratos e composição Module Federation.
+corepack pnpm verify:shell                                               # Verifica shell, navegação e jornadas federadas.
+corepack pnpm demo:portal                                                # Inicia Registry, shell, remotes e legado integrados.
+corepack pnpm demo:journey-registry                                      # Inicia somente o Journey Registry em watch.
+corepack pnpm verify:journey-registry                                    # Valida catálogo HTTP, fallback e recuperação do Registry.
+corepack pnpm demo:legacy                                                # Inicia somente o Holerite legado.
+corepack pnpm verify:external-web                                        # Verifica handoff, retorno e fallback do legado.
+corepack pnpm verify:web-mobile-bridge                                   # Verifica browser, WebView e bridge simulada.
+corepack pnpm golden-path -- --name nova-jornada --dry-run               # Simula a criação de um novo domínio sem gravar arquivos.
+corepack pnpm storybook                                                  # Inicia a documentação do Design System.
+corepack pnpm storybook:build                                            # Gera o Storybook estático de produção.
+corepack pnpm test:design-system                                         # Testa stories, interações e acessibilidade do Design System.
+corepack pnpm verify:design-system-assets                                # Impede ativos remotos ou não autorizados no Design System.
+corepack pnpm verify:performance-budgets                                 # Mede e aplica os budgets gzip do shell e dos remotes.
+corepack pnpm verify:accessibility                                       # Executa Axe nos fluxos críticos desktop e mobile.
 ```
+
+## Mapa das aplicações e ownership
+
+| Superfície | Projeto | Owner | Fronteira |
+| --- | --- | --- | --- |
+| Shell e experiências transversais | `apps/portal-host` | Plataforma Frontend | Compõe jornadas; não contém regras de domínio. |
+| Fundação | `apps/neutral-remote` | Plataforma Frontend | Remote federado independente. |
+| Benefícios | `apps/beneficios` | Squad Benefícios | Domínio e contrato público próprios. |
+| Férias | `apps/ferias` | Squad Férias | Domínio e contrato público próprios. |
+| Catálogo HTTP | `apps/journey-registry` | Plataforma Frontend | Valida e publica manifestos; não decide rollout. |
+| Holerite legado | `fixtures/holerite-legado` | Folha de Pagamento | Destino externo controlado. |
+| Contratos, runtime, bridge e telemetria | `libs/platform/*` | Plataforma Frontend | Capacidades transversais, sem regras de negócio. |
+| Design System | `libs/design-*`, `apps/design-system-docs` | Design System | Tokens, componentes e documentação executável. |
+
+Cada squad mantém seu manifesto em `journeys/<id>/manifest.json`. Domínios não importam outros domínios e o shell não importa suas implementações.
+
+## Qualidade e entrega local
+
+`quality` executa lint, tipos, testes orientados a risco, todos os builds — inclusive o Storybook estático — e as verificações transversais em sequência. A primeira falha obrigatória encerra o comando com código diferente de zero.
+
+`quality:affected` usa `origin/main` e `HEAD` por padrão, aceita `--base`, `--head` ou `--files`, restringe lint/test/build ao grafo afetado do Nx e sempre mantém as verificações transversais. Exemplos:
+
+```sh
+corepack pnpm quality:affected -- --files=apps/beneficios/src/app/Journey.tsx # Simula uma alteração no domínio Benefícios.
+corepack pnpm quality:affected -- --files=libs/platform/contracts/src/index.ts # Simula uma alteração em contrato compartilhado.
+corepack pnpm quality:affected -- --files=journeys/beneficios/manifest.json # Simula uma alteração no manifesto de Benefícios.
+```
+
+### Verificações por domínio
+
+`verify:shell`, `verify:accessibility` e `verify:performance-budgets` aceitam `--project` para uma jornada ou `--projects` para várias. Os identificadores atuais são `neutral-remote`, `beneficios` e `ferias`.
+
+```sh
+# Feedback da Squad Benefícios
+corepack pnpm verify:shell -- --project=beneficios               # Verifica a composição de Benefícios pelo shell.
+corepack pnpm verify:accessibility -- --project=beneficios       # Executa Axe nos fluxos de Benefícios.
+corepack pnpm verify:performance-budgets -- --project=beneficios # Mede shell e carga incremental de Benefícios.
+
+# Mudança compartilhada entre dois domínios
+corepack pnpm verify:accessibility -- --projects=beneficios,ferias       # Executa Axe nos dois domínios.
+corepack pnpm verify:performance-budgets -- --projects=beneficios,ferias # Mede os dois remotes.
+
+# Remote neutro da Plataforma Frontend
+corepack pnpm verify:shell -- --project=neutral-remote # Verifica o remote neutro pelo shell.
+```
+
+Mesmo filtrados, os verificadores iniciam o shell e suas dependências de composição. Sem filtro, percorrem todos os fluxos transversais e são o modo usado por `quality`, `quality:affected` e pelo gate de entrega.
+
+### Budgets de transferência
+
+| Caminho crítico | Alerta | Bloqueio |
+| --- | ---: | ---: |
+| JavaScript inicial do shell, gzip | 180 KiB | 200 KiB |
+| JavaScript incremental por remote, gzip | 90 KiB | 100 KiB |
+| Recursos totais do carregamento inicial, gzip | 315 KiB | 350 KiB |
+| CSS crítico por rota, gzip | 30 KiB | 35 KiB |
+
+KiB equivale a 1.024 bytes. A medição usa respostas realmente solicitadas de builds de produção: shell sem cache e remotes carregados incrementalmente após o shell. Alertas são visíveis sem falhar; ultrapassar o bloqueio encerra o gate. O relatório detalhado fica em `dist/quality/performance-budgets.json`.
+
+LCP, INP e CLS permanecem observáveis com referências de `2,5 s`, `200 ms` e `0,1`, respectivamente, mas seus valores locais não bloqueiam a entrega. Não há meta percentual de cobertura; os testes são orientados a risco, contratos e fronteiras.
 
 ## Design System
 
@@ -46,13 +112,15 @@ O case emite sinais sanitizados no console local com o prefixo `portal-observabi
 Para observar a demonstração, inicie o portal, abra o DevTools e filtre o Console por `portal-observability`:
 
 ```sh
-corepack pnpm demo:portal
+corepack pnpm demo:portal # Inicia a demonstração integrada completa.
 ```
+
+O comando integrado também inicia o Journey Registry na porta `4204`. As portas esperadas são `4200`, `4201`, `4300`, `4301`, `4204` e `4500`; se alguma estiver ocupada, a inicialização falha com mensagem clara sem encerrar processos de terceiros. `Ctrl+C` encerra somente os recursos iniciados pelo comando, em ordem reversa, inclusive após uma inicialização parcial.
 
 O host mede carregamento federado, chamadas do Registry e Core Web Vitals. Os eventos `portal.web-vital.lcp`, `portal.web-vital.inp` e `portal.web-vital.cls` são métricas com somente `value`, `rating` e `navigationType`: carregue a home para LCP, interaja com uma ação como Benefícios para INP e troque de aba para concluir o reporte de LCP/CLS.
 
 ```sh
-corepack pnpm verify:observability
+corepack pnpm verify:observability # Valida correlação, ownership, sanitização e Web Vitals.
 ```
 
 Esse comando inicia o Registry local, valida a propagação de `traceparent`, confirma ownership e namespaces dos manifestos e verifica os sinais estruturados do serviço sem credenciais ou fornecedor externo.
@@ -64,7 +132,7 @@ O Design System demonstrativo está em `libs/design-tokens` e `libs/design-syste
 `test:design-system` executa em Chromium os smoke tests, as `play` functions e as verificações de acessibilidade das stories. Após instalar as dependências, baixe o browser local uma vez (ou defina `PLAYWRIGHT_CHROMIUM_EXECUTABLE` para usar um Chrome corporativo já instalado):
 
 ```sh
-corepack pnpm exec playwright install chromium
+corepack pnpm exec playwright install chromium # Instala o Chromium usado pelos testes locais.
 ```
 
 Os valores visuais são aproximações locais, não oficiais e substituíveis. O verificador de ativos impede referências remotas, fontes e recursos oficiais nos fontes do Design System.
@@ -106,13 +174,13 @@ No case, os arquivos são estáticos e determinísticos para demonstrar discover
 Para executar somente o Registry em watch:
 
 ```sh
-corepack pnpm demo:journey-registry
+corepack pnpm demo:journey-registry # Inicia somente o Registry em modo watch.
 ```
 
 Para a demonstração integrada, que inicia Registry, remotes, host e legado, use `corepack pnpm demo:portal`. Se o Registry ficar indisponível, o host preserva seu snapshot seguro, informa o fallback e permite nova tentativa. A verificação automatizada exercita o endpoint HTTP, o proxy, o fallback e a recuperação:
 
 ```sh
-corepack pnpm verify:journey-registry
+corepack pnpm verify:journey-registry # Valida endpoint, proxy, fallback e recuperação.
 ```
 
 ## Testando `external-web` e Holerite legado
@@ -120,7 +188,7 @@ corepack pnpm verify:journey-registry
 O comando abaixo inicia o host (`4200`), a jornada neutra, Benefícios (`4300`), Férias (`4301`) e a aplicação estática independente Holerite legado (`4500`). Encerre tudo com `Ctrl+C`.
 
 ```sh
-corepack pnpm demo:portal
+corepack pnpm demo:portal # Inicia host, remotes, Registry e legado.
 ```
 
 Abra `http://localhost:4200` e confirme que Produtos possui entradas distintas para Benefícios, Férias e Holerite legado. Depois selecione **Holerite legado** e verifique que:
@@ -135,7 +203,7 @@ Benefícios e Férias continuam sendo remotes modernos independentes. Não exist
 Para iniciar ou interromper somente o legado, em outro terminal, use:
 
 ```sh
-corepack pnpm demo:legacy
+corepack pnpm demo:legacy # Inicia somente o destino legado na porta 4500.
 ```
 
 Encerre esse terminal com `Ctrl+C`. Portal, Benefícios e Férias permanecem em execução quando iniciados separadamente.
@@ -147,7 +215,7 @@ Para demonstrar uma indisponibilidade real, inicie Portal, remotes e legado em t
 O fluxo completo em desktop e viewport mobile é verificável em Chromium:
 
 ```sh
-corepack pnpm verify:external-web
+corepack pnpm verify:external-web # Verifica navegação externa, retorno e indisponibilidade.
 ```
 
 ## Web/mobile e bridge simulada
@@ -187,7 +255,7 @@ O sentido **nativo → web** já existe no nível de hospedagem: o app carrega o
 Verifique browser, WebView simulada e viewport mobile com:
 
 ```sh
-corepack pnpm verify:web-mobile-bridge
+corepack pnpm verify:web-mobile-bridge # Verifica browser, WebView e bridge simulada.
 ```
 
 ### Como funcionaria em produção
@@ -203,6 +271,8 @@ O monorepo contém o código atual das aplicações e as estratégias de composi
 
 Versão e compatibilidade permanecem no manifesto para identificação, diagnóstico, telemetria e validação técnica. O case não reproduz CI/CD, plataforma de deployment, feature flags ou segmentação.
 
+O limite é deliberado: o monorepo produz código, testes, relatórios e artefatos locais; pipelines hospedados, publicação, deploy, promoção, rollout, rollback, dashboards, alertas e fornecedores corporativos pertencem às plataformas externas responsáveis.
+
 O golden path cria um domínio a partir de um template versionado, sem editar configurações internas do shell. Para materializá-lo, remova `--dry-run`.
 
 ## Criando uma nova app de domínio
@@ -212,13 +282,13 @@ No marco atual, novas jornadas entram pelo golden path. Ele valida o nome em `ke
 1. Valide o nome e a estrutura que seria criada:
 
    ```sh
-   corepack pnpm golden-path -- --name beneficios --dry-run
+   corepack pnpm golden-path -- --name beneficios --dry-run # Mostra os arquivos sem gravá-los.
    ```
 
 2. Materialize a app quando o domínio estiver aprovado:
 
    ```sh
-   corepack pnpm golden-path -- --name beneficios
+   corepack pnpm golden-path -- --name beneficios # Cria o domínio e seu manifesto.
    ```
 
 3. Revise os arquivos gerados:
@@ -237,8 +307,8 @@ No marco atual, novas jornadas entram pelo golden path. Ele valida o nome em `ke
 5. Valide o projeto e o workspace:
 
    ```sh
-corepack pnpm nx lint beneficios
-corepack pnpm typecheck
+corepack pnpm nx lint beneficios # Valida o código gerado para o domínio.
+corepack pnpm typecheck          # Valida os tipos de todo o workspace.
    ```
 
 > O generator cria um remote Vite com Module Federation, manifesto em `journeys/<id>/manifest.json` e teste smoke. Use `--port` para evitar colisão entre remotes. Após aprovação, a declaração é descoberta pelo Registry sem alteração do shell.
@@ -272,9 +342,9 @@ Crie uma library apenas quando houver uma responsabilidade reutilizável e um ow
 5. Execute:
 
    ```sh
-   corepack pnpm nx show project beneficios-consulta
-   corepack pnpm lint
-   corepack pnpm typecheck
+   corepack pnpm nx show project beneficios-consulta # Exibe a configuração Nx da library.
+   corepack pnpm lint                                # Valida padrões do workspace.
+   corepack pnpm typecheck                           # Valida os tipos do workspace.
    ```
 
 Uma library transversal requer ownership da Plataforma Frontend. Para tokens e componentes compartilhados, prefira `libs/design-tokens` e `libs/design-system-web`; não crie uma nova library compartilhada para resolver um único caso de uso.
@@ -289,3 +359,7 @@ Uma library transversal requer ownership da Plataforma Frontend. Para tokens e c
 | Operação e entrega | Contratos de manifesto, budgets, observabilidade e gates afetados no CI; rollout permanece na plataforma externa de deployment. |
 
 Cada etapa depende de uma spec aprovada. Até ela existir, mantenha o domínio no esqueleto atual em vez de antecipar infraestrutura ou contratos.
+
+## DD-1 reavaliada
+
+O Journey Registry continua sendo o único serviço server-side frontend-owned e o Portal BFF permanece simulado no navegador. Como não existe um segundo serviço com convenções concretamente repetidas, o gatilho de `DD-1` não ocorreu e nenhum generator de serviços ou BFFs foi criado.

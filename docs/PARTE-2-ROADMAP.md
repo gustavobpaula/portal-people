@@ -20,7 +20,7 @@ Specs futuras permanecem sem link no catálogo até serem detalhadas e aprovadas
 | 8 | Web/mobile e bridge | Fases 3–7 | Responsividade, adapter web, bridge simulada e `native-route` | Concluída |
 | 9 | Journey Registry demonstrativo | Fases 3–8 | Aplicação server-side independente, catálogo por HTTP e fallback seguro | Concluída |
 | 10 | Observabilidade e operação | Instrumentação evolui desde a fase 1 | Correlação ponta a ponta, sinais sanitizados e ownership | Concluída |
-| 11 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Planejada |
+| 11 | Qualidade e entrega | Todas | Gates, budgets, README e demonstração reproduzível | Concluída |
 
 ## Specs futuras previstas
 

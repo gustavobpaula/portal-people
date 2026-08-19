@@ -1,0 +1,44 @@
+{
+  "name": "quality-gates",
+  "sourceRoot": "tools/quality",
+  "projectType": "library",
+  "tags": ["scope:platform", "type:tooling"],
+  "implicitDependencies": [
+    "portal-host",
+    "neutral-remote",
+    "beneficios",
+    "ferias",
+    "journey-registry",
+    "golden-path"
+  ],
+  "targets": {
+    "lint": {
+      "command": "eslint tools/quality scripts --max-warnings=0",
+      "inputs": [
+        "default",
+        "{workspaceRoot}/scripts/**",
+        "{workspaceRoot}/journeys/**",
+        "{workspaceRoot}/apps/portal-host/src/assets/journey-registry.json",
+        "{workspaceRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml",
+        "{workspaceRoot}/nx.json",
+        "{workspaceRoot}/tools/generators/templates/**",
+        "^production"
+      ]
+    },
+    "test": {
+      "command": "vitest run tools/quality/quality-gates.spec.mjs",
+      "inputs": [
+        "default",
+        "{workspaceRoot}/scripts/**",
+        "{workspaceRoot}/journeys/**",
+        "{workspaceRoot}/apps/portal-host/src/assets/journey-registry.json",
+        "{workspaceRoot}/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml",
+        "{workspaceRoot}/nx.json",
+        "{workspaceRoot}/tools/generators/templates/**",
+        "^production"
+      ]
+    }
+  }
+}
