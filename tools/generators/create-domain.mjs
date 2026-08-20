@@ -122,7 +122,7 @@ export async function createDomain({
       "Use --display-name não vazio e --port entre 1024 e 65535.",
     );
   const destination = resolve(workspaceRoot, "apps", name);
-  if (existsSync(destination)) throw new Error(`O domínio ${name} já existe.`);
+  if (existsSync(destination)) throw new Error(`O domínio ${name} já existe em apps/${name}. Remova o diretório para recriá-lo.`);
   await mkdir(resolve(workspaceRoot, "apps"), { recursive: true });
   await cp(resolve(here, "templates/domain"), destination, { recursive: true });
   await rename(
@@ -152,7 +152,7 @@ async function describePlan({
 }) {
   const plan = await planDomain(name);
   if (existsSync(resolve(workspaceRoot, plan.app.root))) {
-    console.error(`O domínio ${name} já existe.`);
+    console.error(`O domínio ${name} já existe em apps/${name}. Remova o diretório para recriá-lo.`);
     process.exitCode = 1;
     return;
   }
