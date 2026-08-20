@@ -1,0 +1,24 @@
+tools/generators/create-domain.mjs
+  s_3d1cd5e6e2ae18::t_5f5a359a38e64e 125,155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "60cc3a375f9e1f975ba007d567d2fde333f27904",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_3d1cd5e6e2ae18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c157b2a5-80fc-4baa-a7f8-9e0ef0b4eeb8",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
