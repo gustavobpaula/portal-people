@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { access, mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -28,7 +29,37 @@ describe("golden path", () => {
       { encoding: "utf8" },
     );
     expect(output.status).toBe(0);
-    expect(output.stdout).toContain("Validado");
+    expect(output.stdout).toContain("Nada foi gravado");
+  });
+  it("describes the structure a domain would occupy without writing it", () => {
+    const output = spawnSync(
+      "node",
+      [
+        "tools/generators/create-domain.mjs",
+        "--name",
+        "nova-jornada",
+        "--dry-run",
+      ],
+      { encoding: "utf8" },
+    );
+    expect(output.status).toBe(0);
+    expect(output.stdout).toContain("apps/nova-jornada/");
+    expect(output.stdout).toContain("journeys/nova-jornada/");
+    expect(output.stdout).toContain("manifest.json");
+    expect(output.stdout).toContain("tools/domain-governance.json");
+    expect(output.stdout).toContain("src/");
+    expect(output.stdout).toContain("Journey.tsx");
+    expect(existsSync("apps/nova-jornada")).toBe(false);
+  });
+  it("reports a conflicting domain in dry-run instead of describing it", () => {
+    const output = spawnSync(
+      "node",
+      ["tools/generators/create-domain.mjs", "--name", "beneficios", "--dry-run"],
+      { encoding: "utf8" },
+    );
+    expect(output.status).toBe(1);
+    expect(output.stderr).toContain("já existe");
+    expect(output.stdout).not.toContain("apps/beneficios/");
   });
   it("rejects invalid names", () => {
     const output = spawnSync(
