@@ -1,0 +1,14 @@
+.gitignore
+  h_4c750985969531 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e959de58a4a7058a02b8d3250c4328520fa16a2f",
+  "prompts": {},
+  "humans": {
+    "h_4c750985969531": {
+      "author": "Gustavo Bento de Paula <gustavob.paula@gmail.com>"
+    }
+  }
+}
