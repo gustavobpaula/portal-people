@@ -1,4 +1,25 @@
-# Portal Pessoas — Fundação da Plataforma
+# Portal Pessoas
+
+Case técnico de arquitetura frontend: a proposta para a próxima geração de um portal corporativo com dezenas de jornadas, mais de dez squads entregando em paralelo e sistemas legados que não podem sair do ar durante a migração — e uma aplicação que demonstra as decisões funcionando.
+
+## Por onde começar
+
+**Não é preciso rodar nada para avaliar a proposta.** Se você tem dez minutos:
+
+| Leia | Para entender |
+| --- | --- |
+| [`docs/PROPOSTA-TECNICA.md`](docs/PROPOSTA-TECNICA.md) | a arquitetura proposta, as alternativas descartadas e os trade-offs de cada decisão |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | as 33 decisões arquiteturais registradas, com fronteiras e regras de dependência |
+| [`journeys/*/manifest.json`](journeys/) | o contrato que permite incluir uma jornada sem alterar o core |
+| [`docs/PARTE-2-ROADMAP.md`](docs/PARTE-2-ROADMAP.md) | como a aplicação foi entregue em 11 incrementos, e o que ficou fora de propósito |
+
+Para ver rodando, `corepack pnpm demo:portal` sobe o portal completo em um comando.
+
+## O que é simulado, e por quê
+
+Portal BFF, feature flags, CI/CD, SSO, os aplicativos Kotlin/Swift e o Journey Registry corporativo **são simulados localmente de propósito**. A intenção foi preservar os contratos e o comportamento sob falha — carregamento em runtime, isolamento de erro, handoff para o legado — sem reimplementar infraestrutura que pertence a outras fronteiras. Os limites estão declarados em [`docs/PARTE-2-ROADMAP.md`](docs/PARTE-2-ROADMAP.md).
+
+O Journey Registry é a exceção: ele roda como uma aplicação server-side de verdade, separada do portal, porque a descoberta de jornadas por HTTP é uma das decisões que o case precisava provar.
 
 ## Pré-requisitos
 
@@ -102,6 +123,15 @@ KiB equivale a 1.024 bytes. A medição usa respostas realmente solicitadas de b
 LCP, INP e CLS permanecem observáveis com referências de `2,5 s`, `200 ms` e `0,1`, respectivamente, mas seus valores locais não bloqueiam a entrega. Não há meta percentual de cobertura; os testes são orientados a risco, contratos e fronteiras.
 
 ## Design System
+
+`libs/design-tokens` publica os tokens semânticos e o tema; `libs/design-system-web` expõe os componentes React consumidos por shell e domínios. Os dois só podem ser importados pela API pública — `no-restricted-imports` reprova o acesso a caminhos internos, e `verify:design-system-assets` impede ativos remotos ou não autorizados.
+
+`apps/design-system-docs` documenta tokens, componentes, estados e temas em um Storybook independente do shell, com testes de interação e verificação de acessibilidade. Componentes com regra de negócio permanecem no domínio até que o reuso seja comprovado.
+
+```sh
+corepack pnpm storybook              # Documentação executável em http://localhost:6006.
+corepack pnpm test:design-system     # Stories, interações e acessibilidade.
+```
 
 ## Observabilidade e operação
 
